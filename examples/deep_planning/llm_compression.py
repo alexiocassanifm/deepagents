@@ -28,6 +28,13 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from context_manager import ContextManager, ContextMetrics, CleaningResult
 from compact_integration import CompactSummary, CompactTrigger
 
+# Import configurazione centralizzata
+try:
+    from config_loader import get_trigger_config, get_full_config
+    CONFIG_LOADER_AVAILABLE = True
+except ImportError:
+    CONFIG_LOADER_AVAILABLE = False
+
 
 class CompressionType(str, Enum):
     """Tipi di compressione disponibili."""
@@ -46,6 +53,47 @@ class CompressionStrategy(str, Enum):
     ADAPTIVE = "adaptive"      # Based on content analysis
 
 
+def _load_compression_config() -> Dict[str, Any]:
+    """Carica configurazione compressione da YAML."""
+    if CONFIG_LOADER_AVAILABLE:
+        try:
+            trigger_config = get_trigger_config()
+            full_config = get_full_config()
+            
+            return {
+                "target_reduction_percentage": 60.0,  # From context_config or default
+                "max_output_tokens": 2500,  # From context_config or default
+                "preserve_last_n_messages": trigger_config.preserve_last_n_messages,
+                "compression_timeout": trigger_config.compression_timeout,
+                "enable_fallback": trigger_config.enable_fallback,
+                "preserve_patterns": [
+                    r'project_id:\s*[\w-]+',
+                    r'entity_id:\s*[\w-]+', 
+                    r'file_path:\s*[\w/.]+',
+                    r'TODO:\s*.+',
+                    r'ERROR:\s*.+'
+                ]
+            }
+        except Exception as e:
+            print(f"⚠️ Failed to load compression config: {e}")
+    
+    # Fallback configuration
+    return {
+        "target_reduction_percentage": 60.0,
+        "max_output_tokens": 2000,
+        "preserve_last_n_messages": 3,
+        "compression_timeout": 30.0,
+        "enable_fallback": True,
+        "preserve_patterns": [
+            r'project_id:\s*[\w-]+',
+            r'entity_id:\s*[\w-]+', 
+            r'file_path:\s*[\w/.]+',
+            r'TODO:\s*.+',
+            r'ERROR:\s*.+'
+        ]
+    }
+
+
 @dataclass
 class CompressionConfig:
     """Configurazione per compressione LLM."""
@@ -62,6 +110,19 @@ class CompressionConfig:
     ])
     compression_timeout: float = 30.0
     enable_fallback: bool = True
+    
+    @classmethod
+    def from_yaml(cls) -> 'CompressionConfig':
+        """Crea configurazione caricando da YAML."""
+        config_data = _load_compression_config()
+        return cls(
+            target_reduction_percentage=config_data["target_reduction_percentage"],
+            max_output_tokens=config_data["max_output_tokens"],
+            preserve_last_n_messages=config_data["preserve_last_n_messages"],
+            preserve_patterns=config_data["preserve_patterns"],
+            compression_timeout=config_data["compression_timeout"],
+            enable_fallback=config_data["enable_fallback"]
+        )
 
 
 @dataclass 

@@ -124,15 +124,15 @@ def setup_debug_logging():
     # Create formatter
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     
-    # Console handler (per vedere i log a schermo)
+    # Console handler (to view logs on screen)
     console_handler = logging.StreamHandler()
     console_handler.setLevel(getattr(logging, log_level))
     console_handler.setFormatter(formatter)
     root_logger.addHandler(console_handler)
     
-    # File handler (per salvare i log su file)
-    file_handler = logging.FileHandler(log_file, mode='w')  # 'w' per sovrascrivere ogni volta
-    file_handler.setLevel(logging.DEBUG)  # Sempre DEBUG su file
+    # File handler (to save logs to file)
+    file_handler = logging.FileHandler(log_file, mode='w')  # 'w' to overwrite each time
+    file_handler.setLevel(logging.DEBUG)  # Always DEBUG on file
     file_handler.setFormatter(formatter)
     root_logger.addHandler(file_handler)
     
@@ -141,6 +141,7 @@ def setup_debug_logging():
         'mcp_cleaners',
         'context_manager', 
         'mcp_wrapper',
+        'mcp_context_tracker',  # New logger for context tracking
         'deepagents',
         'langgraph',
         'langchain'
@@ -148,15 +149,27 @@ def setup_debug_logging():
     
     for logger_name in loggers_to_debug:
         logger = logging.getLogger(logger_name)
-        logger.setLevel(logging.DEBUG)
+        # Configure specific loggers for context management to INFO
+        if logger_name in ['mcp_context_tracker', 'context_manager', 'mcp_wrapper']:
+            logger.setLevel(logging.INFO)
+        else:
+            logger.setLevel(logging.DEBUG)
     
     print(f"🔍 Debug logging enabled at level: {log_level}")
     print(f"📁 Log file: {log_file}")
     print(f"📊 Debug loggers: {', '.join(loggers_to_debug)}")
+    print(f"🎯 Context management loggers set to INFO level")
     
-    # Test log per verificare che funzioni
+    # Test log to verify it works
     logging.debug("🚀 Debug logging setup completed - test message")
     logging.info("ℹ️ Info logging setup completed - test message")
+    
+    # Specifically configure loggers for context management with welcome logs
+    mcp_context_logger = logging.getLogger('mcp_context_tracker')
+    context_manager_logger = logging.getLogger('context_manager')
+    
+    mcp_context_logger.info("🎯 MCP Context Tracker logging activated - tool calls will be tracked")
+    context_manager_logger.info("📊 Context Manager logging activated - cleaning operations will be logged")
 
 # Setup logging immediately
 setup_debug_logging()
@@ -420,7 +433,7 @@ if ENABLE_COMPATIBILITY_FIXES:
 def format_todos_for_prompt(todos: List[Dict[str, Any]]) -> str:
     """Format dynamic TODOs for inclusion in prompts."""
     if not todos:
-        return "Nessun task specifico generato"
+        return "No specific tasks generated"
     
     formatted = []
     for todo in todos:
@@ -432,13 +445,13 @@ def format_todos_for_prompt(todos: List[Dict[str, Any]]) -> str:
 def format_outputs_list(outputs: List[str]) -> str:
     """Format required outputs list for prompts."""
     if not outputs:
-        return "Nessun output specifico richiesto"
+        return "No specific output required"
     return "\n".join([f"📄 {output}" for output in outputs])
 
 def format_validation_rules(rules) -> str:
     """Format validation rules for prompts."""
     if not rules:
-        return "Nessun criterio di validazione specifico"
+        return "No specific validation criteria"
     
     formatted = []
     for rule in rules:
@@ -453,19 +466,19 @@ def format_validation_rules(rules) -> str:
 def format_interaction_points(interaction_points: List[str]) -> str:
     """Format human interaction points for prompts."""
     if not interaction_points:
-        return "Nessuna interazione umana richiesta"
+        return "No human interaction required"
     return "\n".join([f"👤 {point}" for point in interaction_points])
 
 def format_validation_result(validation_result: Dict[str, Any]) -> str:
     """Format validation result for orchestrator prompt."""
     if not validation_result:
-        return "Validazione non disponibile"
+        return "Validation not available"
     
     if validation_result.get('valid', False):
-        return f"✅ Fase validata ({len(validation_result.get('completed_validations', []))} controlli completati)"
+        return f"✅ Phase validated ({len(validation_result.get('completed_validations', []))} checks completed)"
     else:
         errors = validation_result.get('errors', [])
-        return f"❌ Validazione fallita: {', '.join(errors) if errors else 'Errori sconosciuti'}"
+        return f"❌ Validation failed: {', '.join(errors) if errors else 'Unknown errors'}"
 
 def validate_and_transition_phase(current_phase: str, state: Dict[str, Any], tools: List[Any]) -> Tuple[bool, str, List[str]]:
     """
@@ -678,34 +691,34 @@ def create_optimized_subagent(agent_name: str, phase: str, tools: List[Any], sta
     
     # Create COMPLETELY DYNAMIC prompt template
     dynamic_prompt_template = f"""
-Sei il {phase_config.agent_name} - {phase_config.emoji} {phase_config.name}
+You are the {phase_config.agent_name} - {phase_config.emoji} {phase_config.name}
 
-## La Tua Missione
+## Your Mission
 {phase_config.goal}
 
-## Contesto Progetto
-- Progetto: {{project_name}} ({{project_type}})
-- Dominio: {{domain}}
+## Project Context
+- Project: {{project_name}} ({{project_type}})
+- Domain: {{domain}}
 - Focus: {{focus_area}}
-- Fase corrente: {phase} ({phase_config.completion_weight}% completamento)
+- Current phase: {phase} ({phase_config.completion_weight}% completion)
 
-## I Tuoi Task Dinamici
+## Your Dynamic Tasks
 {format_todos_for_prompt(dynamic_todos)}
 
-## Strumenti Disponibili ({tool_context['tool_count']} filtrati per questa fase)
+## Available Tools ({tool_context['tool_count']} filtered for this phase)
 {tool_context['tool_categories']}
 Focus: {tool_context['phase_objectives']}
 
-## Output Richiesti
+## Required Outputs
 {format_outputs_list(phase_config.required_outputs)}
 
-## Criteri di Successo
+## Success Criteria
 {format_validation_rules(phase_config.validation_rules)}
 
-## Interazioni Umane
-{format_interaction_points(phase_config.interaction_points) if phase_config.requires_user_input else "Nessuna interazione richiesta"}
+## Human Interactions
+{format_interaction_points(phase_config.interaction_points) if phase_config.requires_user_input else "No interaction required"}
 
-Durata stimata: {phase_config.duration_estimate}
+Estimated duration: {phase_config.duration_estimate}
 """
     
     # Inject dynamic context into the template
@@ -820,36 +833,36 @@ def generate_optimized_main_prompt(current_phase: str, state: Dict[str, Any], to
     
     # Create DYNAMIC orchestrator template (NO MORE STATIC!)
     dynamic_orchestrator_template = f"""
-Sei il Deep Planning Orchestrator - Coordinatore di pianificazione sviluppo a 4 fasi.
+You are the Deep Planning Orchestrator - 4-phase development planning coordinator.
 
-## Stato Processo
-- Fase attuale: {{current_phase}} ({{completion_percentage}}% completato)
-- Contesto: {{context_summary}}
-- Progetto: {{project_id}}
-- Fasi completate: {{completed_phases}}
+## Process Status
+- Current phase: {{current_phase}} ({{completion_percentage}}% completed)
+- Context: {{context_summary}}
+- Project: {{project_id}}
+- Completed phases: {{completed_phases}}
 
-## Fase Corrente: {current_config.emoji if current_config else '🔧'} {current_config.name if current_config else current_phase.title()}
+## Current Phase: {current_config.emoji if current_config else '🔧'} {current_config.name if current_config else current_phase.title()}
 {f'Goal: {current_config.goal}' if current_config else ''}
-{f'Agent richiesto: {current_config.agent_name}' if current_config else ''}
-{f'Interazione umana: {'Sì' if current_config and current_config.requires_user_input else 'No'}' if current_config else ''}
-{f'Approvazione richiesta: {'Sì' if current_config and current_config.requires_approval else 'No'}' if current_config else ''}
+{f'Required agent: {current_config.agent_name}' if current_config else ''}
+{f'Human interaction: {'Yes' if current_config and current_config.requires_user_input else 'No'}' if current_config else ''}
+{f'Approval required: {'Yes' if current_config and current_config.requires_approval else 'No'}' if current_config else ''}
 
-## Il Tuo Ruolo
-Coordi i sub-agent attraverso fasi strutturate, assicurando transizioni fluide e validazione completezza.
+## Your Role
+Coordinate sub-agents through structured phases, ensuring smooth transitions and completeness validation.
 
-## Strumenti Disponibili
-{{tool_count}} strumenti totali, {{phase_objectives}} per la fase corrente
+## Available Tools
+{{tool_count}} total tools, {{phase_objectives}} for the current phase
 
-## Azione Raccomandata
+## Recommended Action
 {{recommended_next_action}}
 
-## Criteri Transizione
-{get_transition_requirements(phase_type) if phase_type else ['Fase sconosciuta']}
+## Transition Criteria
+{get_transition_requirements(phase_type) if phase_type else ['Unknown phase']}
 
-## Validazione Attuale
+## Current Validation
 {{validation_criteria}}
 
-Deploya il sub-agent appropriato o gestisci la transizione alla prossima fase.
+Deploy the appropriate sub-agent or manage the transition to the next phase.
 """
     
     # Add validation status to context
@@ -857,7 +870,7 @@ Deploya il sub-agent appropriato o gestisci la transizione alla prossima fase.
         validation_result = validate_phase_completion(phase_type, state)
         orchestrator_context['validation_status'] = format_validation_result(validation_result)
         orchestrator_context['validation_criteria'] = '\n'.join(
-            [f"- {rule.description}" for rule in current_config.validation_rules] if current_config else ["Nessun criterio"]
+            [f"- {rule.description}" for rule in current_config.validation_rules] if current_config else ["No criteria"]
         )
     
     # Inject complete dynamic context
@@ -963,7 +976,7 @@ def create_optimized_deep_planning_agent(initial_state: Dict[str, Any] = None, e
         print(f"   🔇 MCP noise trigger: {trigger_config.mcp_noise_threshold:.0%}")
         
         # Get the same model that will be used by the agent
-        from src.deepagents.model import get_model
+        from deepagents.model import get_model
         agent_model = get_model(DEFAULT_MODEL)
         
         # Create LLM compressor using YAML config
@@ -1074,32 +1087,23 @@ def create_compatible_deep_agent(*args, **kwargs):
         print("🔗 Setting up POST_TOOL compression hooks...")
         
         try:
-            # Setup hook manager with POST_TOOL hook
-            hook_manager = ContextHookManager(enhanced_compact_integration.llm_compressor)
+            # Get trigger config for printing
+            hook_trigger_config = get_trigger_config()
             
-            # Get trigger config from YAML
-            yaml_trigger_config = get_trigger_config()
-            
-            # Create compression hook configured for POST_TOOL using YAML values
-            compression_hook = CompressionHook(
-                compressor=enhanced_compact_integration.llm_compressor,
-                trigger_config={
-                    "utilization_threshold": yaml_trigger_config.post_tool_threshold,
-                    "mcp_noise_threshold": yaml_trigger_config.mcp_noise_threshold,
-                    "min_messages": 3,  # Keep low for responsiveness
-                    "force_compression_threshold": yaml_trigger_config.force_llm_threshold
-                },
-                priority=HookType.POST_TOOL
+            # Setup hook manager with POST_TOOL hook - configurazione automatica da YAML
+            hook_manager = ContextHookManager(
+                enhanced_compact_integration.llm_compressor,
+                config_path="context_config.yaml"
             )
             
-            # Register POST_TOOL hook
-            hook_manager.register_hook(HookType.POST_TOOL, compression_hook)
+            # No need to manually create CompressionHook as it's created
+            # automatically by ContextHookManager with YAML configuration
             
             # Wrap the agent with automatic hook execution
             agent = _wrap_agent_with_compression_hooks(agent, hook_manager, enhanced_compact_integration)
             
             print("✅ POST_TOOL compression hooks integrated")
-            print(f"   🎯 Trigger threshold: {yaml_trigger_config.post_tool_threshold:.0%} context utilization")
+            print(f"   🎯 Trigger threshold: {hook_trigger_config.post_tool_threshold:.0%} context utilization")
             print(f"   🔧 Using same LLM as agent for compression")
             print(f"   📋 All triggers from context_config.yaml")
             
@@ -1110,19 +1114,140 @@ def create_compatible_deep_agent(*args, **kwargs):
     return agent
 
 
+def wrap_agent_with_mcp_state_cleaning(agent, mcp_wrapper):
+    """
+    Wrap the agent to clean MCP ToolMessages in LangGraph state.
+    
+    This wrapper resolves the identified integration gap where the context manager
+    cleans MCP responses but LangGraph saves raw ToolMessages in its state.
+    
+    The wrapper intercepts invoke() and cleans all MCP ToolMessages AFTER execution,
+    ensuring the final state contains clean data instead of raw MCP data.
+    
+    Args:
+        agent: The LangGraph agent to wrap
+        mcp_wrapper: The MCP wrapper with cleaning functionality
+    
+    Returns:
+        Wrapped agent that automatically cleans MCP state
+    """
+    if not mcp_wrapper:
+        print("⚠️ No MCP wrapper provided, skipping state cleaning integration")
+        return agent
+    
+    # Store original invoke methods
+    original_invoke = agent.invoke
+    original_ainvoke = agent.ainvoke if hasattr(agent, 'ainvoke') else None
+    
+    def cleaned_invoke(input_data, config=None, **kwargs):
+        """Synchronous wrapper with MCP state cleaning."""
+        # Execute the agent normally
+        result = original_invoke(input_data, config, **kwargs)
+        
+        # Clean MCP ToolMessages in the resulting state
+        if isinstance(result, dict) and "messages" in result:
+            try:
+                original_count = len(result["messages"])
+                original_size = len(str(result["messages"])) // 4  # Rough token estimate
+                
+                # 🟠 MONITORING: MCP Cleaning Operation
+                mcp_logger = logging.getLogger('context_manager')
+                mcp_logger.info(f"🟠 MCP CLEANING ACTIVE 🧹")
+                mcp_logger.info(f"📥 Pre-cleaning Messages: {original_count}")
+                mcp_logger.info(f"📊 Pre-cleaning Size (est.): {original_size:,} tokens")
+                
+                cleaned_messages = mcp_wrapper.clean_message_list(result["messages"])
+                result["messages"] = cleaned_messages
+                
+                cleaned_size = len(str(cleaned_messages)) // 4  # Rough token estimate
+                reduction = ((original_size - cleaned_size) / original_size * 100) if original_size > 0 else 0
+                
+                mcp_logger.info(f"📤 Post-cleaning Messages: {len(cleaned_messages)}")
+                mcp_logger.info(f"📉 Size Reduction: {reduction:.1f}% ({original_size:,} → {cleaned_size:,} tokens)")
+                mcp_logger.info(f"🧹 LangGraph state cleaned: {original_count} messages processed")
+                mcp_logger.info(f"✅ MCP ToolMessages now contain clean data instead of raw responses")
+                
+            except Exception as e:
+                print(f"⚠️ Failed to clean LangGraph state: {e}")
+                # Continue without cleaning if it fails
+        
+        return result
+    
+    def cleaned_ainvoke(input_data, config=None, **kwargs):
+        """Asynchronous wrapper with MCP state cleaning."""
+        import asyncio
+        
+        async def async_cleaned_invoke():
+            # Execute the agent normally (asynchronously if supported)
+            if original_ainvoke:
+                result = await original_ainvoke(input_data, config, **kwargs)
+            else:
+                # Synchronous fallback if ainvoke not available
+                result = original_invoke(input_data, config, **kwargs)
+            
+            # Clean MCP ToolMessages in the resulting state
+            if isinstance(result, dict) and "messages" in result:
+                try:
+                    original_count = len(result["messages"])
+                    cleaned_messages = mcp_wrapper.clean_message_list(result["messages"])
+                    result["messages"] = cleaned_messages
+                    
+                    print(f"🧹 LangGraph state cleaned (async): {original_count} messages processed")
+                    print(f"✅ MCP ToolMessages now contain clean data instead of raw responses")
+                    
+                except Exception as e:
+                    print(f"⚠️ Failed to clean LangGraph state (async): {e}")
+                    # Continue without cleaning if it fails
+            
+            return result
+        
+        return asyncio.create_task(async_cleaned_invoke())
+    
+    # Replace methods with wrapped versions
+    agent.invoke = cleaned_invoke
+    if original_ainvoke:
+        agent.ainvoke = cleaned_ainvoke
+    
+    print("🔗 Agent wrapped with MCP state cleaning")
+    print("📋 LangGraph ToolMessages will now contain cleaned MCP data")
+    print("✅ Gap between context manager and LangGraph state resolved")
+    
+    return agent
+
+
 def _wrap_agent_with_compression_hooks(agent, hook_manager, enhanced_compact_integration):
     """
-    Wrappa l'agent con hook automatici di compressione POST_TOOL.
+    Wrap the agent with automatic POST_TOOL compression hooks.
     
-    Intercetta l'esecuzione dell'agent per triggare compressione dopo tool calls.
+    Intercepts agent execution to trigger compression after tool calls.
     """
+    # Get trigger config for this scope
+    trigger_config = get_trigger_config()
+    
     # Store original invoke methods
     original_invoke = agent.invoke
     original_ainvoke = agent.ainvoke
     
     def wrapped_invoke(input_data, config=None, **kwargs):
-        """Wrapper sincrono con hook POST_TOOL."""
+        """Synchronous wrapper with POST_TOOL hook."""
+        # 🔵 MONITORING: Pre-LLM call token tracking
+        input_messages = input_data.get('messages', []) if isinstance(input_data, dict) else []
+        pre_token_count = len(str(input_messages)) // 4  # Rough estimate
+        
+        # Use logger instead of print for LangGraph visibility
+        monitor_logger = logging.getLogger('mcp_context_tracker')
+        monitor_logger.info(f"🔵 LLM CALL STARTING 🚀")
+        monitor_logger.info(f"📊 Context Window Tokens (est.): {pre_token_count:,}")
+        monitor_logger.info(f"💬 Input Messages Count: {len(input_messages)}")
+        
         result = original_invoke(input_data, config, **kwargs)
+        
+        # 🟢 MONITORING: Post-LLM call analysis
+        result_messages = result.get('messages', []) if isinstance(result, dict) else []
+        post_token_count = len(str(result_messages)) // 4  # Rough estimate
+        monitor_logger.info(f"🟢 LLM CALL COMPLETED ✅")
+        monitor_logger.info(f"📈 Output Messages Count: {len(result_messages)}")
+        monitor_logger.info(f"📊 Total Tokens After (est.): {post_token_count:,}")
         
         # Trigger POST_TOOL hook after execution
         if hasattr(result, 'get') and 'messages' in result:
@@ -1131,6 +1256,13 @@ def _wrap_agent_with_compression_hooks(agent, hook_manager, enhanced_compact_int
                 should_compress, trigger_type, metrics = enhanced_compact_integration.should_trigger_compaction(
                     result.get('messages', [])
                 )
+                
+                # 🔴 MONITORING: Context Management Status
+                monitor_logger.info(f"🔴 CONTEXT MANAGEMENT CHECK 🧠")
+                monitor_logger.info(f"📏 Context Utilization: {metrics.utilization_percentage:.1f}%")
+                monitor_logger.info(f"🎯 Trigger Type: {trigger_type.value if should_compress else 'None'}")
+                monitor_logger.info(f"🧹 MCP Cleaning Status: {'Active' if mcp_wrapper and hasattr(mcp_wrapper, 'context_manager') else 'None'}")
+                monitor_logger.info(f"📦 Compression Needed: {'Yes' if should_compress else 'No'}")
                 
                 if should_compress:
                     print(f"🔄 POST_TOOL compression triggered ({metrics.utilization_percentage:.1f}% utilization)")
@@ -1152,6 +1284,11 @@ def _wrap_agent_with_compression_hooks(agent, hook_manager, enhanced_compact_int
                         result['compression_applied'] = True
                         result['compression_reduction'] = getattr(summary, 'total_reduction_percentage', 0)
                         
+                        # 🟡 MONITORING: Compression Results
+                        monitor_logger.info(f"🟡 COMPRESSION COMPLETED 🗜️")
+                        monitor_logger.info(f"📉 Reduction: {getattr(summary, 'total_reduction_percentage', 0):.1f}%")
+                        monitor_logger.info(f"📝 Summary Generated: {len(getattr(summary, 'summary_content', '')) if hasattr(summary, 'summary_content') else 0} chars")
+                        monitor_logger.info(f"💾 Messages Reduced: {len(result_messages)} → {len(compacted_messages)}")
                         print(f"✅ Context compressed: {getattr(summary, 'total_reduction_percentage', 0):.1f}% reduction")
                         
                     finally:
@@ -1164,8 +1301,25 @@ def _wrap_agent_with_compression_hooks(agent, hook_manager, enhanced_compact_int
         return result
     
     async def wrapped_ainvoke(input_data, config=None, **kwargs):
-        """Wrapper asincrono con hook POST_TOOL."""
+        """Asynchronous wrapper with POST_TOOL hook."""
+        # 🔵 MONITORING: Pre-LLM call token tracking (async)
+        input_messages = input_data.get('messages', []) if isinstance(input_data, dict) else []
+        pre_token_count = len(str(input_messages)) // 4  # Rough estimate
+        
+        # Use logger for async monitoring
+        monitor_logger = logging.getLogger('mcp_context_tracker')
+        monitor_logger.info(f"🔵 ASYNC LLM CALL STARTING 🚀")
+        monitor_logger.info(f"📊 Context Window Tokens (est.): {pre_token_count:,}")
+        monitor_logger.info(f"💬 Input Messages Count: {len(input_messages)}")
+        
         result = await original_ainvoke(input_data, config, **kwargs)
+        
+        # 🟢 MONITORING: Post-LLM call analysis (async)
+        result_messages = result.get('messages', []) if isinstance(result, dict) else []
+        post_token_count = len(str(result_messages)) // 4  # Rough estimate
+        monitor_logger.info(f"🟢 ASYNC LLM CALL COMPLETED ✅")
+        monitor_logger.info(f"📈 Output Messages Count: {len(result_messages)}")
+        monitor_logger.info(f"📊 Total Tokens After (est.): {post_token_count:,}")
         
         # Trigger POST_TOOL hook after execution
         if hasattr(result, 'get') and 'messages' in result:
@@ -1233,7 +1387,28 @@ initial_state = {
 # Create optimized agent with LLM compression enabled by default
 agent = create_optimized_deep_planning_agent(initial_state, enable_llm_compression=True)
 
+# ============================================================================
+# MCP STATE CLEANING INTEGRATION - RISOLVE IL GAP IDENTIFICATO
+# ============================================================================
+
+# Apply the wrapper to clean LangGraph state from raw MCP data
+print("🔧 Applying MCP state cleaning wrapper to resolve LangGraph integration gap...")
+agent = wrap_agent_with_mcp_state_cleaning(agent, mcp_wrapper)
+
 print("🏁 FERRARI-POWERED Deep Planning Agent with FULL DYNAMIC SYSTEM created successfully!")
+print(f"⏰ TIMESTAMP: {__import__('datetime').datetime.now()}")
+print("🔥 Se vedi questo messaggio ogni volta che fai una domanda, i wrapper funzionano!")
+print("\n🔥 MONITORING SYSTEM ACTIVE 🔥")
+print("📊 Token tracking enabled for each LLM call")
+print("🔍 Context management monitoring active")
+print("🧹 MCP cleaning operations tracked")
+print("📈 Compression events monitored")
+print("🎯 All operations using logger.info() for LangGraph visibility")
+print("\n🔧 MONITORING STATUS:")
+print(f"  🔗 Compression hooks enabled: {LLM_COMPRESSION_AVAILABLE}")
+print(f"  🧹 MCP cleaning wrapper: {'Active' if mcp_wrapper else 'None'}")
+print("  📋 Logger names: mcp_context_tracker, context_manager")
+print("  ✅ ASPETTATI I LOG COLORATI NEI LOG DI LANGGRAPH!")
 print("📋 🏎️ FERRARI FEATURES - 100% DYNAMIC SYSTEM:")
 print("  🚀 COMPLETE dynamic prompt system - NO MORE STATIC TEMPLATES!")
 print("  🎯 Context-aware TODO generation based on project state")
@@ -1273,6 +1448,7 @@ if compact_integration:
     print("📦 Automatic context compaction system active for extended conversations")
 if mcp_wrapper:
     print("🧹 MCP noise reduction system active for cleaner context")
+    print("🔗 MCP state cleaning integration - ToolMessages contain clean data")
 print("\n💡 FERRARI Performance Benefits:")
 print("  🧠 MAXIMUM LLM attention with context-specific prompts")
 print("  ⚡ ZERO cognitive load - each prompt perfectly tailored")

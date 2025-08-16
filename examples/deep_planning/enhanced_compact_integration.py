@@ -28,6 +28,13 @@ from mcp_wrapper import MCPToolWrapper
 from llm_compression import LLMCompressor, CompressionConfig, LLMCompressionResult, CompressionType
 from context_hooks import ContextHookManager, CompressionHook, HookType
 
+# Import configurazione centralizzata
+try:
+    from config_loader import get_trigger_config, get_full_config
+    CONFIG_LOADER_AVAILABLE = True
+except ImportError:
+    CONFIG_LOADER_AVAILABLE = False
+
 
 @dataclass
 class EnhancedCompactSummary(CompactSummary):
@@ -63,7 +70,7 @@ class EnhancedCompactIntegration(CompactIntegration):
         # Componenti LLM compression
         self.llm_compressor = llm_compressor
         self.hook_manager = hook_manager
-        self.config = config or self._default_enhanced_config()
+        self.config = config or self._load_enhanced_config()
         
         # Tracking avanzato
         self.enhanced_history: List[EnhancedCompactSummary] = []
@@ -84,10 +91,46 @@ class EnhancedCompactIntegration(CompactIntegration):
             "total_tokens_saved": 0
         }
     
-    def _default_enhanced_config(self) -> Dict[str, Any]:
-        """Configurazione estesa per sistema enhanced."""
+    def _load_enhanced_config(self) -> Dict[str, Any]:
+        """Carica configurazione estesa da YAML con fallback."""
+        if CONFIG_LOADER_AVAILABLE:
+            try:
+                # Carica trigger config da YAML
+                trigger_config = get_trigger_config()
+                full_config = get_full_config()
+                
+                # Configura usando valori dal YAML
+                enhanced_config = {
+                    # Trigger configuration da YAML
+                    "prefer_llm_compression": True,
+                    "llm_threshold": trigger_config.llm_compression_threshold,
+                    "template_threshold": trigger_config.trigger_threshold,
+                    "force_llm_threshold": trigger_config.force_llm_threshold,
+                    
+                    # Performance configuration da YAML
+                    "llm_timeout": trigger_config.compression_timeout,
+                    "max_retry_attempts": 2,
+                    "enable_hybrid_mode": True,
+                    
+                    # Quality configuration da YAML
+                    "min_reduction_threshold": trigger_config.min_reduction_threshold,
+                    "preserve_recent_messages": trigger_config.preserve_last_n_messages,
+                    
+                    # Monitoring da performance config
+                    "enable_detailed_metrics": full_config.performance.get("track_cleaning_performance", True),
+                    "log_compression_details": full_config.monitoring.get("log_level", "INFO") in ["DEBUG", "INFO"]
+                }
+                
+                print("✅ Enhanced compact integration loaded config from YAML")
+                return enhanced_config
+                
+            except Exception as e:
+                print(f"⚠️ Failed to load YAML config in enhanced integration: {e}")
+        
+        # Fallback ai valori predefiniti
+        print("🔄 Enhanced compact integration using default configuration")
         return {
-            # Trigger configuration
+            # Trigger configuration - fallback values
             "prefer_llm_compression": True,
             "llm_threshold": 0.75,  # Usa LLM se utilizzo > 75%
             "template_threshold": 0.60,  # Usa template se utilizzo > 60%

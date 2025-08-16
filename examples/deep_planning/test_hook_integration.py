@@ -88,7 +88,7 @@ async def test_hook_integration():
             from enhanced_compact_integration import EnhancedCompactIntegration
             from context_manager import ContextManager
             from llm_compression import LLMCompressor, CompressionConfig
-            from src.deepagents.model import get_model
+            from deepagents.model import get_model
             
             # Setup sistemi per test
             context_manager = ContextManager()

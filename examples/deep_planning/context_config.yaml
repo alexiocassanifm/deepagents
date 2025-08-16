@@ -25,17 +25,17 @@ context_management:
   # 📏 Dimensione massima della finestra di contesto (in token)
   # Quando viene raggiunta questa dimensione, la compressione diventa obbligatoria
   # Tipico: 200K per modelli Claude, 128K per GPT-4
-  max_context_window: 200000
+  max_context_window: 50000
   
   # 🎯 Soglia principale per compattazione automatica (0.0-1.0)
   # Quando il contesto raggiunge questa % della finestra max, scatta compressione
   # Esempio: 0.85 = comprime quando raggiunge 85% di 200K = 170K token
-  trigger_threshold: 0.85
+  trigger_threshold: 0.5
   
   # 🔇 Soglia per rilevamento rumore MCP (0.0-1.0) 
   # Se questa % del contesto è "rumore" da tool MCP, forza pulizia
   # Esempio: 0.6 = se 60%+ è output verboso MCP, attiva pulizia specializzata
-  mcp_noise_threshold: 0.6
+  mcp_noise_threshold: 0.4
   
   # ================================================================================
   # 🚀 NUOVE SOGLIE PER COMPRESSIONE LLM SEMANTICA

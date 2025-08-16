@@ -202,3 +202,111 @@ def reload_config():
     """Ricarica configurazione da file."""
     _config_loader._loaded = False
     return _config_loader.load_config()
+
+def validate_configuration() -> Dict[str, Any]:
+    """Valida la configurazione caricata e restituisce report di validazione."""
+    config = get_full_config()
+    validation_report = {
+        "status": "valid",
+        "warnings": [],
+        "errors": [],
+        "unused_parameters": [],
+        "performance_recommendations": []
+    }
+    
+    # Validazione soglie
+    trigger_config = config.triggers
+    if trigger_config.trigger_threshold >= 1.0 or trigger_config.trigger_threshold <= 0.0:
+        validation_report["errors"].append("trigger_threshold must be between 0.0 and 1.0")
+    
+    if trigger_config.mcp_noise_threshold >= 1.0 or trigger_config.mcp_noise_threshold <= 0.0:
+        validation_report["errors"].append("mcp_noise_threshold must be between 0.0 and 1.0")
+    
+    if trigger_config.post_tool_threshold >= trigger_config.trigger_threshold:
+        validation_report["warnings"].append("post_tool_threshold >= trigger_threshold may cause frequent compressions")
+    
+    # Validazione performance
+    performance_config = config.performance
+    if performance_config.get("auto_check_interval", 30) > 300:
+        validation_report["warnings"].append("auto_check_interval > 5 minutes may reduce responsiveness")
+    
+    if performance_config.get("analysis_cache_duration", 60) < 10:
+        validation_report["warnings"].append("analysis_cache_duration < 10 seconds may cause excessive reanalysis")
+    
+    # Controllo per parametri non utilizzati (based on what we implemented)
+    implemented_params = {
+        "context_management", "cleaning_strategies", "deduplication", 
+        "compaction", "performance", "monitoring", "integration"
+    }
+    yaml_sections = set(config.__dict__.keys()) - {"triggers"}
+    unused_sections = yaml_sections - implemented_params
+    if unused_sections:
+        validation_report["unused_parameters"].extend(list(unused_sections))
+    
+    # Raccomandazioni performance
+    if trigger_config.llm_compression_threshold < trigger_config.trigger_threshold:
+        validation_report["performance_recommendations"].append(
+            "Consider lowering llm_compression_threshold for better compression quality"
+        )
+    
+    if validation_report["errors"]:
+        validation_report["status"] = "invalid"
+    elif validation_report["warnings"]:
+        validation_report["status"] = "valid_with_warnings"
+    
+    return validation_report
+
+def log_configuration_status():
+    """Stampa stato completo della configurazione con validazione."""
+    print("\n" + "="*60)
+    print("🔧 DEEP PLANNING - CONFIGURATION STATUS")
+    print("="*60)
+    
+    # Carica e valida configurazione
+    config = get_full_config()
+    validation = validate_configuration()
+    
+    # Status generale
+    status_icon = "✅" if validation["status"] == "valid" else "⚠️" if validation["status"] == "valid_with_warnings" else "❌"
+    print(f"{status_icon} Configuration Status: {validation['status'].upper()}")
+    
+    # Trigger summary
+    print_config_summary()
+    
+    # Validation results
+    if validation["errors"]:
+        print("\n❌ CONFIGURATION ERRORS:")
+        for error in validation["errors"]:
+            print(f"   • {error}")
+    
+    if validation["warnings"]:
+        print("\n⚠️ CONFIGURATION WARNINGS:")
+        for warning in validation["warnings"]:
+            print(f"   • {warning}")
+    
+    if validation["unused_parameters"]:
+        print("\n📋 UNUSED CONFIGURATION SECTIONS:")
+        for param in validation["unused_parameters"]:
+            print(f"   • {param}")
+    
+    if validation["performance_recommendations"]:
+        print("\n🚀 PERFORMANCE RECOMMENDATIONS:")
+        for rec in validation["performance_recommendations"]:
+            print(f"   • {rec}")
+    
+    # Performance settings summary
+    performance = config.performance
+    print("\n⚡ PERFORMANCE SETTINGS:")
+    print(f"   📊 Analysis cache: {performance.get('analysis_cache_duration', 60)}s")
+    print(f"   🔄 Auto check interval: {performance.get('auto_check_interval', 30)}s")
+    print(f"   🎯 Precise tokenization: {performance.get('use_precise_tokenization', True)}")
+    print(f"   📈 Track performance: {performance.get('track_cleaning_performance', True)}")
+    
+    # Monitoring settings
+    monitoring = config.monitoring
+    print("\n📊 MONITORING SETTINGS:")
+    print(f"   📈 Collect metrics: {monitoring.get('collect_metrics', True)}")
+    print(f"   📝 Log level: {monitoring.get('log_level', 'INFO')}")
+    print(f"   📤 Export statistics: {monitoring.get('export_statistics', True)}")
+    
+    print("="*60)

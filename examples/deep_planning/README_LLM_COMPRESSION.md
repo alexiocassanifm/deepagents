@@ -75,7 +75,7 @@ config = CompressionConfig(
 
 # Crea sistema compressione
 llm_compressor = LLMCompressor(model=your_model, config=config)
-hook_manager = ContextHookManager(llm_compressor)
+hook_manager = ContextHookManager(llm_compressor, config_path="context_config.yaml")
 enhanced_integration = EnhancedCompactIntegration(
     context_manager=context_manager,
     llm_compressor=llm_compressor,

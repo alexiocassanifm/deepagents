@@ -22,9 +22,61 @@ from dataclasses import dataclass
 
 from context_manager import CleaningStrategy, CleaningResult, CleaningStatus
 
+# Import configurazione centralizzata
+try:
+    from config_loader import get_full_config
+    CONFIG_LOADER_AVAILABLE = True
+except ImportError:
+    CONFIG_LOADER_AVAILABLE = False
+
 # Configure debug logging for MCP cleaners
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+
+def _load_cleaning_config() -> Dict[str, Any]:
+    """Carica configurazione cleaning strategies da YAML."""
+    if CONFIG_LOADER_AVAILABLE:
+        try:
+            full_config = get_full_config()
+            return full_config.cleaning_strategies
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to load cleaning strategies config: {e}")
+    
+    # Fallback configuration
+    return {
+        "ProjectListCleaner": {
+            "enabled": True,
+            "max_projects_fallback": 3,
+            "keep_fields": ["project_id", "id", "name", "title", "description"],
+            "use_context_targeting": True
+        },
+        "CodeSnippetCleaner": {
+            "enabled": True,
+            "primary_field": "text",
+            "optional_fields": ["file_path", "filename"],
+            "remove_metadata": True,
+            "max_snippet_length": 5000
+        },
+        "DocumentCleaner": {
+            "enabled": True,
+            "essential_fields": ["content", "text", "body", "title", "name"],
+            "remove_empty_lines": True,
+            "header_footer_patterns": ["^={3,}", "^-{3,}", "^page \\d+"]
+        },
+        "UserStoryListCleaner": {
+            "enabled": True,
+            "essential_fields": ["user_story_id", "story_id", "id", "title", "description", "status"],
+            "max_stories": 0,
+            "normalize_ids": True
+        },
+        "RepositoryListCleaner": {
+            "enabled": True,
+            "essential_fields": ["repository_id", "repo_id", "id", "name", "description"],
+            "max_repositories": 0,
+            "normalize_ids": True
+        }
+    }
 
 
 class ProjectListCleaner(CleaningStrategy):
@@ -35,6 +87,12 @@ class ProjectListCleaner(CleaningStrategy):
     ma spesso ne serve solo uno. Questa strategia identifica il progetto di interesse e
     rimuove tutti gli altri, riducendo drasticamente il rumore.
     """
+    
+    def __init__(self, config: Dict[str, Any] = None):
+        if config:
+            self.config = config
+        else:
+            self.config = _load_cleaning_config().get("ProjectListCleaner", {})
     
     def can_clean(self, tool_name: str, data: Any) -> bool:
         """Identifica se può pulire risultati di General_list_projects."""
@@ -184,10 +242,16 @@ class ProjectListCleaner(CleaningStrategy):
     def estimate_reduction(self, data: Any) -> float:
         """Stima la riduzione possibile per progetti."""
         projects = self._extract_projects(data)
+        max_projects = self.config.get("max_projects_fallback", 3)
+        
         if len(projects) <= 1:
             return 20.0  # Rimozione metadati
+        elif len(projects) <= max_projects:
+            return 50.0  # Rimozione metadati + alcuni progetti
         else:
-            return 70.0 + (len(projects) - 1) * 10  # Rimozione progetti extra
+            # Rimozione progetti extra basata sulla configurazione
+            extra_projects = len(projects) - max_projects
+            return 70.0 + min(extra_projects * 10, 20.0)  # Cap alla riduzione del 90%
 
 
 class CodeSnippetCleaner(CleaningStrategy):
@@ -197,6 +261,12 @@ class CodeSnippetCleaner(CleaningStrategy):
     Problema risolto: Code_find_relevant_code_snippets restituisce molti metadati
     (file_path, line_numbers, entity_info, scores) ma spesso serve solo il codice.
     """
+    
+    def __init__(self, config: Dict[str, Any] = None):
+        if config:
+            self.config = config
+        else:
+            self.config = _load_cleaning_config().get("CodeSnippetCleaner", {})
     
     def can_clean(self, tool_name: str, data: Any) -> bool:
         """Identifica se può pulire risultati di code search."""
@@ -307,6 +377,12 @@ class DocumentCleaner(CleaningStrategy):
     Problema risolto: Document content spesso include headers, metadata,
     formatting che aumenta il rumore senza aggiungere valore semantico.
     """
+    
+    def __init__(self, config: Dict[str, Any] = None):
+        if config:
+            self.config = config
+        else:
+            self.config = _load_cleaning_config().get("DocumentCleaner", {})
     
     def can_clean(self, tool_name: str, data: Any) -> bool:
         """Identifica se può pulire documenti."""
@@ -431,6 +507,12 @@ class UserStoryListCleaner(CleaningStrategy):
     per ogni story, ma spesso servono solo id, title e description.
     """
     
+    def __init__(self, config: Dict[str, Any] = None):
+        if config:
+            self.config = config
+        else:
+            self.config = _load_cleaning_config().get("UserStoryListCleaner", {})
+    
     def can_clean(self, tool_name: str, data: Any) -> bool:
         """Identifica se può pulire user stories."""
         logger.debug(f"UserStoryListCleaner.can_clean() invoked with tool_name='{tool_name}', data_type={type(data)}")
@@ -509,6 +591,12 @@ class RepositoryListCleaner(CleaningStrategy):
     Problema risolto: Code_list_repositories restituisce molti dettagli
     per ogni repo, ma spesso servono solo id, name e description.
     """
+    
+    def __init__(self, config: Dict[str, Any] = None):
+        if config:
+            self.config = config
+        else:
+            self.config = _load_cleaning_config().get("RepositoryListCleaner", {})
     
     def can_clean(self, tool_name: str, data: Any) -> bool:
         """Identifica se può pulire repository lists."""

@@ -22,8 +22,8 @@ from context_hooks import ContextHookManager, CompressionHook, HookType, with_co
 from enhanced_compact_integration import EnhancedCompactIntegration
 
 # Import necessari per LangGraph
-from src.deepagents.model import get_model
-from src.deepagents.state import DeepAgentState
+from deepagents.model import get_model
+from deepagents.state import DeepAgentState
 
 
 async def create_enhanced_deep_planning_agent(
@@ -77,8 +77,8 @@ async def create_enhanced_deep_planning_agent(
             context_manager=mcp_wrapper.context_manager if mcp_wrapper else None
         )
         
-        # Crea hook manager
-        hook_manager = ContextHookManager(llm_compressor)
+        # Crea hook manager con configurazione automatica da YAML
+        hook_manager = ContextHookManager(llm_compressor, config_path="context_config.yaml")
         
         # Crea enhanced compact integration
         enhanced_compact_integration = EnhancedCompactIntegration(

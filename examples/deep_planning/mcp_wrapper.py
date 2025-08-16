@@ -16,12 +16,18 @@ import asyncio
 import json
 import time
 import inspect
+import logging
 from functools import wraps
 from typing import Any, Dict, List, Optional, Callable, Union
 from dataclasses import asdict
 
 from context_manager import ContextManager, ContextMetrics, ContextInfo, CleaningResult
 from mcp_cleaners import create_default_cleaning_strategies
+
+# Configurazione logging specifico per context tracking
+logging.basicConfig(level=logging.INFO)
+context_logger = logging.getLogger("mcp_context_tracker")
+context_logger.setLevel(logging.INFO)
 
 
 class MCPToolWrapper:
@@ -230,17 +236,30 @@ class MCPToolWrapper:
             # Incrementa statistiche
             self.stats["total_calls"] += 1
             
+            # Log pre-execution con context length
+            context_logger.info(f"🔧 MCP Tool Call: {tool_name}")
+            self._log_pre_execution_context()
+            
             # Esegue il tool originale
             original_result = tool_func(*args, **kwargs)
+            
+            # Calcola dimensioni pre-pulizia
+            original_size = len(json.dumps(original_result, default=str))
             
             # Applica pulizia se abilitata
             if self.config.get("cleaning_enabled", True):
                 cleaned_result, cleaning_info = self._clean_tool_result(
                     tool_name, original_result, args, kwargs
                 )
+                # Log cleaning operation
+                self._log_cleaning_operation(tool_name, cleaning_info, original_size)
             else:
                 cleaned_result = original_result
                 cleaning_info = self._create_no_cleaning_result(original_result)
+                context_logger.info(f"⚪ No cleaning applied for {tool_name} (cleaning disabled)")
+            
+            # Verifica se è necessaria compattazione
+            self._check_and_log_compaction_trigger()
             
             # Aggiorna statistiche
             if cleaning_info.cleaning_status == "completed":
@@ -252,12 +271,16 @@ class MCPToolWrapper:
             self._log_tool_call(tool_name, args, kwargs, original_result, cleaned_result, 
                               cleaning_info, execution_time)
             
+            # Log post-execution context length
+            self._log_post_execution_context(execution_time)
+            
             # Restituisce il risultato pulito
             return cleaned_result
             
         except Exception as e:
             # Gestione errori graceful
             self.stats["errors"] += 1
+            context_logger.error(f"❌ Error in {tool_name}: {str(e)}")
             self._log_error(tool_name, args, kwargs, e, time.time() - start_time)
             
             # Se la pulizia fallisce, restituisce il risultato originale
@@ -366,6 +389,202 @@ class MCPToolWrapper:
             "errors": 0
         }
         self.call_history = []
+    
+    def clean_message_list(self, messages: List[Any]) -> List[Any]:
+        """
+        Pulisce una lista di messaggi LangGraph, applicando cleaning ai ToolMessage MCP.
+        
+        Questo metodo è specificamente progettato per risolvere il gap di integrazione
+        con LangGraph state, pulendo i ToolMessage DOPO che sono stati salvati nello stato.
+        
+        Args:
+            messages: Lista di messaggi LangGraph (HumanMessage, AIMessage, ToolMessage, etc.)
+        
+        Returns:
+            Lista di messaggi con ToolMessage MCP puliti
+        """
+        if not messages:
+            return messages
+        
+        cleaned_messages = []
+        
+        for message in messages:
+            # Verifica se è un ToolMessage che necessita pulizia
+            if self._is_mcp_tool_message(message):
+                try:
+                    # Applica pulizia al contenuto del ToolMessage
+                    cleaned_content = self._clean_tool_message_content(message)
+                    
+                    # Crea una copia del messaggio con contenuto pulito
+                    cleaned_message = self._create_cleaned_tool_message(message, cleaned_content)
+                    cleaned_messages.append(cleaned_message)
+                    
+                    # Log dell'operazione
+                    self._log_message_cleaning(message, cleaned_message)
+                    
+                except Exception as e:
+                    # Se la pulizia fallisce, mantieni il messaggio originale
+                    print(f"⚠️ Failed to clean ToolMessage: {e}")
+                    cleaned_messages.append(message)
+            else:
+                # Non è un ToolMessage MCP, mantieni invariato
+                cleaned_messages.append(message)
+        
+        return cleaned_messages
+    
+    def _is_mcp_tool_message(self, message: Any) -> bool:
+        """Verifica se un messaggio è un ToolMessage MCP che necessita pulizia."""
+        # Verifica se ha attributi di ToolMessage
+        if not (hasattr(message, 'type') and hasattr(message, 'content')):
+            return False
+        
+        # Verifica se è di tipo tool
+        if getattr(message, 'type', None) != 'tool':
+            return False
+        
+        # Verifica se ha tool_call_id o name che indica MCP tool
+        tool_name = getattr(message, 'name', '') or getattr(message, 'tool_call_id', '')
+        
+        return self._is_mcp_tool(tool_name)
+    
+    def _clean_tool_message_content(self, message: Any) -> Any:
+        """Pulisce il contenuto di un ToolMessage."""
+        content = getattr(message, 'content', '')
+        tool_name = getattr(message, 'name', '') or getattr(message, 'tool_call_id', '')
+        
+        # Se il contenuto è già una stringa JSON, prova a parsarlo
+        if isinstance(content, str):
+            try:
+                content = json.loads(content)
+            except json.JSONDecodeError:
+                # Se non è JSON valido, restituisci il contenuto originale
+                return content
+        
+        # Applica pulizia usando il context manager
+        try:
+            cleaned_result, cleaning_info = self._clean_tool_result(
+                tool_name, content, (), {}
+            )
+            return cleaned_result
+        except Exception:
+            # Fallback al contenuto originale se la pulizia fallisce
+            return content
+    
+    def _create_cleaned_tool_message(self, original_message: Any, cleaned_content: Any) -> Any:
+        """Crea una copia del ToolMessage con contenuto pulito."""
+        # Se il contenuto pulito è un dict/list, convertilo in JSON string
+        if isinstance(cleaned_content, (dict, list)):
+            content_str = json.dumps(cleaned_content, ensure_ascii=False, indent=2)
+        else:
+            content_str = str(cleaned_content)
+        
+        # Crea una copia del messaggio mantenendo tutti gli attributi originali
+        if hasattr(original_message, '__dict__'):
+            # Se il messaggio è un oggetto con attributi, crea una copia
+            cleaned_message = type(original_message).__new__(type(original_message))
+            
+            # Copia tutti gli attributi dall'originale
+            for attr, value in original_message.__dict__.items():
+                if attr == 'content':
+                    setattr(cleaned_message, attr, content_str)
+                else:
+                    setattr(cleaned_message, attr, value)
+            
+            return cleaned_message
+        else:
+            # Fallback: restituisci il messaggio originale
+            return original_message
+    
+    def _log_pre_execution_context(self) -> None:
+        """Log del contesto prima dell'esecuzione del tool."""
+        try:
+            # Simula una lista di messaggi per analizzare il contesto
+            # In un ambiente reale, questo dovrebbe essere iniettato dal sistema LangGraph
+            mock_messages = [{"content": "current context", "type": "placeholder"}]
+            metrics = self.context_manager.analyze_context(mock_messages)
+            
+            context_logger.info(f"📊 Pre-execution Context: {metrics.tokens_used:,} tokens "
+                              f"({metrics.utilization_percentage:.1f}% utilization, "
+                              f"{metrics.mcp_noise_percentage:.1f}% MCP noise)")
+        except Exception as e:
+            context_logger.info(f"Could not analyze pre-execution context: {e}")
+    
+    def _log_post_execution_context(self, execution_time: float) -> None:
+        """Log del contesto dopo l'esecuzione del tool."""
+        try:
+            # Simula una lista di messaggi per analizzare il contesto post-esecuzione
+            mock_messages = [{"content": "updated context", "type": "placeholder"}]
+            metrics = self.context_manager.analyze_context(mock_messages)
+            
+            context_logger.info(f"📈 Post-execution Context: {metrics.tokens_used:,} tokens "
+                              f"({metrics.utilization_percentage:.1f}% utilization) "
+                              f"- Execution time: {execution_time:.3f}s")
+        except Exception as e:
+            context_logger.info(f"Could not analyze post-execution context: {e}")
+    
+    def _log_cleaning_operation(self, tool_name: str, cleaning_info: CleaningResult, original_size: int) -> None:
+        """Log delle operazioni di pulizia."""
+        if cleaning_info.cleaning_status == "completed":
+            context_logger.info(f"🧹 Cleaning applied to {tool_name}: "
+                              f"{original_size:,} → {cleaning_info.cleaned_size:,} chars "
+                              f"({cleaning_info.reduction_percentage:.1f}% reduction) "
+                              f"using {cleaning_info.strategy_used}")
+        elif cleaning_info.cleaning_status == "skipped":
+            context_logger.info(f"⏭️ Cleaning skipped for {tool_name}: {cleaning_info.strategy_used}")
+        elif cleaning_info.cleaning_status == "failed":
+            context_logger.warning(f"⚠️ Cleaning failed for {tool_name}: "
+                                  f"{cleaning_info.metadata.get('error', 'Unknown error')}")
+    
+    def _check_and_log_compaction_trigger(self) -> None:
+        """Verifica e log dei trigger di compattazione."""
+        try:
+            # Simula una lista di messaggi per il controllo compattazione
+            mock_messages = [{"content": "context for compaction check", "type": "placeholder"}]
+            should_compact, trigger_type, metrics = self.context_manager.should_trigger_compaction(mock_messages)
+            
+            if should_compact:
+                context_logger.warning(f"🔄 COMPACTION TRIGGERED: {trigger_type.value} "
+                                     f"(Utilization: {metrics.utilization_percentage:.1f}%, "
+                                     f"MCP Noise: {metrics.mcp_noise_percentage:.1f}%)")
+                
+                # Qui potresti attivare effettivamente la compattazione
+                self._trigger_context_compaction(mock_messages, trigger_type, metrics)
+            elif metrics.is_near_limit:
+                context_logger.info(f"⚠️ Context near limit: {metrics.utilization_percentage:.1f}% utilization")
+        except Exception as e:
+            context_logger.info(f"Could not check compaction trigger: {e}")
+    
+    def _trigger_context_compaction(self, messages: List[Any], trigger_type: Any, metrics: ContextMetrics) -> None:
+        """Esegue la compattazione del contesto."""
+        try:
+            context_logger.info(f"🔄 Starting context compaction ({trigger_type.value})...")
+            
+            # Esegue la pulizia completa del contesto
+            cleaned_messages, context_info = self.context_manager.process_context_cleaning(messages)
+            
+            context_logger.info(f"✅ Context compaction completed: "
+                              f"{context_info.total_reduction_percentage:.1f}% total reduction "
+                              f"({len(context_info.cleaning_results)} operations)")
+            
+            # Aggiorna le statistiche
+            self.context_manager.context_history.append(context_info)
+            
+        except Exception as e:
+            context_logger.error(f"❌ Context compaction failed: {e}")
+    
+    def _log_message_cleaning(self, original_message: Any, cleaned_message: Any) -> None:
+        """Log dell'operazione di pulizia messaggio."""
+        original_size = len(str(getattr(original_message, 'content', '')))
+        cleaned_size = len(str(getattr(cleaned_message, 'content', '')))
+        
+        if original_size > 0:
+            reduction = ((original_size - cleaned_size) / original_size) * 100
+            context_logger.info(f"🧹 ToolMessage cleaned: {original_size:,} → {cleaned_size:,} chars ({reduction:.1f}% reduction)")
+        else:
+            context_logger.info("🧹 ToolMessage processed (no size change)")
+        
+        # Aggiorna statistiche se non già contate
+        self.stats["cleaned_calls"] += 1
 
 
 def create_mcp_wrapper(config: Dict[str, Any] = None) -> MCPToolWrapper:

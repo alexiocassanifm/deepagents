@@ -17,6 +17,7 @@ Ispirato dalle specifiche di Claude Code compact-implementation per massima comp
 import json
 import re
 import time
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -28,6 +29,17 @@ try:
     TIKTOKEN_AVAILABLE = True
 except ImportError:
     TIKTOKEN_AVAILABLE = False
+
+# Import del config loader per caricare configurazione da YAML
+try:
+    from config_loader import get_context_management_config
+    CONFIG_LOADER_AVAILABLE = True
+except ImportError:
+    CONFIG_LOADER_AVAILABLE = False
+
+# Logger specifico per context manager
+context_manager_logger = logging.getLogger("context_manager")
+context_manager_logger.setLevel(logging.INFO)
 
 
 class CompactTrigger(str, Enum):
@@ -53,7 +65,8 @@ class ContextMetrics:
     tokens_used: int
     max_context_window: int
     utilization_percentage: float
-    trigger_threshold: float = 0.85
+    trigger_threshold: float
+    mcp_noise_threshold: float
     mcp_noise_percentage: float = 0.0
     deduplication_potential: float = 0.0
     
@@ -62,13 +75,15 @@ class ContextMetrics:
         """Determina se deve essere attivata la compattazione."""
         return (
             self.utilization_percentage >= self.trigger_threshold or 
-            self.mcp_noise_percentage > 0.6
+            self.mcp_noise_percentage > self.mcp_noise_threshold
         )
     
     @property
     def is_near_limit(self) -> bool:
         """Indica se siamo vicini al limite del contesto."""
-        return self.utilization_percentage >= 0.70
+        # Usa post_tool_threshold o fallback a 70%
+        near_limit_threshold = getattr(self, 'post_tool_threshold', 70.0)
+        return self.utilization_percentage >= near_limit_threshold
 
 
 @dataclass
@@ -170,24 +185,56 @@ class ContextManager:
     """
     
     def __init__(self, config: Dict[str, Any] = None):
-        self.config = config or self._default_config()
+        self.config = config or self._load_config()
         self.cleaning_strategies: List[CleaningStrategy] = []
         self.context_history: List[ContextInfo] = []
         self.session_id = f"ctx_{int(time.time())}"
         
+        # Performance configuration from YAML
+        self.use_precise_tokenization = self.config.get("use_precise_tokenization", True)
+        self.analysis_cache_duration = self.config.get("analysis_cache_duration", 60)
+        self.auto_check_interval = self.config.get("auto_check_interval", 30)
+        self.fallback_token_estimation = self.config.get("fallback_token_estimation", True)
+        
+        # Cache per analysis per evitare rianalisi continue
+        self._analysis_cache = {}
+        self._last_analysis_time = 0
+        
         # Inizializza tokenizer per conteggio preciso
         self.tokenizer = None
-        if TIKTOKEN_AVAILABLE:
+        if TIKTOKEN_AVAILABLE and self.use_precise_tokenization:
             try:
                 self.tokenizer = tiktoken.encoding_for_model("gpt-4")
+                context_manager_logger.info("✅ Using precise tokenization (tiktoken for gpt-4)")
             except:
                 try:
                     self.tokenizer = tiktoken.get_encoding("cl100k_base")
-                except:
-                    pass
+                    context_manager_logger.info("✅ Using precise tokenization (tiktoken cl100k_base)")
+                except Exception as e:
+                    if self.fallback_token_estimation:
+                        context_manager_logger.warning(f"⚠️ Tiktoken failed, using fallback: {e}")
+                    else:
+                        context_manager_logger.error(f"❌ Tiktoken required but failed: {e}")
+        elif not self.use_precise_tokenization:
+            context_manager_logger.info("🔄 Using fallback tokenization (configured)")
+        else:
+            if self.fallback_token_estimation:
+                context_manager_logger.warning("⚠️ Tiktoken not available, using fallback estimation")
+            else:
+                context_manager_logger.error("❌ Precise tokenization required but tiktoken not available")
     
-    def _default_config(self) -> Dict[str, Any]:
-        """Configurazione predefinita del context manager."""
+    def _load_config(self) -> Dict[str, Any]:
+        """Carica configurazione da YAML con fallback a valori predefiniti."""
+        if CONFIG_LOADER_AVAILABLE:
+            try:
+                config = get_context_management_config()
+                context_manager_logger.info("✅ Configuration loaded from context_config.yaml")
+                return config
+            except Exception as e:
+                context_manager_logger.warning(f"⚠️ Failed to load YAML config: {e}")
+        
+        # Fallback ai valori predefiniti
+        context_manager_logger.info("🔄 Using default configuration (YAML not available)")
         return {
             "max_context_window": 200000,
             "trigger_threshold": 0.85,
@@ -196,7 +243,12 @@ class ContextManager:
             "deduplication_similarity": 0.90,
             "preserve_essential_fields": True,
             "auto_compaction": True,
-            "logging_enabled": True
+            "logging_enabled": True,
+            # Performance settings fallback
+            "use_precise_tokenization": True,
+            "analysis_cache_duration": 60,
+            "auto_check_interval": 30,
+            "fallback_token_estimation": True
         }
     
     def register_cleaning_strategy(self, strategy: CleaningStrategy) -> None:
@@ -214,7 +266,16 @@ class ContextManager:
         return len(text) // 4
     
     def analyze_context(self, messages: List[Dict[str, Any]]) -> ContextMetrics:
-        """Analizza le metriche del contesto corrente."""
+        """Analizza le metriche del contesto corrente con cache intelligente."""
+        # Controlla cache se abilitata
+        current_time = time.time()
+        cache_key = f"{len(messages)}_{hash(str(messages))}"
+        
+        if (cache_key in self._analysis_cache and 
+            current_time - self._last_analysis_time < self.analysis_cache_duration):
+            context_manager_logger.debug("📋 Using cached context analysis")
+            return self._analysis_cache[cache_key]
+        
         total_tokens = 0
         mcp_tokens = 0
         
@@ -231,13 +292,30 @@ class ContextManager:
         utilization = total_tokens / max_window if max_window > 0 else 0
         mcp_noise = mcp_tokens / total_tokens if total_tokens > 0 else 0
         
-        return ContextMetrics(
+        metrics = ContextMetrics(
             tokens_used=total_tokens,
             max_context_window=max_window,
             utilization_percentage=round(utilization * 100, 2),
             trigger_threshold=self.config["trigger_threshold"],
+            mcp_noise_threshold=self.config["mcp_noise_threshold"],
             mcp_noise_percentage=round(mcp_noise * 100, 2)
         )
+        
+        # Log detailed context analysis
+        context_manager_logger.info(f"📋 Context Analysis: {len(messages)} messages, "
+                                   f"{total_tokens:,} total tokens "
+                                   f"({mcp_tokens:,} MCP tokens, {metrics.mcp_noise_percentage:.1f}% noise)")
+        
+        # Salva nel cache
+        self._analysis_cache[cache_key] = metrics
+        self._last_analysis_time = current_time
+        
+        # Limita dimensione cache (mantieni solo le ultime 10 analisi)
+        if len(self._analysis_cache) > 10:
+            oldest_key = min(self._analysis_cache.keys())
+            del self._analysis_cache[oldest_key]
+        
+        return metrics
     
     def _contains_mcp_content(self, message: Dict[str, Any]) -> bool:
         """Identifica se un messaggio contiene contenuto MCP."""
@@ -269,12 +347,24 @@ class ContextManager:
         Returns:
             Tupla (risultato_pulito, informazioni_pulizia)
         """
+        original_size = len(json.dumps(result, default=str))
+        context_manager_logger.info(f"🔍 Searching cleaning strategy for {tool_name} ({original_size:,} chars)")
+        
         # Trova la strategia appropriata
         for strategy in self.cleaning_strategies:
             if strategy.can_clean(tool_name, result):
-                return strategy.clean(result, context)
+                context_manager_logger.info(f"✅ Found strategy: {strategy.name} for {tool_name}")
+                cleaned_result, cleaning_info = strategy.clean(result, context)
+                
+                if cleaning_info.cleaning_status == "completed":
+                    context_manager_logger.info(f"🧹 {strategy.name} cleaned {tool_name}: "
+                                               f"{original_size:,} → {cleaning_info.cleaned_size:,} chars "
+                                               f"({cleaning_info.reduction_percentage:.1f}% reduction)")
+                
+                return cleaned_result, cleaning_info
         
         # Nessuna strategia specifica trovata - pulizia generica
+        context_manager_logger.info(f"⚪ No specific strategy found for {tool_name}, using generic cleaning")
         return self._generic_clean(result, tool_name)
     
     def _generic_clean(self, data: Any, tool_name: str) -> Tuple[Any, CleaningResult]:

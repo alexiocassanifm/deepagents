@@ -15,11 +15,14 @@ Funzionalità principali:
 import asyncio
 import json
 import time
+import yaml
+import os
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Optional, Callable, Union
 from dataclasses import dataclass, field
 from enum import Enum
 from functools import wraps
+from pathlib import Path
 
 from langchain_core.language_models import LanguageModelLike
 from langgraph.types import Command
@@ -27,7 +30,46 @@ from langgraph.types import Command
 # Import existing system components
 from context_manager import ContextManager, ContextMetrics
 from llm_compression import LLMCompressor, CompressionConfig, LLMCompressionResult, CompressionType
-from src.deepagents.state import DeepAgentState
+from deepagents.state import DeepAgentState
+
+
+def load_context_config(config_path: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Carica configurazione dal file YAML.
+    
+    Args:
+        config_path: Percorso al file di configurazione. Se None, cerca context_config.yaml
+                    nella directory corrente.
+    
+    Returns:
+        Dizionario con la configurazione caricata dal YAML.
+    """
+    if config_path is None:
+        # Cerca nella directory corrente
+        config_path = Path(__file__).parent / "context_config.yaml"
+    
+    try:
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
+        return config
+    except FileNotFoundError:
+        # Fallback con valori di default se il file non esiste
+        return {
+            'context_management': {
+                'trigger_threshold': 0.80,
+                'mcp_noise_threshold': 0.60,
+                'force_llm_threshold': 0.90,
+                'post_tool_threshold': 0.70,
+                'llm_compression_threshold': 0.75
+            },
+            'performance': {
+                'auto_check_interval': 60
+            }
+        }
+    except yaml.YAMLError as e:
+        print(f"Errore parsing YAML config: {e}")
+        # Usa configurazione di default in caso di errore
+        return load_context_config()
 
 
 class HookType(str, Enum):
@@ -90,17 +132,27 @@ class CompressionHook(Hook):
     def __init__(self, 
                  compressor: LLMCompressor,
                  trigger_config: Dict[str, Any] = None,
-                 priority: HookPriority = HookPriority.HIGH):
+                 priority: HookPriority = HookPriority.HIGH,
+                 config_path: Optional[str] = None):
         super().__init__("compression_hook", priority)
         self.compressor = compressor
+        
+        # Carica configurazione dal YAML
+        self.config = load_context_config(config_path)
+        context_mgmt = self.config.get('context_management', {})
+        performance = self.config.get('performance', {})
+        
+        # Usa configurazione YAML con fallback ai valori di default
         self.trigger_config = trigger_config or {
-            "utilization_threshold": 0.80,
-            "mcp_noise_threshold": 0.60,
-            "min_messages": 5,
-            "force_compression_threshold": 0.90
+            "utilization_threshold": context_mgmt.get('trigger_threshold', 0.80),
+            "mcp_noise_threshold": context_mgmt.get('mcp_noise_threshold', 0.60),
+            "min_messages": 5,  # Non presente nel YAML, mantieni default
+            "force_compression_threshold": context_mgmt.get('force_llm_threshold', 0.90),
+            "post_tool_threshold": context_mgmt.get('post_tool_threshold', 0.70),
+            "llm_compression_threshold": context_mgmt.get('llm_compression_threshold', 0.75)
         }
         self.last_compression_time = 0
-        self.compression_cooldown = 60  # seconds
+        self.compression_cooldown = performance.get('auto_check_interval', 60)  # seconds from YAML
     
     async def execute(self, context: HookContext) -> Optional[Dict[str, Any]]:
         """Esegue compressione se necessaria."""
@@ -248,9 +300,10 @@ class ContextHookManager:
     5. Si integra trasparentemente con LangGraph execution
     """
     
-    def __init__(self, compressor: LLMCompressor, config: Dict[str, Any] = None):
+    def __init__(self, compressor: LLMCompressor, config: Dict[str, Any] = None, config_path: Optional[str] = None):
         self.compressor = compressor
         self.config = config or {}
+        self.config_path = config_path
         self.hooks: Dict[HookType, List[Hook]] = {hook_type: [] for hook_type in HookType}
         self.enabled = True
         self.stats = {
@@ -260,8 +313,8 @@ class ContextHookManager:
             "total_processing_time": 0.0
         }
         
-        # Registra hook di compressione di default
-        compression_hook = CompressionHook(compressor)
+        # Registra hook di compressione di default con configurazione YAML
+        compression_hook = CompressionHook(compressor, config_path=config_path)
         self.register_hook(HookType.POST_STEP, compression_hook)
         self.register_hook(HookType.POST_TOOL, compression_hook)
     
@@ -420,14 +473,22 @@ def with_context_hooks(hook_manager: ContextHookManager):
     return decorator
 
 
-async def create_hooked_deep_agent(tools, instructions, model=None, hook_manager=None, **kwargs):
+async def create_hooked_deep_agent(tools, instructions, model=None, hook_manager=None, config_path=None, **kwargs):
     """
     Crea un deep agent con hook automatici integrati.
     
     Questa funzione wrappa create_deep_agent e aggiunge hook automatici
     senza modificare l'interfaccia esistente.
+    
+    Args:
+        tools: Lista di tool per l'agente
+        instructions: Istruzioni per l'agente
+        model: Modello LLM da utilizzare
+        hook_manager: Manager per gli hook. Se None, verrà creato automaticamente
+        config_path: Percorso al file di configurazione YAML
+        **kwargs: Altri argomenti per create_deep_agent
     """
-    from src.deepagents.graph import create_deep_agent
+    from deepagents.graph import create_deep_agent
     
     # Crea agent normale
     agent = create_deep_agent(tools, instructions, model, **kwargs)
