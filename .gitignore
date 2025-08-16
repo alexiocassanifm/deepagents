@@ -208,3 +208,62 @@ __marimo__/
 
 # LangGraph
 .langgraph_api
+
+# DeepAgents specific
+# Local environment files with sensitive data
+.env.local
+*.env.local
+
+# AI/LLM Development
+# Claude Code configuration and cache
+.claude/
+.claude-code/
+
+# LangSmith traces and logs
+.langsmith/
+langsmith_traces.json
+
+# MCP (Model Context Protocol) configurations
+mcp_config.json
+.mcp/
+
+# AI model caches and temporary files
+.ai_cache/
+.model_cache/
+*.model_cache
+
+# Anthropic API keys and configurations
+anthropic_api_key.txt
+.anthropic/
+
+# OpenAI API configurations
+openai_config.json
+.openai/
+
+# Temporary agent state files
+agent_state_*.json
+conversation_*.json
+
+# Development and testing
+# Local test configurations
+test_config_local.json
+local_test_*.py
+
+# Example environment files (keep .env.example but ignore local versions)
+examples/*/.env
+examples/*/config.json
+examples/*/local_config.json
+
+# Debugging and profiling
+debug_*.log
+profile_*.log
+trace_*.json
+
+# IDE and editor specific (additional to common ones)
+# Cursor AI IDE
+.cursor/
+cursor_*.log
+
+# Claude artifacts and generations
+claude_artifacts/
+generated_*.py.bak
