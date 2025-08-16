@@ -1,0 +1,22 @@
+# Deep Agents Atlas Example Requirements
+
+# Core dependencies - Install locally from project root
+# Run: pip install -e . (from /Users/alexiocassani/Projects/deepagents/)
+# deepagents (install locally with: pip install -e .)
+
+# LangChain MCP integration - OFFICIAL LIBRARIES
+langchain-mcp-adapters>=0.1.0
+mcp>=1.0.0
+
+# LangChain core components
+langchain>=0.2.14
+langchain-core>=0.2.14
+langchain-anthropic>=0.1.23
+langgraph>=0.2.6
+
+# Additional useful dependencies
+python-dotenv>=1.0.0
+
+# Development dependencies (optional)
+pytest>=7.0.0
+pytest-asyncio>=0.21.0

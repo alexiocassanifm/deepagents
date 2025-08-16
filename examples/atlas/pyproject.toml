@@ -1,0 +1,25 @@
+[project]
+name = "atlas"
+version = "0.1.0"
+description = "Atlas Agent - Tech Lead and Software Architect for DeepAgents"
+requires-python = ">=3.11"
+dependencies = [
+    "deepagents",  # Install locally from main project
+    "langchain-mcp-adapters>=0.1.0",
+    "mcp>=1.0.0",
+    "langchain>=0.2.14",
+    "langchain-core>=0.2.14", 
+    "langchain-anthropic>=0.1.23",
+    "langgraph>=0.2.6",
+    "python-dotenv>=1.0.0",
+]
+
+[tool.setuptools]
+py-modules = ["atlas_agent"]
+
+[tool.setuptools.package-data]
+"*" = ["**/*"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"

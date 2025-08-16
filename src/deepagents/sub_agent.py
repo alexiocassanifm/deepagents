@@ -16,6 +16,8 @@ class SubAgent(TypedDict):
     description: str
     prompt: str
     tools: NotRequired[list[str]]
+    requires_approval: NotRequired[bool]
+    approval_points: NotRequired[list[str]]
 
 
 def _create_task_tool(tools, instructions, subagents: list[SubAgent], model, state_schema):
@@ -32,6 +34,12 @@ def _create_task_tool(tools, instructions, subagents: list[SubAgent], model, sta
             _tools = [tools_by_name[t] for t in _agent["tools"]]
         else:
             _tools = tools
+        
+        # If the subagent requires approval, add review_plan to its tools
+        if _agent.get("requires_approval", False):
+            from deepagents.tools import review_plan
+            _tools = list(_tools) + [review_plan]
+        
         agents[_agent["name"]] = create_react_agent(
             model, prompt=_agent["prompt"], tools=_tools, state_schema=state_schema
         )
@@ -40,11 +48,19 @@ def _create_task_tool(tools, instructions, subagents: list[SubAgent], model, sta
         f"- {_agent['name']}: {_agent['description']}" for _agent in subagents
     ]
 
+    # Build agent info with approval requirements
+    agents_info = {}
+    for _agent in subagents:
+        agents_info[_agent["name"]] = {
+            "requires_approval": _agent.get("requires_approval", False),
+            "approval_points": _agent.get("approval_points", [])
+        }
+
     @tool(
         description=TASK_DESCRIPTION_PREFIX.format(other_agents=other_agents_string)
         + TASK_DESCRIPTION_SUFFIX
     )
-    def task(
+    async def task(
         description: str,
         subagent_type: str,
         state: Annotated[DeepAgentState, InjectedState],
@@ -52,9 +68,18 @@ def _create_task_tool(tools, instructions, subagents: list[SubAgent], model, sta
     ):
         if subagent_type not in agents:
             return f"Error: invoked agent of type {subagent_type}, the only allowed types are {[f'`{k}`' for k in agents]}"
+        
+        # The subagent will handle its own approval workflow internally
+        # No need to pre-approve here - let the subagent use review_plan tool if needed
+        
+        # Execute the sub-agent
         sub_agent = agents[subagent_type]
-        state["messages"] = [{"role": "user", "content": description}]
-        result = sub_agent.invoke(state)
+        agent_state = state.copy()
+        agent_state["messages"] = [{"role": "user", "content": description}]
+        
+        result = await sub_agent.ainvoke(agent_state)
+        
+        # Return the subagent results
         return Command(
             update={
                 "files": result.get("files", {}),
