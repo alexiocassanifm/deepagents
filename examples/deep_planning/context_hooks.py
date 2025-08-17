@@ -126,6 +126,65 @@ class Hook(ABC):
         return self.enabled
 
 
+class ValidationHook(Hook):
+    """Hook for lightweight validation and preparation before operations."""
+    
+    def __init__(self,
+                 compressor: LLMCompressor,
+                 priority: HookPriority = HookPriority.HIGH,
+                 config_path: Optional[str] = None):
+        super().__init__("validation_hook", priority)
+        self.compressor = compressor
+        self.config = load_context_config(config_path)
+        self.validation_errors = []
+    
+    async def execute(self, context: HookContext) -> Optional[Dict[str, Any]]:
+        """Perform lightweight validation without compression."""
+        try:
+            # Extract metrics for validation
+            messages = self._extract_messages_from_state(context.state)
+            
+            # Check for critical thresholds
+            context_mgmt = self.config.get('context_management', {})
+            
+            # Calculate basic metrics
+            total_tokens = sum(len(json.dumps(m, default=str)) // 4 for m in messages)
+            utilization = min(total_tokens / context_mgmt.get('max_context_window', 50000) * 100, 100)
+            
+            # Validation checks
+            warnings = []
+            if utilization > 95:
+                warnings.append("Critical context utilization (>95%)")
+            
+            if len(messages) > 1000:
+                warnings.append("Excessive message count (>1000)")
+            
+            # Check for errors in recent messages
+            error_count = sum(1 for m in messages[-10:] if 'error' in str(m).lower())
+            if error_count > 3:
+                warnings.append(f"High error rate in recent messages ({error_count}/10)")
+            
+            return {
+                "validation_complete": True,
+                "warnings": warnings,
+                "metrics": {
+                    "utilization": utilization,
+                    "message_count": len(messages),
+                    "recent_errors": error_count
+                }
+            }
+            
+        except Exception as e:
+            self.validation_errors.append(str(e))
+            return {"validation_complete": False, "error": str(e)}
+    
+    def _extract_messages_from_state(self, state: DeepAgentState) -> List[Dict[str, Any]]:
+        """Extract messages from DeepAgentState."""
+        if 'messages' in state:
+            return [msg.dict() if hasattr(msg, 'dict') else dict(msg) for msg in state['messages']]
+        return []
+
+
 class CompressionHook(Hook):
     """Hook specializzato per compressione LLM del contesto."""
     
@@ -315,8 +374,19 @@ class ContextHookManager:
         
         # Registra hook di compressione di default con configurazione YAML
         compression_hook = CompressionHook(compressor, config_path=config_path)
+        validation_hook = ValidationHook(compressor, config_path=config_path)
+        
+        # Register POST hooks - trigger compression after operations
         self.register_hook(HookType.POST_STEP, compression_hook)
         self.register_hook(HookType.POST_TOOL, compression_hook)
+        self.register_hook(HookType.POST_MESSAGE, compression_hook)
+        self.register_hook(HookType.POST_SUBAGENT, compression_hook)
+        
+        # Register PRE hooks - validation and preparation
+        self.register_hook(HookType.PRE_TOOL, validation_hook)
+        self.register_hook(HookType.PRE_STEP, validation_hook)
+        self.register_hook(HookType.PRE_MESSAGE, validation_hook)
+        self.register_hook(HookType.PRE_SUBAGENT, validation_hook)
     
     def register_hook(self, hook_type: HookType, hook: Hook) -> None:
         """Registra un hook per un tipo specifico."""

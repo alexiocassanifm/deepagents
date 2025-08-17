@@ -25,6 +25,10 @@ from enum import Enum
 
 import aiofiles
 import aiofiles.os
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 class CacheStrategy(str, Enum):
@@ -76,8 +80,9 @@ class RateLimitConfig:
             self.requests_per_hour = perf_cfg.requests_per_hour
             self.max_backoff_seconds = perf_cfg.max_backoff_seconds
             self.backoff_multiplier = perf_cfg.backoff_factor
-        except ImportError:
-            pass  # Use defaults if unified config not available
+        except ImportError as e:
+            # Log the error but continue with defaults
+            logger.debug(f"Unified config not available, using defaults: {e}")
 
 
 class RateLimiter:
@@ -270,8 +275,9 @@ class CompressionCache:
                         # Scaduto - rimuove file
                         await aiofiles.os.remove(file_path)
         
-        except Exception:
-            pass  # Ignora errori di lettura
+        except Exception as e:
+            # Log error but don't crash - cache read is optional
+            logger.debug(f"Cache read error (non-critical): {e}")
         
         return None
     
@@ -287,8 +293,9 @@ class CompressionCache:
             
             self.stats["disk_writes"] += 1
         
-        except Exception:
-            pass  # Ignora errori di scrittura
+        except Exception as e:
+            # Log error but don't crash - cache write is optional  
+            logger.debug(f"Cache write error (non-critical): {e}")
     
     def get_stats(self) -> Dict[str, Any]:
         """Restituisce statistiche cache."""
