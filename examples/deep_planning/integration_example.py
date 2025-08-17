@@ -10,11 +10,11 @@ import os
 from typing import Dict, Any, List, Optional
 
 # Import sistema esistente
-from deep_planning_agent import (
+from agent_core import (
     create_optimized_deep_planning_agent,
-    initialize_deep_planning_mcp_tools,
     DEFAULT_MODEL
 )
+from mcp_integration import initialize_deep_planning_mcp_tools
 
 # Import nuovo sistema LLM compression
 from llm_compression import LLMCompressor, CompressionConfig, CompressionStrategy

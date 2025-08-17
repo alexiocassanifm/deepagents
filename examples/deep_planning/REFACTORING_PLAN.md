@@ -106,7 +106,7 @@ Il prototipo deep_planning è un agente AI sofisticato con avanzate capacità di
 ### ✅ FASE 3: Semplificazione Architettura Codice (COMPLETATA)
 **Status**: ✅ COMPLETATA il 17 Agosto 2025  
 **Impatto**: Medio, Rischio: Medio  
-**Tempo effettivo**: 3 ore
+**Tempo effettivo**: 4 ore (incluso 3.3)
 
 #### ✅ 3.1 Refactoring File Agente Principale - COMPLETATO
 **Diviso deep_planning_agent.py (1,896 righe) in:**
@@ -122,10 +122,11 @@ Il prototipo deep_planning è un agente AI sofisticato con avanzate capacità di
 - [x] **Semplificata suite test**: Consolidato test_logging.py + test_enhanced_logging.py
 - [x] **Aggiornati import** e dipendenze
 
-#### 3.3 Semplificare Architettura
-- [ ] **Valutare dynamic agent factory**: Determinare se la complessità è giustificata
-- [ ] **Ridurre livelli wrapper**: Combinare wrapper ridondanti
-- [ ] **Semplificare compatibilità tipi**: Ridurre sezione type patching di 74 righe
+#### ✅ 3.3 Semplificare Architettura - COMPLETATO
+- [x] **Simplified agent factory**: Ridotto da 497 a 150 righe (70% riduzione)
+- [x] **Unified wrapper creato**: Consolidati mcp_wrapper + context_hooks
+- [x] **Compatibilità tipi**: GIÀ RISOLTO in Fase 3.1 (agent_core usa compatibility_layer)
+- [x] **File obsoleti archiviati**: deep_planning_agent.py e dynamic_agent_factory.py in archive/
 
 ---
 

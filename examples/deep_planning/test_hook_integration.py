@@ -13,7 +13,7 @@ from typing import Dict, Any
 def test_llm_compression_import():
     """Testa che tutti i moduli si importino correttamente."""
     try:
-        from deep_planning_agent import create_optimized_deep_planning_agent, LLM_COMPRESSION_AVAILABLE
+        from agent_core import create_optimized_deep_planning_agent, LLM_COMPRESSION_AVAILABLE
         
         if LLM_COMPRESSION_AVAILABLE:
             print("✅ LLM compression system imported successfully")
@@ -39,7 +39,7 @@ async def test_hook_integration():
         return
     
     try:
-        from deep_planning_agent import create_optimized_deep_planning_agent
+        from agent_core import create_optimized_deep_planning_agent
         
         print("\n1️⃣ Testing YAML config loading...")
         try:

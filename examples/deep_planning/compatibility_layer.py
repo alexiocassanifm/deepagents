@@ -66,7 +66,6 @@ def setup_type_patches():
         builtins.Callable = Callable
         builtins.Any = Any
         builtins.Awaitable = Awaitable
-        builtins.tool_input = Any
         
         # Update global namespace
         globals().update({
@@ -77,7 +76,6 @@ def setup_type_patches():
             'Callable': Callable,
             'Any': Any,
             'Awaitable': Awaitable,
-            'tool_input': Any,
             'BaseModel': BaseModel,
             'Field': Field,
             'FieldInfo': FieldInfo
@@ -92,17 +90,16 @@ def setup_type_patches():
         typing.Callable = Callable
         typing.Any = Any
         typing.Awaitable = Awaitable
-        typing.tool_input = Any
         
-        # Define modules to patch
+        # Define modules to patch (removed tool_input from all)
         module_patches = {
-            'deepagents.tools': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable', 'tool_input'],
-            'deepagents.sub_agent': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable', 'tool_input'], 
-            'deepagents.state': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable', 'tool_input'],
-            'langchain_core.tools.base': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable', 'tool_input'],
-            'langchain_core.tools.convert': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable', 'tool_input'],
-            'langchain_core.tools.structured': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable', 'tool_input'],
-            'pydantic.deprecated.decorator': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable', 'tool_input']
+            'deepagents.tools': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable'],
+            'deepagents.sub_agent': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable'], 
+            'deepagents.state': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable'],
+            'langchain_core.tools.base': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable'],
+            'langchain_core.tools.convert': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable'],
+            'langchain_core.tools.structured': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable'],
+            'pydantic.deprecated.decorator': ['Annotated', 'ArgsSchema', 'SkipValidation', 'Optional', 'Callable', 'Any', 'Awaitable']
         }
         
         # Apply patches to modules
@@ -180,6 +177,66 @@ def print_compatibility_report():
         print(f"  {type_name}: {status}")
     
     print("="*60 + "\n")
+
+
+def fix_tool_signatures(tools):
+    """
+    Fix function signatures for tools that have missing type annotations.
+    This specifically handles cases where parameters lack type hints.
+    
+    Args:
+        tools: List of tools to fix
+        
+    Returns:
+        List of tools with fixed signatures
+    """
+    import inspect
+    from typing import Any
+    from langchain_core.tools import BaseTool
+    
+    fixed_tools = []
+    
+    for tool in tools:
+        # Get the actual function to inspect
+        if isinstance(tool, BaseTool):
+            func = tool.func if hasattr(tool, 'func') else tool._run if hasattr(tool, '_run') else None
+        elif callable(tool):
+            func = tool
+        else:
+            # If it's not a tool we can fix, just pass it through
+            fixed_tools.append(tool)
+            continue
+            
+        if func and callable(func):
+            try:
+                # Get function signature
+                sig = inspect.signature(func)
+                params = sig.parameters
+                
+                # Check if any parameter lacks annotation
+                needs_fix = False
+                for param_name, param in params.items():
+                    if param.annotation == inspect.Parameter.empty and param_name not in ['self', 'cls']:
+                        needs_fix = True
+                        break
+                
+                if needs_fix:
+                    # Fix the function's __annotations__ dictionary
+                    if not hasattr(func, '__annotations__'):
+                        func.__annotations__ = {}
+                    
+                    for param_name, param in params.items():
+                        if param.annotation == inspect.Parameter.empty and param_name not in ['self', 'cls']:
+                            # Add Any type hint for missing annotations
+                            func.__annotations__[param_name] = Any
+                            logger.debug(f"Added type annotation for parameter '{param_name}' in {func.__name__}")
+                
+            except Exception as e:
+                logger.debug(f"Could not inspect/fix function signatures for tool: {e}")
+        
+        fixed_tools.append(tool)
+    
+    return fixed_tools
 
 
 def ensure_compatibility():

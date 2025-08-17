@@ -7,8 +7,11 @@ from langchain_core.tools import tool, InjectedToolCallId
 from langchain_core.messages import ToolMessage
 from typing import Annotated, NotRequired
 from langgraph.types import Command
+import logging
 
 from langgraph.prebuilt import InjectedState
+
+logger = logging.getLogger(__name__)
 
 
 class SubAgent(TypedDict):
@@ -21,31 +24,70 @@ class SubAgent(TypedDict):
 
 
 def _create_task_tool(tools, instructions, subagents: list[SubAgent], model, state_schema):
-    agents = {
-        "general-purpose": create_react_agent(model, prompt=instructions, tools=tools)
-    }
+    # Try to create the agent with the original tools first
+    try:
+        agents = {
+            "general-purpose": create_react_agent(model, prompt=instructions, tools=tools)
+        }
+    except KeyError as e:
+        # If there's a KeyError with 'tool_input', try filtering problematic tools
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.warning(f"KeyError creating sub-agent: {e}. Attempting to filter problematic tools.")
+        
+        # Filter out potentially problematic wrapped tools
+        filtered_tools = []
+        for tool_ in tools:
+            # Skip wrapped tools that might have corrupted signatures
+            if hasattr(tool_, '__wrapped__') or hasattr(tool_, '_wrapper'):
+                logger.debug(f"Skipping wrapped tool: {getattr(tool_, 'name', 'unknown')}")
+                continue
+            filtered_tools.append(tool_)
+        
+        # Try again with filtered tools
+        agents = {
+            "general-purpose": create_react_agent(model, prompt=instructions, tools=filtered_tools)
+        }
     tools_by_name = {}
     for tool_ in tools:
-        if not isinstance(tool_, BaseTool):
-            tool_ = tool(tool_)
-        tools_by_name[tool_.name] = tool_
+        # Only wrap if it's a callable but not already a tool
+        if callable(tool_) and not isinstance(tool_, BaseTool):
+            try:
+                # Check if it's already a decorated tool
+                if not (hasattr(tool_, 'name') and hasattr(tool_, 'description')):
+                    tool_ = tool(tool_)
+            except Exception:
+                # If conversion fails, just use as-is
+                pass
+        
+        # Store by name if available
+        if hasattr(tool_, 'name'):
+            tools_by_name[tool_.name] = tool_
     for _agent in subagents:
         if "tools" in _agent:
-            _tools = [tools_by_name[t] for t in _agent["tools"]]
+            _tools = [tools_by_name[t] for t in _agent["tools"] if t in tools_by_name]
         else:
-            _tools = tools
+            _tools = [t for t in tools if hasattr(t, 'name')]  # Filter to valid tools
         
         # If the subagent requires approval, add review_plan to its tools
         if _agent.get("requires_approval", False):
             from deepagents.tools import review_plan
             _tools = list(_tools) + [review_plan]
         
-        agents[_agent["name"]] = create_react_agent(
-            model, prompt=_agent["prompt"], tools=_tools, state_schema=state_schema
-        )
+        try:
+            agents[_agent["name"]] = create_react_agent(
+                model, prompt=_agent["prompt"], tools=_tools, state_schema=state_schema
+            )
+        except KeyError as e:
+            # If creation fails, try without problematic tools
+            logger.warning(f"Failed to create sub-agent {_agent['name']}: {e}. Trying with filtered tools.")
+            safe_tools = [t for t in _tools if not (hasattr(t, '__wrapped__') or hasattr(t, '_wrapper'))]
+            agents[_agent["name"]] = create_react_agent(
+                model, prompt=_agent["prompt"], tools=safe_tools, state_schema=state_schema
+            )
 
     other_agents_string = [
-        f"- {_agent['name']}: {_agent['description']}" for _agent in subagents
+        f"- {_agent['name']}: {_agent.get('description', 'Specialized agent')}" for _agent in subagents
     ]
 
     # Build agent info with approval requirements

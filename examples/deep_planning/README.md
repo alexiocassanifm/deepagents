@@ -68,7 +68,7 @@ export FAIRMIND_MCP_TOKEN="your_token_here"
 ### Standalone Mode
 
 ```python
-from deep_planning_agent import agent
+from agent_core import agent
 
 # Invocare l'agente con una richiesta
 result = agent.invoke({

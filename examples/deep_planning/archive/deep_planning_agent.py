@@ -236,12 +236,10 @@ from mcp_wrapper import wrap_existing_mcp_tools
 # Import compact integration for automatic context management
 from compact_integration import CompactIntegration
 
-# Import dynamic agent factory for specialized sub-agents
-from dynamic_agent_factory import (
-    DynamicAgentFactory,
-    create_dynamic_agent_factory,
-    quick_create_phase_agent,
-    validate_factory_setup
+# Import simplified agent factory for specialized sub-agents
+from simplified_agent_factory import (
+    SimplifiedAgentFactory,
+    create_simplified_factory
 )
 
 # Import LLM compression system for automatic hook integration
@@ -534,7 +532,7 @@ def validate_and_transition_phase(current_phase: str, state: Dict[str, Any], too
         return False, "", [f"Invalid phase: {current_phase}"]
     
     # Create factory for validation
-    agent_factory = create_dynamic_agent_factory(tools)
+    agent_factory = create_simplified_factory(tools)
     
     # Use factory's validation method
     can_transition, next_phase, missing_reqs = agent_factory.validate_phase_transition(
@@ -559,7 +557,7 @@ def get_phase_progress_report(state: Dict[str, Any], tools: List[Any]) -> Dict[s
     Returns:
         Complete progress report with dynamic analysis
     """
-    agent_factory = create_dynamic_agent_factory(tools)
+    agent_factory = create_simplified_factory(tools)
     report = agent_factory.get_phase_summary_report(state)
     
     # Add dynamic context analysis
@@ -793,7 +791,7 @@ def create_dynamic_subagents(tools: List[Any], current_state: Dict[str, Any]) ->
         List of completely dynamically configured sub-agents
     """
     # Create the dynamic agent factory system
-    agent_factory = create_dynamic_agent_factory(tools)
+    agent_factory = create_simplified_factory(tools)
     
     # Validate factory setup
     validation_report = validate_factory_setup(agent_factory)

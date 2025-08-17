@@ -20,7 +20,7 @@ cd ../.. && pip install -e .
 ### Running the Agent
 ```bash
 # Standalone execution
-python deep_planning_agent.py
+python agent_core.py
 
 # LangGraph development server (hot reload)
 langgraph dev
@@ -42,10 +42,11 @@ python test_optimization.py
 
 ### 🏗️ Core Components
 
-1. **Main Agent (`deep_planning_agent.py`)**
+1. **Main Agent (`agent_core.py`)** *(Simplified Architecture)*
    - Entry point that creates optimized deep planning agent with MCP integration
-   - Implements compatibility fixes for different LLM models
-   - Configures 4-phase orchestration workflow
+   - Modularized from original 1847-line file to 602 lines
+   - Uses `simplified_agent_factory.py` (150 lines) instead of complex 497-line factory
+   - Integrates with `unified_wrapper.py` for consolidated tool wrapping
 
 2. **Optimized Prompt System (`optimized_prompts.py`)**
    - 91% reduction in main prompt length (650 → 60 lines)
@@ -149,7 +150,7 @@ FAIRMIND_MCP_TOKEN="your_token_here"
 - Tool-specific overrides and custom rules
 
 ### LangGraph Configuration (`langgraph.json`)
-- Graph definition: `deep_planning_agent.py:agent`
+- Graph definition: `agent_core.py:agent`
 - Dependencies: Local directory (`.`)
 - Environment: `.env` file
 
@@ -184,7 +185,7 @@ FAIRMIND_MCP_TOKEN="your_token_here"
 ## File Structure and Responsibilities
 
 ### Core Files
-- `deep_planning_agent.py` - Main agent creation and initialization
+- `agent_core.py` - Main agent creation and orchestration (602 lines, modularized from original 1847-line file)
 - `optimized_prompts.py` - Modular prompt templates
 - `model_compatibility.py` - Model detection and compatibility profiles
 - `tool_compatibility.py` - Tool fixing and wrapping logic

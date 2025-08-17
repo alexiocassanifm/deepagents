@@ -89,12 +89,10 @@ from model_compatibility import (
     default_registry
 )
 
-# Import dynamic agent factory
-from dynamic_agent_factory import (
-    DynamicAgentFactory,
-    create_dynamic_agent_factory,
-    quick_create_phase_agent,
-    validate_factory_setup
+# Import simplified agent factory
+from simplified_agent_factory import (
+    SimplifiedAgentFactory,
+    create_simplified_factory
 )
 
 # Check for LLM compression availability
@@ -241,14 +239,14 @@ def create_dynamic_subagents(tools: List[Any], current_state: Dict[str, Any]) ->
     Returns:
         List of dynamically generated sub-agent configurations
     """
-    # Use the dynamic agent factory
-    agent_factory = create_dynamic_agent_factory(tools)
+    # Use the simplified agent factory
+    agent_factory = create_simplified_factory(tools)
     
     # Generate agents for all phases
     subagents = []
     for phase in PhaseType:
         try:
-            agent_config = agent_factory.create_agent_from_phase(phase, current_state)
+            agent_config = agent_factory.create_phase_agent(phase, current_state)
             subagents.append(agent_config)
             print(f"✅ Created {agent_config['emoji']} {agent_config['agent_name']} for {phase.value} phase")
         except Exception as e:
@@ -480,7 +478,7 @@ def create_optimized_deep_planning_agent(
     
     # Add validation capabilities to the agent
     logger.info("⚡ Adding validation capabilities")
-    agent._dynamic_factory = create_dynamic_agent_factory(deep_planning_tools)
+    agent._dynamic_factory = create_simplified_factory(deep_planning_tools)
     agent._validate_phase_transition = lambda phase, state: validate_and_transition_phase(phase, state, deep_planning_tools)
     agent._get_progress_report = lambda state: get_phase_progress_report(state, deep_planning_tools)
     agent._auto_advance_phase = lambda state: auto_advance_phase_if_ready(state, deep_planning_tools)

@@ -30,14 +30,15 @@ except ImportError:
     MCP_AVAILABLE = False
     logger.warning("⚠️ langchain-mcp-adapters not available. Install with: pip install langchain-mcp-adapters")
 
-# Import MCP wrapper and compact integration if available
+# Import unified wrapper and compact integration if available
 try:
-    from mcp_wrapper import wrap_existing_mcp_tools
+    from unified_wrapper import wrap_tools_unified
     from compact_integration import CompactIntegration
+    from context_manager import ContextManager
     WRAPPER_AVAILABLE = True
 except ImportError:
     WRAPPER_AVAILABLE = False
-    logger.warning("⚠️ MCP wrapper or compact integration not available")
+    logger.warning("⚠️ Unified wrapper or compact integration not available")
 
 
 async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[Any]]:
@@ -78,21 +79,10 @@ async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[
         
         logger.info(f"🎯 Found {len(fairmind_tools)} relevant fairmind tools")
         
-        # Wrap MCP tools with auto-cleaning functionality if available
-        if WRAPPER_AVAILABLE:
-            logger.info("🧹 Applying MCP auto-cleaning wrapper...")
-            wrapped_tools, wrapper = wrap_existing_mcp_tools(fairmind_tools)
-            
-            # Create compact integration for automatic context management
-            logger.info("📦 Initializing automatic context compaction...")
-            compact_integration = CompactIntegration(wrapper.context_manager, wrapper)
-            
-            logger.info(f"✅ MCP tools wrapped with auto-cleaning - {len(wrapped_tools)} tools ready")
-            logger.info("✅ Automatic context compaction initialized")
-            return wrapped_tools, wrapper, compact_integration
-        else:
-            logger.warning("⚠️ MCP wrapper not available, returning unwrapped tools")
-            return fairmind_tools, None, None
+        # Skip wrapping MCP tools as it corrupts signatures
+        logger.warning("⚠️ Skipping MCP tool wrapping due to signature corruption issues")
+        logger.info(f"✅ Using {len(fairmind_tools)} MCP tools without wrapping")
+        return fairmind_tools, None, None
         
     except Exception as e:
         logger.error(f"❌ Failed to connect to MCP server: {e}")
@@ -101,16 +91,9 @@ async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[
         # EVEN FOR DEMO TOOLS: Create MCP wrapper to test logging functionality
         demo_tools = get_fallback_tools()
         
-        if WRAPPER_AVAILABLE:
-            logger.info("🧹 Creating MCP wrapper for demo tools to test logging system...")
-            wrapped_demo_tools, wrapper = wrap_existing_mcp_tools(demo_tools)
-            
-            logger.info(f"✅ Demo tools wrapped for testing - {len(wrapped_demo_tools)} tools ready")
-            logger.info("⚠️ Using demo tools (no real MCP connection) but MCP wrapper active for testing")
-            
-            return wrapped_demo_tools, wrapper, None
-        else:
-            return demo_tools, None, None
+        # Skip wrapping for demo tools - they're causing signature issues
+        logger.info("⚠️ Using demo tools (no real MCP connection) without wrapping")
+        return demo_tools, None, None
 
 
 def filter_relevant_fairmind_tools(tools: List[Any]) -> List[Any]:

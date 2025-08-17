@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 # Import phase configuration and dynamic agent factory
 try:
     from prompt_config import PhaseType
-    from dynamic_agent_factory import create_dynamic_agent_factory
+    from simplified_agent_factory import create_simplified_factory
     PHASE_CONFIG_AVAILABLE = True
 except ImportError:
     PHASE_CONFIG_AVAILABLE = False
@@ -156,10 +156,10 @@ def validate_and_transition_phase(
         return False, "", [f"Invalid phase: {current_phase}"]
     
     # Create factory for validation
-    agent_factory = create_dynamic_agent_factory(tools)
+    agent_factory = create_simplified_factory(tools)
     
     # Use factory's validation method
-    can_transition, next_phase, missing_reqs = agent_factory.validate_phase_transition(
+    can_transition, next_phase, missing_reqs = agent_factory.validate_transition(
         current_phase, state
     )
     
@@ -186,15 +186,19 @@ def get_phase_progress_report(state: Dict[str, Any], tools: List[Any]) -> Dict[s
         logger.error("Phase configuration not available")
         return {"error": "Phase configuration module not available"}
     
-    agent_factory = create_dynamic_agent_factory(tools)
-    report = agent_factory.get_phase_summary_report(state)
+    agent_factory = create_simplified_factory(tools)
+    # Note: Simplified factory doesn't have get_phase_summary_report, using basic report
+    report = {
+        "current_phase": state.get("current_phase", "unknown"),
+        "completed_phases": state.get("completed_phases", [])
+    }
     
     # Add dynamic context analysis
     current_phase = state.get("current_phase", "unknown")
     if current_phase != "unknown":
         try:
             phase_type = PhaseType(current_phase)
-            current_agent_config = agent_factory.create_agent_from_phase(phase_type, state)
+            current_agent_config = agent_factory.create_phase_agent(phase_type, state)
             
             report["current_phase_details"] = {
                 "agent_name": current_agent_config["agent_name"],
