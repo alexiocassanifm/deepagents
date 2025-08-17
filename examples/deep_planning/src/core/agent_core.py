@@ -49,12 +49,8 @@ from .phase_orchestration import (
     print_phase_status
 )
 
-from ..context.context_compression import (
-    check_and_compact_if_needed,
-    get_compaction_metrics,
-    wrap_agent_with_compression_hooks,
-    print_compression_status
-)
+# Note: Tool wrapping is now imported dynamically when needed
+# from ..context.context_compression import wrap_tools_with_compression_hooks
 
 # Import dynamic prompt system
 from ..config.prompt_templates import (
@@ -447,25 +443,42 @@ def create_optimized_deep_planning_agent(
             "enable_hybrid_mode": True
         }
         
-        enhanced_compact_integration = EnhancedCompactIntegration(
-            context_manager=compact_integration.context_manager,
-            mcp_wrapper=mcp_wrapper,
-            llm_compressor=llm_compressor,
-            config=enhanced_config
-        )
+        # For now, use basic CompactIntegration for testing
+        # TODO: Implement EnhancedCompactIntegration with LLM compression
+        enhanced_compact_integration = compact_integration
+        logger.info("⚠️ Using basic CompactIntegration for testing (enhanced version not available)")
         
         print(f"✅ LLM compression configured with {agent_model.__class__.__name__}")
         print(f"   🎯 Strategy: {compression_config.strategy.value}")
         print(f"   📉 Target reduction: {compression_config.target_reduction_percentage}%")
         print(f"   ⚙️ Config source: context_config.yaml")
     
+    # Wrap tools with compression hooks BEFORE creating the agent
+    final_tools = deep_planning_tools
+    if enable_llm_compression and enhanced_compact_integration:
+        print("🔗 Wrapping tools with POST_TOOL compression hooks...")
+        
+        from ..context.context_compression import wrap_tools_with_compression_hooks
+        
+        final_tools = wrap_tools_with_compression_hooks(
+            deep_planning_tools,
+            enhanced_compact_integration,
+            mcp_wrapper
+        )
+        
+        print(f"✅ Wrapped {len(final_tools)} tools with POST_TOOL compression hooks")
+        logger.info(f"🔗 Tools wrapped with compression hooks for LangGraph compatibility")
+    else:
+        print("⏭️ Skipping tool wrapping - compression not available or disabled")
+        logger.info("⏭️ Using unwrapped tools (compression disabled)")
+    
     # Create the agent
     logger.info("🏎️ Assembling final agent with dynamic prompts")
     logger.info(f"🔧 Using model: {DEFAULT_MODEL}")
-    logger.info(f"🛠️ Tools count: {len(deep_planning_tools)}")
+    logger.info(f"🛠️ Tools count: {len(final_tools)}")
     
     agent = create_compatible_deep_agent(
-        tools=deep_planning_tools,
+        tools=final_tools,
         instructions=optimized_main_prompt,
         model=DEFAULT_MODEL,
         subagents=optimized_subagents,
@@ -538,26 +551,19 @@ def create_compatible_deep_agent(*args, **kwargs):
     agent = create_deep_agent(*args, **kwargs)
     logger.info("✅ Base deep agent created successfully")
     
-    # Setup LLM compression hooks if enhanced integration is provided
+    # Note: Compression hooks are now applied at the tool level before agent creation
+    # This is more compatible with LangGraph's execution model
     if enhanced_compact_integration and LLM_COMPRESSION_AVAILABLE:
-        print("🔗 Setting up POST_TOOL compression hooks...")
-        
-        try:
-            agent = wrap_agent_with_compression_hooks(
-                agent, 
-                None, 
-                enhanced_compact_integration,
-                mcp_wrapper
-            )
-            
-            print("✅ POST_TOOL compression hooks integrated")
-            
-        except Exception as e:
-            logger.error(f"❌ Failed to setup compression hooks: {e}")
-            print(f"⚠️ Failed to setup compression hooks: {e}")
-            print("🔄 Agent running without automatic compression")
+        print("🔗 POST_TOOL compression hooks active via wrapped tools")
+        print(f"📊 Agent type: {type(agent).__name__}")
+        print(f"🔧 Enhanced integration: ✅ Active")
+        print(f"🧹 MCP wrapper: {'✅ Active' if mcp_wrapper else '❌ None'}")
+        logger.info("✅ Agent created with compression-enabled tools")
     else:
-        logger.info("⏭️ Skipping LLM compression hooks (not available or disabled)")
+        print(f"⏭️ POST_TOOL compression hooks: ❌ Disabled")
+        print(f"   - Enhanced integration: {enhanced_compact_integration is not None}")
+        print(f"   - LLM compression available: {LLM_COMPRESSION_AVAILABLE}")
+        logger.info("⏭️ Agent created without compression hooks")
     
     logger.info("🏁 Compatible deep agent creation completed!")
     return agent

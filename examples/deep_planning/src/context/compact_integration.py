@@ -572,3 +572,9 @@ the initial task message, if applicable.
             "trigger_breakdown": trigger_counts,
             "latest_compaction": self.compact_history[-1].timestamp if self.compact_history else None
         }
+
+
+# Alias per compatibilità con il sistema di compressione esistente
+# Il refactoring precedente ha integrato le funzionalità di EnhancedCompactIntegration
+# in CompactIntegration, quindi utilizziamo un alias per mantenere la compatibilità
+EnhancedCompactIntegration = CompactIntegration

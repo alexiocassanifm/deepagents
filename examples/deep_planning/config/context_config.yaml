@@ -30,12 +30,14 @@ context_management:
   # 🎯 Main threshold for automatic compaction (0.0-1.0)
   # When context reaches this % of max window, compression triggers
   # Example: 0.85 = compress when reaching 85% of 200K = 170K tokens
-  trigger_threshold: 0.5
+  # LOWERED FOR TESTING: 0.25 = 50k tokens for 200k model
+  trigger_threshold: 0.25
   
   # 🔇 Threshold for MCP noise detection (0.0-1.0) 
   # If this % of context is "noise" from MCP tools, force cleanup
   # Example: 0.6 = if 60%+ is verbose MCP output, activate specialized cleanup
-  mcp_noise_threshold: 0.4
+  # LOWERED FOR TESTING: 0.15 = trigger MCP cleanup early
+  mcp_noise_threshold: 0.15
   
   # ================================================================================
   # 🚀 NEW THRESHOLDS FOR SEMANTIC LLM COMPRESSION
@@ -46,7 +48,8 @@ context_management:
   # THIS IS THE MOST IMPORTANT THRESHOLD for real-time automatic compression
   # Example: 0.70 = automatically compress when context > 70% after tool call
   # 💡 Recommendation: 0.60-0.75 for aggressive behavior, 0.75-0.85 for conservative
-  post_tool_threshold: 0.70
+  # LOWERED FOR TESTING: 0.20 = 10k tokens for 50k model  
+  post_tool_threshold: 0.20
   
   # 🔥 Threshold to FORCE LLM compression (0.0-1.0)
   # If context exceeds this threshold, ALWAYS use LLM compression (never template)

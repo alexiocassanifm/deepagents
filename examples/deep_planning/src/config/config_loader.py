@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 class TriggerConfig:
     """Configurazione centralizzata per tutti i trigger points."""
     # Context management triggers
-    max_context_window: int = 200000
+    max_context_window: int = 50000
     trigger_threshold: float = 0.85
     mcp_noise_threshold: float = 0.6
     
@@ -57,8 +57,11 @@ class ConfigLoader:
             import os
             possible_paths = [
                 "context_config.yaml",  # Same directory
+                "config/context_config.yaml",  # In config subdirectory
                 "examples/deep_planning/context_config.yaml",  # From project root
+                "examples/deep_planning/config/context_config.yaml",  # From project root with config/
                 os.path.join(os.path.dirname(__file__), "context_config.yaml"),  # Module directory
+                os.path.join(os.path.dirname(__file__), "..", "..", "config", "context_config.yaml"),  # Relative to module
             ]
             
             for path in possible_paths:

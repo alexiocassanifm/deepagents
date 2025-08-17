@@ -348,23 +348,31 @@ class ContextManager:
             Tupla (risultato_pulito, informazioni_pulizia)
         """
         original_size = len(json.dumps(result, default=str))
-        context_manager_logger.info(f"🔍 Searching cleaning strategy for {tool_name} ({original_size:,} chars)")
+        
+        # 🔍 LOG: Valutazione MCP cleaning
+        context_manager_logger.info(f"🔍 MCP CLEANING EVALUATION - Tool: {tool_name}, "
+                                   f"Size: {original_size:,} chars, "
+                                   f"Strategies available: {len(self.cleaning_strategies)}")
         
         # Trova la strategia appropriata
-        for strategy in self.cleaning_strategies:
+        for i, strategy in enumerate(self.cleaning_strategies):
+            strategy_name = getattr(strategy, 'name', strategy.__class__.__name__)
+            context_manager_logger.debug(f"🔍 Checking strategy {i+1}/{len(self.cleaning_strategies)}: {strategy_name} for {tool_name}")
             if strategy.can_clean(tool_name, result):
-                context_manager_logger.info(f"✅ Found strategy: {strategy.name} for {tool_name}")
+                context_manager_logger.info(f"✅ MCP CLEANING TRIGGERED - Strategy: {strategy_name} for {tool_name}")
                 cleaned_result, cleaning_info = strategy.clean(result, context)
                 
                 if cleaning_info.cleaning_status == "completed":
-                    context_manager_logger.info(f"🧹 {strategy.name} cleaned {tool_name}: "
+                    context_manager_logger.info(f"🧹 MCP CLEANING COMPLETED - {strategy_name}: "
                                                f"{original_size:,} → {cleaning_info.cleaned_size:,} chars "
                                                f"({cleaning_info.reduction_percentage:.1f}% reduction)")
+                else:
+                    context_manager_logger.warning(f"⚠️ MCP CLEANING FAILED - {strategy_name}: status={cleaning_info.cleaning_status}")
                 
                 return cleaned_result, cleaning_info
         
         # Nessuna strategia specifica trovata - pulizia generica
-        context_manager_logger.info(f"⚪ No specific strategy found for {tool_name}, using generic cleaning")
+        context_manager_logger.info(f"⏸️ MCP CLEANING SKIPPED - No specific strategy found for {tool_name}, using generic cleaning")
         return self._generic_clean(result, tool_name)
     
     def _generic_clean(self, data: Any, tool_name: str) -> Tuple[Any, CleaningResult]:
@@ -473,11 +481,23 @@ class ContextManager:
         """
         metrics = self.analyze_context(messages)
         
+        # 🔍 LOG: Valutazione compattazione 
+        context_manager_logger.info(f"🔍 COMPACTION EVALUATION - Context: {metrics.utilization_percentage:.1f}% utilized "
+                                   f"({metrics.tokens_used:,}/{metrics.max_context_window:,} tokens), "
+                                   f"MCP Noise: {metrics.mcp_noise_percentage:.1f}%, "
+                                   f"Thresholds: trigger={metrics.trigger_threshold*100:.1f}% mcp_noise={metrics.mcp_noise_threshold*100:.1f}%")
+        
         # Controllo soglia standard
         if metrics.should_trigger_compact:
             trigger = CompactTrigger.THRESHOLD if metrics.utilization_percentage >= metrics.trigger_threshold else CompactTrigger.MCP_NOISE
+            context_manager_logger.info(f"✅ COMPACTION TRIGGERED - Reason: {trigger.value}, "
+                                       f"Utilization: {metrics.utilization_percentage:.1f}%, "
+                                       f"MCP Noise: {metrics.mcp_noise_percentage:.1f}%")
             return True, trigger, metrics
         
+        context_manager_logger.info(f"⏸️ COMPACTION SKIPPED - Context below thresholds "
+                                   f"(utilization: {metrics.utilization_percentage:.1f}% < {metrics.trigger_threshold*100:.1f}%, "
+                                   f"mcp_noise: {metrics.mcp_noise_percentage:.1f}% < {metrics.mcp_noise_threshold*100:.1f}%)")
         return False, CompactTrigger.MANUAL, metrics
     
     def process_context_cleaning(self, messages: List[Dict[str, Any]], context: Dict[str, Any] = None) -> Tuple[List[Dict[str, Any]], ContextInfo]:

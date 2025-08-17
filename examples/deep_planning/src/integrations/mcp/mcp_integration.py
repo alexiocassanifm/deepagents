@@ -51,7 +51,16 @@ async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[
     """
     if not MCP_AVAILABLE:
         logger.warning("⚠️ MCP adapters not available, using fallback tools")
-        return get_fallback_tools(), None, None
+        # Create compact integration even for fallback tools
+        if WRAPPER_AVAILABLE:
+            from ...context.context_manager import ContextManager
+            from ...context.compact_integration import CompactIntegration
+            context_manager = ContextManager()
+            compact_integration = CompactIntegration(context_manager)
+            logger.info("✅ Created compact integration for fallback tools")
+            return get_fallback_tools(), None, compact_integration
+        else:
+            return get_fallback_tools(), None, None
     
     try:
         # Configure fairmind MCP server connection using HTTP streamable transport
@@ -79,21 +88,41 @@ async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[
         
         logger.info(f"🎯 Found {len(fairmind_tools)} relevant fairmind tools")
         
-        # Skip wrapping MCP tools as it corrupts signatures
+        # Skip wrapping MCP tools as it corrupts signatures, but CREATE context integration
         logger.warning("⚠️ Skipping MCP tool wrapping due to signature corruption issues")
         logger.info(f"✅ Using {len(fairmind_tools)} MCP tools without wrapping")
-        return fairmind_tools, None, None
+        
+        # Create compact integration even without wrapping
+        if WRAPPER_AVAILABLE:
+            from ...context.context_manager import ContextManager
+            from ...context.compact_integration import CompactIntegration
+            context_manager = ContextManager()
+            compact_integration = CompactIntegration(context_manager)
+            logger.info("✅ Created compact integration for context management")
+            return fairmind_tools, None, compact_integration
+        else:
+            logger.warning("⚠️ Context manager not available")
+            return fairmind_tools, None, None
         
     except Exception as e:
         logger.error(f"❌ Failed to connect to MCP server: {e}")
         logger.info("🔄 Falling back to demo tools")
         
-        # EVEN FOR DEMO TOOLS: Create MCP wrapper to test logging functionality
+        # EVEN FOR DEMO TOOLS: Create context integration to test compression functionality
         demo_tools = get_fallback_tools()
         
-        # Skip wrapping for demo tools - they're causing signature issues
-        logger.info("⚠️ Using demo tools (no real MCP connection) without wrapping")
-        return demo_tools, None, None
+        # Skip wrapping for demo tools but create compact integration for testing
+        if WRAPPER_AVAILABLE:
+            from ...context.context_manager import ContextManager
+            from ...context.compact_integration import CompactIntegration
+            context_manager = ContextManager()
+            compact_integration = CompactIntegration(context_manager)
+            logger.info("✅ Created compact integration for demo tools (for testing compression)")
+            logger.info("⚠️ Using demo tools (no real MCP connection) without wrapping")
+            return demo_tools, None, compact_integration
+        else:
+            logger.warning("⚠️ Context manager not available for demo tools")
+            return demo_tools, None, None
 
 
 def filter_relevant_fairmind_tools(tools: List[Any]) -> List[Any]:
@@ -206,7 +235,20 @@ def initialize_deep_planning_mcp_tools() -> Tuple[List[Any], Optional[Any], Opti
     except Exception as e:
         logger.error(f"⚠️ Failed to initialize MCP tools: {e}")
         logger.info("🔄 Using fallback demo tools")
-        return get_fallback_tools(), None, None
+        # Create compact integration even for fallback case
+        if WRAPPER_AVAILABLE:
+            try:
+                from ..context.context_manager import ContextManager
+                from ..context.compact_integration import CompactIntegration
+                context_manager = ContextManager()
+                compact_integration = CompactIntegration(context_manager)
+                logger.info("✅ Created compact integration for fallback initialization")
+                return get_fallback_tools(), None, compact_integration
+            except Exception as context_error:
+                logger.error(f"⚠️ Failed to create compact integration: {context_error}")
+                return get_fallback_tools(), None, None
+        else:
+            return get_fallback_tools(), None, None
 
 
 def get_mcp_status() -> Dict[str, Any]:
