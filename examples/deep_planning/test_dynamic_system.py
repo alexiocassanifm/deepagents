@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-🧪 FERRARI SYSTEM TEST - Complete Dynamic Deep Planning Agent Testing
+🧪 Dynamic System Test - Complete Deep Planning Agent Testing
 
 This script tests the complete dynamic system to ensure the refactoring
-is 100% functional and the Ferrari is running at full speed!
+is 100% functional and the dynamic system is running properly!
 
 Tests:
 1. Dynamic Agent Factory creation
@@ -380,7 +380,7 @@ def test_complete_workflow_simulation() -> bool:
 
 def run_all_tests() -> bool:
     """Run all tests and return overall success."""
-    print("🏁 FERRARI DYNAMIC SYSTEM - COMPLETE TEST SUITE")
+    print("🏁 Dynamic System - Complete Test Suite")
     print("=" * 60)
     
     tests = [
@@ -412,13 +412,13 @@ def run_all_tests() -> bool:
     print(f"📊 OVERALL RESULTS: {passed}/{total} tests passed ({success_rate:.1f}%)")
     
     if success_rate >= 80:
-        print("🏁 🏎️ FERRARI IS RUNNING AT FULL SPEED! 🏎️ 🏁")
+        print("🏁 ✅ System Running at Full Performance! ✅ 🏁")
         print("🎯 Dynamic system is fully operational and ready for production!")
     elif success_rate >= 60:
-        print("⚠️ FERRARI NEEDS TUNING")
+        print("⚠️ System Needs Optimization")
         print("🔧 Some components need adjustment before full deployment")
     else:
-        print("🚨 FERRARI ENGINE PROBLEMS")
+        print("🚨 System Problems Detected")
         print("🛠️ Major issues detected - system needs debugging")
     
     return success_rate >= 80

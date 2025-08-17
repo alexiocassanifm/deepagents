@@ -2,91 +2,91 @@
 # DEEP PLANNING AGENT - CONTEXT COMPRESSION CONFIGURATION
 # ================================================================================
 # 
-# Questo file configura il sistema di compressione automatica del contesto
-# per il Deep Planning Agent con integrazione LLM e hook POST_TOOL.
+# This file configures the automatic context compression system
+# for the Deep Planning Agent with LLM integration and POST_TOOL hooks.
 #
-# 🎯 COSA CONTROLLA:
-# - Quando scatta la compressione automatica del contesto
-# - Quali tool MCP vengono puliti e come
-# - Come funziona la compressione LLM semantica
-# - Trigger points per hook automatici dopo tool calls
+# 🎯 WHAT IT CONTROLS:
+# - When automatic context compression triggers
+# - Which MCP tools are cleaned and how
+# - How LLM semantic compression works
+# - Trigger points for automatic hooks after tool calls
 #
-# 🔧 COME MODIFICARE:
-# - Valori 0.0-1.0 sono percentuali (es. 0.85 = 85% utilizzo contesto)
-# - Soglie più basse = compressione più aggressiva/frequente
-# - Soglie più alte = compressione più conservativa/rara
+# 🔧 HOW TO MODIFY:
+# - Values 0.0-1.0 are percentages (e.g. 0.85 = 85% context utilization)
+# - Lower thresholds = more aggressive/frequent compression
+# - Higher thresholds = more conservative/rare compression
 #
 # ================================================================================
 
 # =============================================================================
-# 🧠 TRIGGER AUTOMATICI PER COMPRESSIONE CONTESTO
+# 🧠 AUTOMATIC TRIGGERS FOR CONTEXT COMPRESSION
 # =============================================================================
 context_management:
-  # 📏 Dimensione massima della finestra di contesto (in token)
-  # Quando viene raggiunta questa dimensione, la compressione diventa obbligatoria
-  # Tipico: 200K per modelli Claude, 128K per GPT-4
+  # 📏 Maximum context window size (in tokens)
+  # When this size is reached, compression becomes mandatory
+  # Typical: 200K for Claude models, 128K for GPT-4
   max_context_window: 50000
   
-  # 🎯 Soglia principale per compattazione automatica (0.0-1.0)
-  # Quando il contesto raggiunge questa % della finestra max, scatta compressione
-  # Esempio: 0.85 = comprime quando raggiunge 85% di 200K = 170K token
+  # 🎯 Main threshold for automatic compaction (0.0-1.0)
+  # When context reaches this % of max window, compression triggers
+  # Example: 0.85 = compress when reaching 85% of 200K = 170K tokens
   trigger_threshold: 0.5
   
-  # 🔇 Soglia per rilevamento rumore MCP (0.0-1.0) 
-  # Se questa % del contesto è "rumore" da tool MCP, forza pulizia
-  # Esempio: 0.6 = se 60%+ è output verboso MCP, attiva pulizia specializzata
+  # 🔇 Threshold for MCP noise detection (0.0-1.0) 
+  # If this % of context is "noise" from MCP tools, force cleanup
+  # Example: 0.6 = if 60%+ is verbose MCP output, activate specialized cleanup
   mcp_noise_threshold: 0.4
   
   # ================================================================================
-  # 🚀 NUOVE SOGLIE PER COMPRESSIONE LLM SEMANTICA
+  # 🚀 NEW THRESHOLDS FOR SEMANTIC LLM COMPRESSION
   # ================================================================================
   
-  # 🔧 POST_TOOL Hook - Trigger dopo ogni chiamata tool (0.0-1.0)
-  # Il hook controlla il contesto dopo ogni tool call e comprime se supera questa soglia
-  # QUESTA È LA SOGLIA PIÙ IMPORTANTE per compressione automatica real-time
-  # Esempio: 0.70 = comprime automaticamente quando contesto > 70% dopo tool call
-  # 💡 Consiglio: 0.60-0.75 per comportamento aggressivo, 0.75-0.85 per conservativo
+  # 🔧 POST_TOOL Hook - Trigger after every tool call (0.0-1.0)
+  # The hook checks context after every tool call and compresses if it exceeds this threshold
+  # THIS IS THE MOST IMPORTANT THRESHOLD for real-time automatic compression
+  # Example: 0.70 = automatically compress when context > 70% after tool call
+  # 💡 Recommendation: 0.60-0.75 for aggressive behavior, 0.75-0.85 for conservative
   post_tool_threshold: 0.70
   
-  # 🔥 Soglia per FORZARE compressione LLM (0.0-1.0)
-  # Se il contesto supera questa soglia, usa SEMPRE LLM compression (mai template)
-  # Esempio: 0.90 = se contesto > 90%, forza LLM anche se più lento
-  # 💡 Consiglio: 0.85-0.95 per garantire qualità massima in situazioni critiche
+  # 🔥 Threshold to FORCE LLM compression (0.0-1.0)
+  # If context exceeds this threshold, ALWAYS use LLM compression (never template)
+  # Example: 0.90 = if context > 90%, force LLM even if slower
+  # 💡 Recommendation: 0.85-0.95 to ensure maximum quality in critical situations
   force_llm_threshold: 0.90
   
-  # 🧠 Soglia per preferire LLM vs Template (0.0-1.0)
-  # Se contesto > questa soglia, preferisce LLM compression al template system  
-  # Tra post_tool_threshold e force_llm_threshold decide strategia ottimale
-  # Esempio: 0.75 = preferisce LLM quando contesto > 75%
-  # 💡 Consiglio: 0.70-0.80 per bilanciare qualità/velocità
+  # 🧠 Threshold to prefer LLM vs Template (0.0-1.0)
+  # If context > this threshold, prefers LLM compression over template system  
+  # Between post_tool_threshold and force_llm_threshold decides optimal strategy
+  # Example: 0.75 = prefers LLM when context > 75%
+  # 💡 Recommendation: 0.70-0.80 to balance quality/speed
   llm_compression_threshold: 0.75
   
-  # ✅ Abilita pulizia automatica dei risultati tool MCP
-  # Rimuove campi ridondanti/verbosi dai tool prima della compressione LLM
+  # ✅ Enable automatic cleanup of MCP tool results
+  # Removes redundant/verbose fields from tools before LLM compression
   cleaning_enabled: true
   
-  # 📦 Abilita compattazione automatica quando soglie raggiunte
-  # Se false, sistema monitora ma non comprime mai automaticamente
+  # 📦 Enable automatic compaction when thresholds reached
+  # If false, system monitors but never compresses automatically
   auto_compaction: true
   
-  # 📝 Abilita logging dettagliato delle operazioni di compressione
-  # Utile per debug e monitoring del sistema
+  # 📝 Enable detailed logging of compression operations
+  # Useful for debug and system monitoring
   logging_enabled: true
   
-  # 🛡️ Mantiene sempre campi essenziali durante pulizia
-  # Previene rimozione accidentale di dati critici (ID, nomi, etc.)
+  # 🛡️ Always preserve essential fields during cleanup
+  # Prevents accidental removal of critical data (IDs, names, etc.)
   preserve_essential_fields: true
 
 # =============================================================================
-# 🔄 DEDUPLICAZIONE AUTOMATICA MESSAGGI
+# 🔄 AUTOMATIC MESSAGE DEDUPLICATION
 # =============================================================================
 deduplication:
-  # ✅ Abilita rimozione automatica di messaggi duplicati o molto simili
-  # Riduce ridondanza quando utente ripete domande o tool restituiscono risultati simili
+  # ✅ Enable automatic removal of duplicate or very similar messages
+  # Reduces redundancy when user repeats questions or tools return similar results
   enabled: true
   
-  # 🎯 Soglia di similarità per considerare messaggi duplicati (0.0-1.0)
-  # Due messaggi con similarità >= questa soglia vengono considerati duplicati
+  # 🎯 Similarity threshold to consider messages as duplicates (0.0-1.0)
+  # Two messages with similarity >= this threshold are considered duplicates
   # Esempio: 0.90 = rimuove messaggi simili al 90%+
   # 💡 Consiglio: 0.85-0.95 per evitare rimozioni eccessive mantenendo efficacia
   similarity_threshold: 0.90
@@ -394,41 +394,18 @@ monitoring:
   export_format: "json"
 
 # =============================================================================
-# 🔬 IMPOSTAZIONI AVANZATE E CUSTOMIZZAZIONI
+# 🔬 ADVANCED SETTINGS (Reserved for Future Use)
 # =============================================================================
-# Configurazioni per utenti esperti che vogliono estendere il sistema
-# con logica personalizzata, pipeline custom, o modelli di scoring avanzati.
-
-advanced:
-  # 🧩 Strategie di pulizia personalizzate (path ai moduli Python)
-  # Permette di caricare classi custom che implementano CleaningStrategy
-  # Esempio: ["my_custom_cleaning.py", "advanced_cleaners.py"]
-  custom_strategies: []
-  
-  # 🔄 Pipeline di pre-processing prima della pulizia
-  # Funzioni da eseguire sui dati prima di applicare le strategie di pulizia
-  # Esempio: normalizzazione, decodifica, formattazione
-  preprocessing_pipeline: []
-  
-  # ✨ Pipeline di post-processing dopo la pulizia
-  # Funzioni da eseguire sui dati dopo la pulizia per ulteriori trasformazioni
-  # Esempio: validazione, re-formattazione, arricchimento
-  postprocessing_pipeline: []
-  
-  # 🤖 Modelli di ML per scoring automatico dell'importanza del contenuto
-  # Integrazione con modelli esterni per valutare automaticamente rilevanza
-  # Esempio: modelli di sentiment, topic classification, importance scoring  
-  ml_scoring_models: null
-  
-  # 📝 Regole personalizzate basate su regex per cleaning avanzato
-  # Pattern regex custom per identificare e rimuovere contenuto specifico
-  # Esempio: [{"pattern": "\\[DEBUG\\].*", "replacement": ""}]
-  custom_rules: []
-  
-  # 🎯 Soglie dinamiche che cambiano in base al dominio/contesto
-  # Permette di avere trigger diversi per progetti diversi o tipi di contenuto
-  # Esempio: {"code_heavy_projects": {"trigger_threshold": 0.75}}
-  domain_specific_thresholds: null
+# Note: The following advanced features are defined but not yet implemented.
+# They have been removed to avoid confusion. When needed, they can be re-added
+# with proper implementation.
+#
+# Planned features:
+# - Custom cleaning strategies
+# - Pre/post-processing pipelines
+# - ML scoring models integration
+# - Custom regex rules
+# - Domain-specific thresholds
 
 # ================================================================================
 # 🎉 FINE CONFIGURAZIONE

@@ -104,9 +104,11 @@ for module_name, attrs in module_patches.items():
                     setattr(module, attr, globals()[attr])
     except Exception as e:
         # Ignore patching errors but log them
-        print(f"Note: Could not patch {module_name}: {e}")
+        logging.debug(f"Note: Could not patch {module_name}: {e}")
 
-print("🔧 Comprehensive type annotation patching completed")
+# Setup logger for initialization
+init_logger = logging.getLogger('deep_planning_init')
+init_logger.info("🔧 Type annotation patching completed")
 
 # Configure debug logging for development
 def setup_debug_logging():
@@ -167,11 +169,12 @@ def setup_debug_logging():
         else:
             logger.setLevel(logging.DEBUG)
     
-    print(f"🔍 Debug logging enabled at level: {log_level} (forced to INFO for console)")
-    print(f"📁 Log file: {log_file}")
-    print(f"📊 Debug loggers: {', '.join(loggers_to_debug)}")
-    print(f"🎯 Context management loggers set to INFO level")
-    print(f"🔥 Console logging FORCED to INFO level for visibility")
+    setup_logger = logging.getLogger('setup')
+    setup_logger.info(f"🔍 Debug logging enabled at level: {log_level} (forced to INFO for console)")
+    setup_logger.info(f"📁 Log file: {log_file}")
+    setup_logger.debug(f"📊 Debug loggers: {', '.join(loggers_to_debug)}")
+    setup_logger.debug(f"🎯 Context management loggers set to INFO level")
+    setup_logger.debug(f"🔥 Console logging FORCED to INFO level for visibility")
     
     # Test log to verify it works - THESE SHOULD NOW APPEAR IN CONSOLE
     logging.debug("🚀 Debug logging setup completed - test message")
@@ -185,8 +188,8 @@ def setup_debug_logging():
     mcp_context_logger.info("🎯 MCP Context Tracker logging activated - tool calls will be tracked")
     context_manager_logger.info("📊 Context Manager logging activated - cleaning operations will be logged")
     
-    # Add a console test to verify immediate visibility
-    print("🔥 If you see the line above this with ℹ️, console logging is working!")
+    # Console test to verify immediate visibility
+    setup_logger.debug("🔥 Console logging configured successfully")
     
     # Create a simple test logger to verify console output
     test_logger = logging.getLogger('langgraph_console_test')
@@ -233,7 +236,7 @@ from mcp_wrapper import wrap_existing_mcp_tools
 # Import compact integration for automatic context management
 from compact_integration import CompactIntegration
 
-# Import dynamic agent factory - FERRARI ENGINE!
+# Import dynamic agent factory for specialized sub-agents
 from dynamic_agent_factory import (
     DynamicAgentFactory,
     create_dynamic_agent_factory,
@@ -248,9 +251,9 @@ try:
     from enhanced_compact_integration import EnhancedCompactIntegration
     from config_loader import get_trigger_config, get_context_management_config, print_config_summary
     LLM_COMPRESSION_AVAILABLE = True
-    print("✅ LLM Compression system available")
+    init_logger.info("✅ LLM Compression system available")
 except ImportError as e:
-    print(f"⚠️ LLM Compression system not available: {e}")
+    init_logger.warning(f"⚠️ LLM Compression system not available: {e}")
     LLM_COMPRESSION_AVAILABLE = False
 
 # Model configuration from environment
@@ -263,9 +266,9 @@ setup_compatibility_logging(level="INFO")
 detected_model = detect_model_from_environment() or DEFAULT_MODEL or "claude-3.5-sonnet"
 ENABLE_COMPATIBILITY_FIXES = should_apply_compatibility_fixes(detected_model, default_registry)
 
-print("🔧 Model Compatibility Configuration:")
-print(f"🤖 Detected/Configured model: {detected_model}")
-print(f"🛡️  Compatibility fixes enabled: {ENABLE_COMPATIBILITY_FIXES}")
+init_logger.info("🔧 Model Compatibility Configuration:")
+init_logger.info(f"🤖 Detected/Configured model: {detected_model}")
+init_logger.info(f"🛡️  Compatibility fixes enabled: {ENABLE_COMPATIBILITY_FIXES}")
 
 # Print detailed compatibility report if fixes are enabled
 if ENABLE_COMPATIBILITY_FIXES:
@@ -277,7 +280,7 @@ try:
     MCP_AVAILABLE = True
 except ImportError:
     MCP_AVAILABLE = False
-    print("Warning: langchain-mcp-adapters not available. Install with: pip install langchain-mcp-adapters")
+    init_logger.warning("langchain-mcp-adapters not available. Install with: pip install langchain-mcp-adapters")
 
 
 # ============================================================================
@@ -293,7 +296,8 @@ async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[
         Falls back to demo tools if MCP server is not available.
     """
     if not MCP_AVAILABLE:
-        print("⚠️ MCP adapters not available, using fallback tools")
+        mcp_logger = logging.getLogger('mcp_tools')
+        mcp_logger.warning("⚠️ MCP adapters not available, using fallback tools")
         return get_fallback_tools(), None, None
     
     try:
@@ -458,7 +462,7 @@ if ENABLE_COMPATIBILITY_FIXES:
 
 
 # ============================================================================
-# DYNAMIC PROMPT HELPER FUNCTIONS - NEW FERRARI ENGINE!
+# DYNAMIC PROMPT HELPER FUNCTIONS - PHASE MANAGEMENT SYSTEM
 # ============================================================================
 
 def format_todos_for_prompt(todos: List[Dict[str, Any]]) -> str:
@@ -513,7 +517,7 @@ def format_validation_result(validation_result: Dict[str, Any]) -> str:
 
 def validate_and_transition_phase(current_phase: str, state: Dict[str, Any], tools: List[Any]) -> Tuple[bool, str, List[str]]:
     """
-    FERRARI ENGINE: Validate current phase completion and determine transition.
+    Phase Management: Validate current phase completion and determine transition.
     Uses dynamic validation from prompt_config.py!
     
     Args:
@@ -546,7 +550,7 @@ def validate_and_transition_phase(current_phase: str, state: Dict[str, Any], too
 
 def get_phase_progress_report(state: Dict[str, Any], tools: List[Any]) -> Dict[str, Any]:
     """
-    FERRARI DASHBOARD: Generate comprehensive phase progress report.
+    Progress Dashboard: Generate comprehensive phase progress report.
     
     Args:
         state: Current project state
@@ -580,7 +584,7 @@ def get_phase_progress_report(state: Dict[str, Any], tools: List[Any]) -> Dict[s
 
 def auto_advance_phase_if_ready(state: Dict[str, Any], tools: List[Any]) -> Tuple[bool, Dict[str, Any]]:
     """
-    FERRARI AUTO-PILOT: Automatically advance to next phase if current is completed.
+    Auto Progression: Automatically advance to next phase if current is completed.
     
     Args:
         state: Current project state
@@ -616,7 +620,7 @@ def auto_advance_phase_if_ready(state: Dict[str, Any], tools: List[Any]) -> Tupl
     # Update context summary
     updated_state["context_summary"] = f"Advanced from {current_phase} to {next_phase}"
     
-    print(f"🏁 FERRARI AUTO-PILOT: Advanced from {current_phase} → {next_phase}")
+    print(f"🔄 Auto Progression: Advanced from {current_phase} → {next_phase}")
     return True, updated_state
 
 # ============================================================================
@@ -778,7 +782,7 @@ Estimated duration: {phase_config.duration_estimate}
 
 def create_dynamic_subagents(tools: List[Any], current_state: Dict[str, Any]) -> List[Dict[str, Any]]:
     """
-    Create ALL sub-agents using the DYNAMIC AGENT FACTORY - FERRARI POWER!
+    Create ALL sub-agents using the dynamic agent factory system.
     NO MORE MANUAL CREATION - Everything automated from phase configurations!
     
     Args:
@@ -788,7 +792,7 @@ def create_dynamic_subagents(tools: List[Any], current_state: Dict[str, Any]) ->
     Returns:
         List of completely dynamically configured sub-agents
     """
-    # Create the dynamic agent factory - FERRARI ENGINE
+    # Create the dynamic agent factory system
     agent_factory = create_dynamic_agent_factory(tools)
     
     # Validate factory setup
@@ -803,7 +807,7 @@ def create_dynamic_subagents(tools: List[Any], current_state: Dict[str, Any]) ->
     # Use factory to create all agents dynamically
     dynamic_agents = agent_factory.create_all_phase_agents(current_state)
     
-    print(f"🏎️ FERRARI FACTORY created {len(dynamic_agents)} dynamic sub-agents!")
+    print(f"🏭 Agent Factory created {len(dynamic_agents)} dynamic sub-agents!")
     print(f"📊 Phase coverage: {[agent['phase'] for agent in dynamic_agents]}")
     print(f"⚙️ All agents generated from prompt_config.py with real-time context")
     
@@ -1020,14 +1024,18 @@ def create_optimized_deep_planning_agent(initial_state: Dict[str, Any] = None, e
         from deepagents.model import get_model
         agent_model = get_model(DEFAULT_MODEL)
         
-        # Create LLM compressor using YAML config
+        # Create LLM compressor using unified config
+        from unified_config import get_model_config, get_performance_config
+        model_cfg = get_model_config()
+        perf_cfg = get_performance_config()
+        
         compression_config = CompressionConfig(
             strategy=CompressionStrategy.ADAPTIVE,
             target_reduction_percentage=65.0,
-            max_output_tokens=2500,
+            max_output_tokens=model_cfg.max_output_tokens,  # From unified config
             preserve_last_n_messages=trigger_config.preserve_last_n_messages,
             enable_fallback=trigger_config.enable_fallback,
-            compression_timeout=trigger_config.compression_timeout
+            compression_timeout=perf_cfg.compression_timeout  # From unified config
         )
         
         llm_compressor = LLMCompressor(
@@ -1058,7 +1066,7 @@ def create_optimized_deep_planning_agent(initial_state: Dict[str, Any] = None, e
         print(f"   📉 Target reduction: {compression_config.target_reduction_percentage}%")
         print(f"   ⚙️ Config source: context_config.yaml")
     
-    # FERRARI FINAL ASSEMBLY: Create the agent with COMPLETELY DYNAMIC prompts
+    # Final Assembly: Create the agent with completely dynamic prompts
     main_logger.info("🏎️ ASSEMBLING: Final agent with dynamic prompts")
     main_logger.info(f"🔧 Using model: {DEFAULT_MODEL}")
     main_logger.info(f"🛠️ Tools count: {len(deep_planning_tools)}")
@@ -1080,15 +1088,15 @@ def create_optimized_deep_planning_agent(initial_state: Dict[str, Any] = None, e
     )
     main_logger.info("✅ ASSEMBLED: Base agent created successfully")
     
-    # Add FERRARI validation capabilities to the agent
-    main_logger.info("⚡ ENHANCING: Adding FERRARI validation capabilities")
+    # Add validation capabilities to the agent
+    main_logger.info("⚡ ENHANCING: Adding validation capabilities")
     agent._dynamic_factory = create_dynamic_agent_factory(deep_planning_tools)
     agent._validate_phase_transition = lambda phase, state: validate_and_transition_phase(phase, state, deep_planning_tools)
     agent._get_progress_report = lambda state: get_phase_progress_report(state, deep_planning_tools)
     agent._auto_advance_phase = lambda state: auto_advance_phase_if_ready(state, deep_planning_tools)
     
     main_logger.info("🏁 COMPLETED: Deep planning agent creation finished!")
-    print("🏎️ FERRARI agent equipped with dynamic validation and auto-pilot!")
+    print("🤖 Agent equipped with dynamic validation and auto-progression!")
     
     return agent
 
@@ -1832,65 +1840,9 @@ print("🔥 EXECUTION: Agent enhanced with runtime logging capabilities")
 print("🔧 Applying MCP state cleaning wrapper to resolve LangGraph integration gap...")
 agent = wrap_agent_with_mcp_state_cleaning(agent, mcp_wrapper)
 
-print("🏁 FERRARI-POWERED Deep Planning Agent with FULL DYNAMIC SYSTEM created successfully!")
+print("✅ Deep Planning Agent with Dynamic System created successfully!")
 print(f"⏰ TIMESTAMP: {__import__('datetime').datetime.now()}")
 print("🔥 Se vedi questo messaggio ogni volta che fai una domanda, i wrapper funzionano!")
-print("\n🔥 MONITORING SYSTEM ACTIVE 🔥")
-print("📊 Token tracking enabled for each LLM call")
-print("🔍 Context management monitoring active")
-print("🧹 MCP cleaning operations tracked")
-print("📈 Compression events monitored")
-print("🎯 All operations using logger.info() for LangGraph visibility")
 print("\n🔧 MONITORING STATUS:")
 print(f"  🔗 Compression hooks enabled: {LLM_COMPRESSION_AVAILABLE}")
 print(f"  🧹 MCP cleaning wrapper: {'Active' if mcp_wrapper else 'None'}")
-print("  📋 Logger names: mcp_context_tracker, context_manager")
-print("  ✅ ASPETTATI I LOG COLORATI NEI LOG DI LANGGRAPH!")
-print("📋 🏎️ FERRARI FEATURES - 100% DYNAMIC SYSTEM:")
-print("  🚀 COMPLETE dynamic prompt system - NO MORE STATIC TEMPLATES!")
-print("  🎯 Context-aware TODO generation based on project state")
-print("  🔧 Intelligent tool filtering per phase from configurations")
-print("  📋 Phase validation using prompt_config.py rules")
-print("  🏗️ Sub-agents created entirely from PhaseType configurations")
-print("  ⚡ 91% reduction in main prompt length (650 → 60 lines)")
-print("  🧠 Dynamic context injection throughout ALL prompts")
-print("  📊 Real-time phase configuration and state adaptation")
-print("  🔄 Automatic phase transition validation")
-print("  🎨 Template-free prompt generation system")
-print("  📱 MCP integration for real-time project analysis")
-print("  👤 Human-in-the-loop plan approval workflow")
-print("  ✅ Structured plan validation (8 required sections)")
-print("  🎼 Sub-agent orchestration with FULLY dynamic prompts")
-print("  📈 Focus chain creation for implementation tracking")
-if compact_integration:
-    print("  ✅ Automatic context compaction with 60-80% noise reduction")
-    print("  ✅ Claude Code compatible summarization and continuation")
-if LLM_COMPRESSION_AVAILABLE:
-    print("  ✅ LLM-based semantic compression with POST_TOOL hooks")
-    print("  ✅ Intelligent compression using same LLM as agent") 
-    print("  ✅ Automatic trigger at 70% context utilization")
-print("  🏎️ FERRARI Dynamic Agent Factory for real-time agent generation")
-print("  🏆 Automatic phase validation and transition management")
-print("  📊 Real-time progress reporting with dynamic analysis")
-print("  ⚡ Auto-pilot phase advancement when criteria met")
-if ENABLE_COMPATIBILITY_FIXES:
-    print("  ✅ Model compatibility fixes for reliable tool calling")
-
-print(f"\n🏁 FERRARI ACTIVATED! {OPTIMIZATION_STATS['overall_reduction_percentage']}% more efficient prompts with 100% dynamic system!")
-print("🏗️  FULLY modular architecture - every prompt generated from configurations")
-print("🛡️  Tool compatibility system active for maximum model compatibility")
-print("⚙️  Dynamic system status: ALL components using prompt_config.py")
-print("🎯  Context-awareness: MAXIMUM (no more static templates!)")
-if compact_integration:
-    print("📦 Automatic context compaction system active for extended conversations")
-if mcp_wrapper:
-    print("🧹 MCP noise reduction system active for cleaner context")
-    print("🔗 MCP state cleaning integration - ToolMessages contain clean data")
-print("\n💡 FERRARI Performance Benefits:")
-print("  🧠 MAXIMUM LLM attention with context-specific prompts")
-print("  ⚡ ZERO cognitive load - each prompt perfectly tailored")
-print("  🎯 COMPLETE dynamic adaptation to any project context")
-print("  🔧 ULTIMATE maintainability - single source of truth in configs")
-print("  🏆 CONSISTENT peak performance across all scenarios")
-print("  🚀 INTELLIGENT todo generation based on real project state")
-print("  🎨 NO MORE HARDCODED EXAMPLES - everything dynamically generated")

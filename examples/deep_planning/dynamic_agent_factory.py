@@ -1,5 +1,5 @@
 """
-🏎️ Dynamic Agent Factory - FERRARI ENGINE for Deep Planning Agents
+🏭 Dynamic Agent Factory - Specialized Agent Generation System
 
 This module provides a factory system for creating completely dynamic agents
 based on phase configurations. NO MORE STATIC TEMPLATES!

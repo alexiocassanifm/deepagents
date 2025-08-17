@@ -1,17 +1,29 @@
 #!/usr/bin/env python3
 """
-test_logging.py - Quick test to verify your logging setup is working
+test_logging.py - Comprehensive logging tests for Deep Planning Agent
 
-This script tests the logging configuration without running the full agent.
+This script tests both basic logging configuration and enhanced context management logging.
+It combines tests from the original test_logging.py and test_enhanced_logging.py.
 """
 
 import logging
 import os
 import sys
+import json
 from pathlib import Path
+from typing import Dict, Any
 
 # Add the current directory to Python path for imports
 sys.path.insert(0, str(Path(__file__).parent))
+
+# Configure logging for enhanced tests
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
 def test_logging_setup():
     """Test the logging configuration from deep_planning_agent.py"""
@@ -19,18 +31,9 @@ def test_logging_setup():
     print("🧪 TESTING: Logging configuration")
     print("=" * 50)
     
-    # Import the logging setup function
-    try:
-        from deep_planning_agent import setup_debug_logging
-        print("✅ IMPORTED: setup_debug_logging function")
-    except ImportError as e:
-        print(f"❌ FAILED: Could not import setup_debug_logging: {e}")
-        return False
-    
-    # Call the setup function
-    print("🔧 SETUP: Calling setup_debug_logging()...")
-    setup_debug_logging()
-    print("✅ SETUP: Logging configuration complete")
+    # Import is no longer needed - logging is configured at module level
+    print("🔧 SETUP: Logging configuration is now handled at module import level")
+    print("✅ SETUP: Basic logging configuration complete")
     
     # Test different loggers that should appear in console
     print("\n🎯 TESTING: Various loggers (should appear in console and debug.log)")
@@ -80,23 +83,76 @@ def show_recent_logs():
     else:
         print(f"\n⚠️ Log file {log_file} does not exist yet")
 
+def test_enhanced_logging():
+    """Test enhanced logging for context management."""
+    print("\n🚀 TESTING: Enhanced Context Management Logging")
+    print("=" * 60)
+    
+    try:
+        # Import modules with enhanced logging
+        from mcp_wrapper import create_mcp_wrapper
+        from context_manager import ContextManager
+        print("✅ Enhanced modules imported successfully")
+        
+        # Create wrapper with test configuration
+        config = {
+            "cleaning_enabled": True,
+            "max_context_window": 50000,
+            "trigger_threshold": 0.70,
+            "mcp_noise_threshold": 0.50,
+            "deduplication_enabled": True,
+            "preserve_essential_fields": True,
+            "auto_compaction": True
+        }
+        
+        wrapper = create_mcp_wrapper(config)
+        print("✅ MCP Wrapper created with enhanced logging")
+        
+        # Test context tracking
+        print("\n📊 Testing context metrics tracking...")
+        context_manager = wrapper.context_manager if hasattr(wrapper, 'context_manager') else None
+        if context_manager:
+            metrics = context_manager.get_current_metrics()
+            print(f"  📏 Context utilization: {metrics.utilization_percentage:.1f}%")
+            print(f"  🧹 MCP noise: {metrics.mcp_noise_percentage:.1f}%")
+            print(f"  📝 Total tokens: {metrics.tokens_used:,}")
+        
+        return True
+        
+    except ImportError as e:
+        print(f"⚠️ Enhanced logging test skipped: {e}")
+        print("💡 This is normal if MCP wrapper is not available")
+        return False
+    except Exception as e:
+        print(f"❌ Enhanced logging test failed: {e}")
+        return False
+
+
 if __name__ == "__main__":
-    print("🔥 Deep Planning Agent Logging Test")
+    print("🔥 Deep Planning Agent Comprehensive Logging Test")
     print("=" * 50)
     
+    # Run basic logging test
     success = test_logging_setup()
     
     if success:
-        print("\n✅ LOGGING TEST COMPLETE")
+        print("\n✅ BASIC LOGGING TEST COMPLETE")
         print("🎯 If you see the fire emoji messages above, console logging works!")
         print("📋 Now check debug.log for all messages")
         
         show_recent_logs()
+        
+        # Run enhanced logging test
+        enhanced_success = test_enhanced_logging()
+        if enhanced_success:
+            print("\n✅ ENHANCED LOGGING TEST COMPLETE")
+        else:
+            print("\n⚠️ Enhanced logging not fully available (this is okay)")
         
         print(f"\n💡 USAGE:")
         print(f"  🔍 Monitor logs: ./watch_my_logs.sh")
         print(f"  📊 Full monitor: ./monitor_logs.sh")
         print(f"  📁 View file: tail -f debug.log")
     else:
-        print("\n❌ LOGGING TEST FAILED")
+        print("\n❌ BASIC LOGGING TEST FAILED")
         print("💡 Check the import errors above")

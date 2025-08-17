@@ -51,7 +51,7 @@ colorize_line() {
     elif [[ "$line" =~ "🔵|🟢|🔴|🟠|🟡" ]]; then
         echo -e "${RED}💎 MONITORING: ${line}${NC}"
     elif [[ "$line" =~ "🏗️|🔧|🤖|✅|📝|⚡|🏁" ]]; then
-        echo -e "${GREEN}⭐ FERRARI: ${line}${NC}"
+        echo -e "${GREEN}⭐ SYSTEM: ${line}${NC}"
     # LangGraph internal (dimmed)
     elif [[ "$line" =~ "langgraph_runtime_inmem|langgraph_api|LiteLLM|httpx" ]]; then
         if [[ "$line" =~ "ERROR" ]]; then

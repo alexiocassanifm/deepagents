@@ -67,6 +67,17 @@ class RateLimitConfig:
     backoff_multiplier: float = 2.0
     max_backoff_seconds: float = 300.0
     adaptive_adjustment: bool = True
+    
+    def __post_init__(self):
+        """Load from unified config if available."""
+        try:
+            from unified_config import get_performance_config
+            perf_cfg = get_performance_config()
+            self.requests_per_hour = perf_cfg.requests_per_hour
+            self.max_backoff_seconds = perf_cfg.max_backoff_seconds
+            self.backoff_multiplier = perf_cfg.backoff_factor
+        except ImportError:
+            pass  # Use defaults if unified config not available
 
 
 class RateLimiter:

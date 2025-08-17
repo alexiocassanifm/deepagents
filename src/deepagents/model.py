@@ -39,7 +39,7 @@ def get_model(model_spec=None):
         # LiteLLM gestisce automaticamente il routing basato sul prefisso
         return ChatLiteLLM(
             model=model_spec,
-            temperature=0.7,
+            temperature=0.1,
             max_tokens=64000
         )
     
