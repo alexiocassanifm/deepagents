@@ -28,8 +28,8 @@ from langchain_core.language_models import LanguageModelLike
 from langgraph.types import Command
 
 # Import existing system components
-from context_manager import ContextManager, ContextMetrics
-from llm_compression import LLMCompressor, CompressionConfig, LLMCompressionResult, CompressionType
+from .context_manager import ContextManager, ContextMetrics
+from .llm_compression import LLMCompressor, CompressionConfig, LLMCompressionResult, CompressionType
 from deepagents.state import DeepAgentState
 
 

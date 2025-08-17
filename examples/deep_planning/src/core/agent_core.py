@@ -26,18 +26,18 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Import compatibility layer
-from compatibility_layer import ensure_compatibility, print_compatibility_report
+from ..compatibility.compatibility_layer import ensure_compatibility, print_compatibility_report
 
 # Apply compatibility patches on import
 ensure_compatibility()
 
 # Import all supporting modules
-from mcp_integration import (
+from ..integrations.mcp.mcp_integration import (
     initialize_deep_planning_mcp_tools,
     print_mcp_status
 )
 
-from phase_orchestration import (
+from .phase_orchestration import (
     format_todos_for_prompt,
     format_outputs_list,
     format_validation_rules,
@@ -49,7 +49,7 @@ from phase_orchestration import (
     print_phase_status
 )
 
-from context_compression import (
+from ..context.context_compression import (
     check_and_compact_if_needed,
     get_compaction_metrics,
     wrap_agent_with_compression_hooks,
@@ -57,7 +57,7 @@ from context_compression import (
 )
 
 # Import dynamic prompt system
-from prompt_templates import (
+from ..config.prompt_templates import (
     inject_dynamic_context,
     generate_phase_todos,
     generate_phase_context,
@@ -66,7 +66,7 @@ from prompt_templates import (
     generate_all_phase_contexts
 )
 
-from prompt_config import (
+from ..config.prompt_config import (
     PhaseType,
     get_phase_config,
     get_tools_for_phase,
@@ -78,11 +78,11 @@ from prompt_config import (
 )
 
 # Import optimization stats for reporting
-from optimized_prompts import OPTIMIZATION_STATS
+from ..config.optimized_prompts import OPTIMIZATION_STATS
 
 # Import compatibility system
-from tool_compatibility import apply_tool_compatibility_fixes, setup_compatibility_logging
-from model_compatibility import (
+from ..compatibility.tool_compatibility import apply_tool_compatibility_fixes, setup_compatibility_logging
+from ..compatibility.model_compatibility import (
     detect_model_from_environment, 
     should_apply_compatibility_fixes,
     print_model_compatibility_report,
@@ -90,18 +90,18 @@ from model_compatibility import (
 )
 
 # Import simplified agent factory
-from simplified_agent_factory import (
+from .agent_factory import (
     SimplifiedAgentFactory,
     create_simplified_factory
 )
 
 # Check for LLM compression availability
 try:
-    from llm_compression import LLMCompressor, CompressionConfig, CompressionStrategy
-    from context_hooks import ContextHookManager, CompressionHook, HookType
-    from enhanced_compact_integration import EnhancedCompactIntegration
-    from config_loader import get_trigger_config, get_context_management_config, print_config_summary
-    from unified_config import get_model_config, get_performance_config
+    from ..context.llm_compression import LLMCompressor, CompressionConfig, CompressionStrategy
+    from ..context.context_hooks import ContextHookManager, CompressionHook, HookType
+    from ..context.compact_integration import EnhancedCompactIntegration
+    from ..config.config_loader import get_trigger_config, get_context_management_config, print_config_summary
+    from ..config.unified_config import get_model_config, get_performance_config
     LLM_COMPRESSION_AVAILABLE = True
     logger.info("✅ LLM Compression system available")
 except ImportError as e:

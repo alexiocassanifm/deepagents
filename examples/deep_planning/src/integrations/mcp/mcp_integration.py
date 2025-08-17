@@ -32,9 +32,9 @@ except ImportError:
 
 # Import unified wrapper and compact integration if available
 try:
-    from unified_wrapper import wrap_tools_unified
-    from compact_integration import CompactIntegration
-    from context_manager import ContextManager
+    from ...compatibility.unified_wrapper import wrap_tools_unified
+    from ...context.compact_integration import CompactIntegration
+    from ...context.context_manager import ContextManager
     WRAPPER_AVAILABLE = True
 except ImportError:
     WRAPPER_AVAILABLE = False

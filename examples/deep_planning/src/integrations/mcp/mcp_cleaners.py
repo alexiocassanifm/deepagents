@@ -20,11 +20,11 @@ import logging
 from typing import Dict, Any, List, Optional, Tuple, Set
 from dataclasses import dataclass
 
-from context_manager import CleaningStrategy, CleaningResult, CleaningStatus
+from ...context.context_manager import CleaningStrategy, CleaningResult, CleaningStatus
 
 # Import configurazione centralizzata
 try:
-    from config_loader import get_full_config
+    from ...config.config_loader import get_full_config
     CONFIG_LOADER_AVAILABLE = True
 except ImportError:
     CONFIG_LOADER_AVAILABLE = False

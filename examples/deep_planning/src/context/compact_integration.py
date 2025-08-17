@@ -21,8 +21,8 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, asdict
 
-from context_manager import ContextManager, ContextMetrics, ContextInfo, CompactTrigger
-from mcp_wrapper import MCPToolWrapper
+from .context_manager import ContextManager, ContextMetrics, ContextInfo, CompactTrigger
+from ..integrations.mcp.mcp_wrapper import MCPToolWrapper
 
 
 @dataclass

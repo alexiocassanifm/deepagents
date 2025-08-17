@@ -21,8 +21,8 @@ logger = logging.getLogger(__name__)
 
 # Import phase configuration and dynamic agent factory
 try:
-    from prompt_config import PhaseType
-    from simplified_agent_factory import create_simplified_factory
+    from ..config.prompt_config import PhaseType
+    from .agent_factory import create_simplified_factory
     PHASE_CONFIG_AVAILABLE = True
 except ImportError:
     PHASE_CONFIG_AVAILABLE = False

@@ -12,14 +12,14 @@ Key simplifications:
 """
 
 from typing import Dict, Any, List, Optional
-from prompt_config import (
+from ..config.prompt_config import (
     PhaseType, 
     get_phase_config, 
     get_tools_for_phase,
     validate_phase_completion,
     get_next_phase
 )
-from prompt_templates import (
+from ..config.prompt_templates import (
     generate_phase_todos,
     generate_phase_context,
     inject_dynamic_context

@@ -1,7 +1,7 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "deep_planning": "./agent_core.py:agent"
+    "deep_planning": "src.core.agent_core:agent"
   },
   "env": ".env"
 }

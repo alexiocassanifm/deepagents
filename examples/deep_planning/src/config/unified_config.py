@@ -14,7 +14,7 @@ from pathlib import Path
 from enum import Enum
 
 # Import existing configurations to integrate
-from prompt_config import PhaseType, PhaseConfig, ToolCategory, ValidationLevel
+from .prompt_config import PhaseType, PhaseConfig, ToolCategory, ValidationLevel
 
 logger = logging.getLogger('unified_config')
 
@@ -350,8 +350,8 @@ class ConfigurationManager:
         
         # Load phase configurations from prompt_config
         try:
-            from prompt_config import PHASE_CONFIGURATIONS
-            self._config.phases = PHASE_CONFIGURATIONS
+            from .prompt_config import PHASE_CONFIGS
+            self._config.phases = PHASE_CONFIGS
         except ImportError:
             logger.warning("Could not import phase configurations")
         

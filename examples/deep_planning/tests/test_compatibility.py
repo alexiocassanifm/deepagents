@@ -10,17 +10,17 @@ import asyncio
 import sys
 import os
 
-# Add the current directory to Python path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add the parent directory to Python path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tool_compatibility import (
+from src.compatibility.tool_compatibility import (
     safe_json_parse, 
     validate_todo_structure, 
     create_write_todos_wrapper,
     apply_tool_compatibility_fixes,
     setup_compatibility_logging
 )
-from model_compatibility import (
+from src.compatibility.model_compatibility import (
     ModelCompatibilityRegistry,
     detect_model_from_environment,
     should_apply_compatibility_fixes,

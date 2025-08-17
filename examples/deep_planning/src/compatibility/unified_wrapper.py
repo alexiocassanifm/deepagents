@@ -18,8 +18,8 @@ from functools import wraps
 from dataclasses import dataclass
 
 # Import existing components
-from context_manager import ContextManager
-from mcp_cleaners import create_default_cleaning_strategies
+from ..context.context_manager import ContextManager
+from ..integrations.mcp.mcp_cleaners import create_default_cleaning_strategies
 
 # Setup logging
 logger = logging.getLogger(__name__)

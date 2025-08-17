@@ -32,7 +32,7 @@ except ImportError:
 
 # Import del config loader per caricare configurazione da YAML
 try:
-    from config_loader import get_context_management_config
+    from ..config.config_loader import get_context_management_config
     CONFIG_LOADER_AVAILABLE = True
 except ImportError:
     CONFIG_LOADER_AVAILABLE = False

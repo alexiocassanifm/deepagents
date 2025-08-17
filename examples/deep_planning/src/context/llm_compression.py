@@ -25,12 +25,12 @@ from langchain_core.language_models import LanguageModelLike
 from langchain_core.messages import HumanMessage, SystemMessage
 
 # Import existing context management
-from context_manager import ContextManager, ContextMetrics, CleaningResult
-from compact_integration import CompactSummary, CompactTrigger
+from .context_manager import ContextManager, ContextMetrics, CleaningResult
+from .compact_integration import CompactSummary, CompactTrigger
 
 # Import configurazione centralizzata
 try:
-    from config_loader import get_trigger_config, get_full_config
+    from ..config.config_loader import get_trigger_config, get_full_config
     CONFIG_LOADER_AVAILABLE = True
 except ImportError:
     CONFIG_LOADER_AVAILABLE = False

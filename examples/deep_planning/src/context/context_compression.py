@@ -23,15 +23,15 @@ logger = logging.getLogger(__name__)
 
 # Import dependencies if available
 try:
-    from compact_integration import CompactIntegration
-    from enhanced_compact_integration import EnhancedCompactIntegration
+    from .compact_integration import CompactIntegration
+    from .compact_integration import EnhancedCompactIntegration
     COMPACT_AVAILABLE = True
 except ImportError:
     COMPACT_AVAILABLE = False
     logger.warning("⚠️ Compact integration not available")
 
 try:
-    from config_loader import get_trigger_config
+    from ..config.config_loader import get_trigger_config
     CONFIG_AVAILABLE = True
 except ImportError:
     CONFIG_AVAILABLE = False

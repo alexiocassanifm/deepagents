@@ -12,11 +12,11 @@ sys.path.insert(0, '../../src')
 sys.path.insert(0, '.')
 
 # Apply compatibility patches
-from compatibility_layer import ensure_compatibility
+from ..compatibility.compatibility_layer import ensure_compatibility
 ensure_compatibility()
 
 # Import MCP integration to get the actual tools
-from mcp_integration import initialize_deep_planning_mcp_tools
+from ..integrations.mcp.mcp_integration import initialize_deep_planning_mcp_tools
 
 # Get the tools that would be passed to the agent
 deep_planning_tools, mcp_wrapper, mcp_client = initialize_deep_planning_mcp_tools()
