@@ -114,26 +114,38 @@ def setup_debug_logging():
     log_level = os.getenv('PYTHON_LOG_LEVEL', 'INFO').upper()
     log_file = os.getenv('LOG_FILE', 'debug.log')
     
+    # FORCE INFO level for better console visibility with LangGraph
+    force_info = log_level in ['INFO', 'DEBUG']
+    actual_level = logging.INFO if force_info else getattr(logging, log_level)
+    
     # Configure root logger with file and console handlers
     root_logger = logging.getLogger()
-    root_logger.setLevel(getattr(logging, log_level))
+    root_logger.setLevel(actual_level)
     
     # Clear existing handlers
     root_logger.handlers.clear()
     
-    # Create formatter
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    # Create formatter with more prominent format for console
+    console_formatter = logging.Formatter('🔥 %(levelname)s - %(name)s - %(message)s')
+    file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     
-    # Console handler (to view logs on screen)
+    # Console handler (to view logs on screen) - FORCE INFO level
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(getattr(logging, log_level))
-    console_handler.setFormatter(formatter)
+    console_handler.setLevel(logging.INFO)  # Always show INFO in console
+    console_handler.setFormatter(console_formatter)
     root_logger.addHandler(console_handler)
+    
+    # Explicitly configure LangGraph loggers to propagate to console
+    langgraph_loggers = ['langgraph', 'langchain', 'langgraph_api', 'langgraph_runtime_inmem']
+    for logger_name in langgraph_loggers:
+        logger = logging.getLogger(logger_name)
+        logger.setLevel(logging.WARNING)  # Reduce LangGraph noise but keep errors
+        logger.propagate = True
     
     # File handler (to save logs to file)
     file_handler = logging.FileHandler(log_file, mode='w')  # 'w' to overwrite each time
     file_handler.setLevel(logging.DEBUG)  # Always DEBUG on file
-    file_handler.setFormatter(formatter)
+    file_handler.setFormatter(file_formatter)
     root_logger.addHandler(file_handler)
     
     # Enable debug for specific modules
@@ -155,14 +167,16 @@ def setup_debug_logging():
         else:
             logger.setLevel(logging.DEBUG)
     
-    print(f"🔍 Debug logging enabled at level: {log_level}")
+    print(f"🔍 Debug logging enabled at level: {log_level} (forced to INFO for console)")
     print(f"📁 Log file: {log_file}")
     print(f"📊 Debug loggers: {', '.join(loggers_to_debug)}")
     print(f"🎯 Context management loggers set to INFO level")
+    print(f"🔥 Console logging FORCED to INFO level for visibility")
     
-    # Test log to verify it works
+    # Test log to verify it works - THESE SHOULD NOW APPEAR IN CONSOLE
     logging.debug("🚀 Debug logging setup completed - test message")
-    logging.info("ℹ️ Info logging setup completed - test message")
+    logging.info("ℹ️ Info logging setup completed - test message - THIS SHOULD BE VISIBLE!")
+    logging.warning("⚠️ Warning test - this should definitely be visible")
     
     # Specifically configure loggers for context management with welcome logs
     mcp_context_logger = logging.getLogger('mcp_context_tracker')
@@ -170,6 +184,14 @@ def setup_debug_logging():
     
     mcp_context_logger.info("🎯 MCP Context Tracker logging activated - tool calls will be tracked")
     context_manager_logger.info("📊 Context Manager logging activated - cleaning operations will be logged")
+    
+    # Add a console test to verify immediate visibility
+    print("🔥 If you see the line above this with ℹ️, console logging is working!")
+    
+    # Create a simple test logger to verify console output
+    test_logger = logging.getLogger('langgraph_console_test')
+    test_logger.setLevel(logging.INFO)
+    test_logger.info("🚀 CONSOLE TEST: This should appear immediately in your terminal!")
 
 # Setup logging immediately
 setup_debug_logging()
@@ -334,7 +356,16 @@ async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[
     except Exception as e:
         print(f"❌ Failed to connect to MCP server: {e}")
         print("🔄 Falling back to demo tools")
-        return get_fallback_tools(), None, None
+        
+        # EVEN FOR DEMO TOOLS: Create MCP wrapper to test logging functionality
+        print("🧹 Creating MCP wrapper for demo tools to test logging system...")
+        demo_tools = get_fallback_tools()
+        wrapped_demo_tools, wrapper = wrap_existing_mcp_tools(demo_tools)
+        
+        print(f"✅ Demo tools wrapped for testing - {len(wrapped_demo_tools)} tools ready")
+        print("⚠️ Using demo tools (no real MCP connection) but MCP wrapper active for testing")
+        
+        return wrapped_demo_tools, wrapper, None
 
 
 def get_fallback_tools() -> List[Any]:
@@ -939,6 +970,11 @@ def create_optimized_deep_planning_agent(initial_state: Dict[str, Any] = None, e
     Returns:
         Configured deep planning agent with optional compression hooks
     """
+    # STRATEGIC LOGGING: This function is called by LangGraph
+    main_logger = logging.getLogger('deep_planning_main')
+    main_logger.info("🏗️ STARTING: create_optimized_deep_planning_agent() - LangGraph will see this!")
+    main_logger.info(f"🔧 Parameters: enable_llm_compression={enable_llm_compression}")
+    
     # Initialize default state
     if initial_state is None:
         initial_state = {
@@ -953,14 +989,19 @@ def create_optimized_deep_planning_agent(initial_state: Dict[str, Any] = None, e
     
     # Generate dynamic main prompt
     current_phase = initial_state.get("current_phase", "investigation")
+    main_logger.info(f"📝 GENERATING: Dynamic main prompt for phase: {current_phase}")
+    
     optimized_main_prompt = generate_optimized_main_prompt(
         current_phase, 
         initial_state, 
         deep_planning_tools
     )
+    main_logger.info(f"✅ GENERATED: Main prompt ({len(optimized_main_prompt)} chars)")
     
     # Create dynamic sub-agents
+    main_logger.info("🤖 CREATING: Dynamic sub-agents")
     optimized_subagents = create_dynamic_subagents(deep_planning_tools, initial_state)
+    main_logger.info(f"✅ CREATED: {len(optimized_subagents)} sub-agents")
     
     # Setup LLM compression if available and enabled
     enhanced_compact_integration = None
@@ -1018,6 +1059,11 @@ def create_optimized_deep_planning_agent(initial_state: Dict[str, Any] = None, e
         print(f"   ⚙️ Config source: context_config.yaml")
     
     # FERRARI FINAL ASSEMBLY: Create the agent with COMPLETELY DYNAMIC prompts
+    main_logger.info("🏎️ ASSEMBLING: Final agent with dynamic prompts")
+    main_logger.info(f"🔧 Using model: {DEFAULT_MODEL}")
+    main_logger.info(f"🛠️ Tools count: {len(deep_planning_tools)}")
+    main_logger.info("🎯 CALLBACK: Adding DeepPlanningCallbackHandler for execution visibility")
+    
     agent = create_compatible_deep_agent(
         tools=deep_planning_tools,
         instructions=optimized_main_prompt,
@@ -1026,15 +1072,22 @@ def create_optimized_deep_planning_agent(initial_state: Dict[str, Any] = None, e
         enable_planning_approval=True,
         checkpointer="memory",
         # Pass compression integration for hook setup
-        _enhanced_compact_integration=enhanced_compact_integration
+        _enhanced_compact_integration=enhanced_compact_integration,
+        # Add callback handler for execution logging
+        _callback_handler=deep_planning_callback,
+        # Pass MCP wrapper for StructuredTool re-wrapping
+        _mcp_wrapper=mcp_wrapper
     )
+    main_logger.info("✅ ASSEMBLED: Base agent created successfully")
     
     # Add FERRARI validation capabilities to the agent
+    main_logger.info("⚡ ENHANCING: Adding FERRARI validation capabilities")
     agent._dynamic_factory = create_dynamic_agent_factory(deep_planning_tools)
     agent._validate_phase_transition = lambda phase, state: validate_and_transition_phase(phase, state, deep_planning_tools)
     agent._get_progress_report = lambda state: get_phase_progress_report(state, deep_planning_tools)
     agent._auto_advance_phase = lambda state: auto_advance_phase_if_ready(state, deep_planning_tools)
     
+    main_logger.info("🏁 COMPLETED: Deep planning agent creation finished!")
     print("🏎️ FERRARI agent equipped with dynamic validation and auto-pilot!")
     
     return agent
@@ -1051,13 +1104,23 @@ def create_compatible_deep_agent(*args, **kwargs):
     fixes to the built-in tools before agent creation. It also sets up automatic
     compression hooks if enhanced_compact_integration is provided.
     """
+    # STRATEGIC LOGGING: This function is called during agent creation
+    compat_logger = logging.getLogger('deep_planning_compat')
+    compat_logger.info("🔧 STARTING: create_compatible_deep_agent() - Setting up compatibility")
+    
     # Import here to avoid circular imports and access to built-in tools
     from deepagents.tools import write_todos, write_file, read_file, ls, edit_file, review_plan
     
-    # Extract compression integration from kwargs
+    # Extract compression integration, callback handler, and MCP wrapper from kwargs
     enhanced_compact_integration = kwargs.pop('_enhanced_compact_integration', None)
+    callback_handler = kwargs.pop('_callback_handler', None)
+    mcp_wrapper = kwargs.pop('_mcp_wrapper', None)
+    
+    compat_logger.info(f"🧠 LLM Compression available: {enhanced_compact_integration is not None}")
+    compat_logger.info(f"🎯 Callback Handler provided: {callback_handler is not None}")
     
     if ENABLE_COMPATIBILITY_FIXES:
+        compat_logger.info("🛡️ APPLYING: Compatibility fixes to built-in tools")
         print("🛡️  Applying compatibility fixes to built-in tools...")
         
         # Create list of built-in tools
@@ -1066,6 +1129,9 @@ def create_compatible_deep_agent(*args, **kwargs):
         # Add review_plan if planning approval is enabled
         if kwargs.get('enable_planning_approval', False):
             built_in_tools.append(review_plan)
+            compat_logger.info("📋 ADDED: review_plan tool for planning approval")
+        
+        compat_logger.info(f"🔧 FIXING: {len(built_in_tools)} built-in tools for model: {detected_model}")
         
         # Apply compatibility fixes
         fixed_built_in_tools = apply_tool_compatibility_fixes(built_in_tools, detected_model)
@@ -1077,10 +1143,92 @@ def create_compatible_deep_agent(*args, **kwargs):
             if tool_name and hasattr(tools_module, tool_name):
                 setattr(tools_module, tool_name, fixed_built_in_tools[i])
         
+        compat_logger.info("✅ PATCHED: Built-in tools with compatibility fixes")
         print("✅ Built-in tools patched with compatibility fixes")
+    else:
+        compat_logger.info("⏭️ SKIPPED: Compatibility fixes (not needed for this model)")
+    
+    # Prepare for callback handler configuration (deepagents doesn't support callbacks param)
+    if callback_handler:
+        compat_logger.info("🎯 PREPARING: Callback handler for post-creation configuration")
+        # Remove callbacks from kwargs since deepagents doesn't support it
+        if 'callbacks' in kwargs:
+            kwargs.pop('callbacks')
+            compat_logger.info("🔧 REMOVED: callbacks parameter (deepagents doesn't support it)")
+        
+        # Set environment for callback propagation
+        import os
+        os.environ['LANGCHAIN_CALLBACKS_ENABLED'] = 'true'
+        compat_logger.info("🌐 SET: Environment configured for callback propagation")
     
     # Create the agent normally
+    compat_logger.info("🏗️ CREATING: Base deep agent with deepagents library")
+    compat_logger.info(f"🔧 Agent kwargs: {list(kwargs.keys())}")
     agent = create_deep_agent(*args, **kwargs)
+    compat_logger.info("✅ CREATED: Base deep agent successfully")
+    
+    # CRITICAL FIX: Re-wrap the agent's tools after creation
+    # deepagents might have extracted original tools, so re-apply wrappers
+    try:
+        compat_logger.info(f"🔍 AGENT INSPECTION: Agent type: {type(agent)}")
+        compat_logger.info(f"🔍 AGENT ATTRIBUTES: {[attr for attr in dir(agent) if not attr.startswith('_')]}")
+        
+        # Check various possible tool locations
+        tool_locations = ['tools', 'graph', 'nodes', '_tools', 'executor', 'runner']
+        for location in tool_locations:
+            if hasattr(agent, location):
+                attr_value = getattr(agent, location)
+                compat_logger.info(f"🔍 FOUND: agent.{location} = {type(attr_value)} with {len(str(attr_value))} chars")
+        
+        # CRITICAL NEW APPROACH: Re-wrap StructuredTools after creation
+        if 'tools' in kwargs:
+            original_wrapped_tools = kwargs['tools']
+            
+            # Check if we have an MCP wrapper available to re-wrap StructuredTools
+            if mcp_wrapper is not None:
+                compat_logger.info("🔧 APPLYING: StructuredTool re-wrapping with MCP wrapper")
+                
+                # Re-wrap any StructuredTools that were created
+                for i, tool in enumerate(original_wrapped_tools):
+                    if hasattr(tool, '_schema') or 'StructuredTool' in str(type(tool)):
+                        tool_name = getattr(tool, 'name', f"tool_{i}")
+                        is_mcp = mcp_wrapper._is_mcp_tool(tool_name)
+                        compat_logger.info(f"🔧 CHECKING: Tool {i} name='{tool_name}' is_mcp={is_mcp}")
+                        
+                        # Force wrap ALL StructuredTools for now to test - USE LOGGING FOR RELIABILITY
+                        compat_logger.info(f"🔧 FORCE WRAPPING StructuredTool: {tool_name}")
+                        
+                        try:
+                            # This will trigger the new StructuredTool wrapping logic
+                            compat_logger.info(f"🔧 CALLING: mcp_wrapper.wrap_tool() for {tool_name}")
+                            re_wrapped = mcp_wrapper.wrap_tool(tool, tool_name)
+                            compat_logger.info(f"🔧 RETURNED: wrap_tool() succeeded for {tool_name}")
+                            
+                            original_wrapped_tools[i] = re_wrapped
+                            compat_logger.info(f"✅ FORCE WRAPPED: {tool_name} successfully replaced in list")
+                            
+                        except Exception as e:
+                            compat_logger.error(f"❌ EXCEPTION in wrap_tool() for {tool_name}: {type(e).__name__}: {e}")
+                            compat_logger.error(f"❌ TOOL TYPE: {type(tool)}")
+                            compat_logger.error(f"❌ TOOL ATTRS: {[attr for attr in dir(tool) if not attr.startswith('_')]}")
+                            # Continue with next tool instead of crashing
+                        
+                compat_logger.info("✅ STRUCTURED TOOLS: Re-wrapped with MCP integration")
+                print("🎯 CRITICAL FIX APPLIED: StructuredTool functions now wrapped!")
+            else:
+                compat_logger.warning("⚠️ MCP wrapper not available for StructuredTool re-wrapping")
+                    
+        # If still no luck, print debug info
+        if 'tools' in kwargs:
+            original_wrapped_tools = kwargs['tools']
+            compat_logger.info(f"📋 ORIGINAL WRAPPED TOOLS: {len(original_wrapped_tools)} tools")
+            for i, tool in enumerate(original_wrapped_tools[:3]):  # Show first 3
+                compat_logger.info(f"   Tool {i}: {type(tool)} - wrapped: {hasattr(tool, '__wrapped__')}")
+                
+    except Exception as e:
+        compat_logger.warning(f"⚠️ Tool re-wrapping failed: {e}")
+        import traceback
+        compat_logger.warning(f"⚠️ Full error: {traceback.format_exc()}")
     
     # Setup LLM compression hooks if enhanced integration is provided
     if enhanced_compact_integration and LLM_COMPRESSION_AVAILABLE:
@@ -1108,9 +1256,44 @@ def create_compatible_deep_agent(*args, **kwargs):
             print(f"   📋 All triggers from context_config.yaml")
             
         except Exception as e:
+            compat_logger.error(f"❌ FAILED: Compression hook setup - {e}")
             print(f"⚠️ Failed to setup compression hooks: {e}")
             print("🔄 Agent running without automatic compression")
+    else:
+        compat_logger.info("⏭️ SKIPPED: LLM compression hooks (not available or disabled)")
     
+    # Configure the callback handler on the agent itself
+    if callback_handler:
+        compat_logger.info("🎯 FINALIZING: Adding callback handler to agent object")
+        try:
+            # Try to add callback to the agent's LLM if it exists
+            if hasattr(agent, 'llm') and agent.llm:
+                if hasattr(agent.llm, 'callbacks'):
+                    if agent.llm.callbacks is None:
+                        agent.llm.callbacks = [callback_handler]
+                    else:
+                        agent.llm.callbacks.append(callback_handler)
+                    compat_logger.info("✅ CONFIGURED: Callback added to agent.llm.callbacks")
+                else:
+                    compat_logger.info("⚠️ Agent LLM doesn't support callbacks directly")
+            
+            # Try to add to the agent itself if it supports callbacks
+            if hasattr(agent, 'callbacks'):
+                if agent.callbacks is None:
+                    agent.callbacks = [callback_handler]
+                else:
+                    agent.callbacks.append(callback_handler)
+                compat_logger.info("✅ CONFIGURED: Callback added to agent.callbacks")
+            
+            # Store callback for manual triggering if needed
+            agent._deep_planning_callback = callback_handler
+            compat_logger.info("✅ STORED: Callback handler stored on agent for manual access")
+            
+        except Exception as e:
+            compat_logger.warning(f"⚠️ Could not configure callback on agent: {e}")
+            compat_logger.info("🔄 Callback handler will rely on environment configuration")
+    
+    compat_logger.info("🏁 COMPLETED: create_compatible_deep_agent() finished successfully!")
     return agent
 
 
@@ -1384,8 +1567,262 @@ initial_state = {
     "investigation_focus": "comprehensive project analysis"
 }
 
+# ============================================================================
+# LANGGRAPH NATIVE CALLBACK SYSTEM FOR EXECUTION LOGGING
+# ============================================================================
+
+from langchain_core.callbacks.base import BaseCallbackHandler
+from langchain_core.outputs import LLMResult
+from langchain_core.messages import BaseMessage
+from typing import Any, Dict, List, Optional
+
+class DeepPlanningCallbackHandler(BaseCallbackHandler):
+    """
+    Custom callback handler that captures LangGraph execution events.
+    This is the CORRECT way to get execution visibility in LangGraph.
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.execution_logger = logging.getLogger('langgraph_execution_callback')
+        self.execution_logger.setLevel(logging.INFO)
+        
+        # SUPER AGGRESSIVE CALLBACK INITIALIZATION
+        print("🎯 CALLBACK: DeepPlanningCallbackHandler initialized")
+        print("🔥 QUESTO MESSAGGIO DEVE ESSERE VISIBILE NEL TERMINALE!")
+        print("🔥 SE VEDI QUESTO, IL CALLBACK HANDLER È ATTIVO!")
+        print("🔥 ORA DOVRAI VEDERE I LOG DURANTE L'ESECUZIONE!")
+        
+        self.execution_logger.info("🎯 CALLBACK: Handler ready for LangGraph execution events")
+        
+        # FORCE FLUSH
+        import sys
+        sys.stdout.flush()
+    
+    def on_llm_start(self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any) -> None:
+        """Called when LLM starts generating."""
+        model_name = serialized.get('id', ['unknown'])[-1] if serialized.get('id') else 'unknown'
+        prompt_preview = prompts[0][:100] + "..." if prompts and len(prompts[0]) > 100 else prompts[0] if prompts else ""
+        
+        message = f"🚀 LLM_START: model={model_name}, prompt_len={len(prompts[0]) if prompts else 0}"
+        self.execution_logger.info(message)
+        print(f"🔥 EXEC: {message}")
+        
+        if prompt_preview:
+            self.execution_logger.info(f"📝 PROMPT_PREVIEW: {prompt_preview}")
+    
+    def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:
+        """Called when LLM finishes generating."""
+        if response.generations:
+            response_preview = response.generations[0][0].text[:100] + "..." if len(response.generations[0][0].text) > 100 else response.generations[0][0].text
+            response_len = len(response.generations[0][0].text)
+        else:
+            response_preview = "No response"
+            response_len = 0
+            
+        message = f"✅ LLM_END: response_len={response_len}"
+        self.execution_logger.info(message)
+        print(f"🔥 EXEC: {message}")
+        
+        if response_preview:
+            self.execution_logger.info(f"💬 RESPONSE_PREVIEW: {response_preview}")
+    
+    def on_llm_error(self, error: Exception, **kwargs: Any) -> None:
+        """Called when LLM encounters an error."""
+        message = f"❌ LLM_ERROR: {str(error)[:200]}"
+        self.execution_logger.error(message)
+        print(f"🔥 ERROR: {message}")
+    
+    def on_tool_start(self, serialized: Dict[str, Any], input_str: str, **kwargs: Any) -> None:
+        """Called when a tool starts executing."""
+        tool_name = serialized.get('name', 'unknown_tool')
+        
+        # SUPER AGGRESSIVE LOGGING
+        message = f"🔧 TOOL_START: {tool_name}, input_len={len(input_str)}"
+        self.execution_logger.info(message)
+        print(f"🔥 EXEC TOOL START: {message}")
+        print(f"🔥 FORZATA VISIBILITA': TOOL {tool_name} HA INIZIATO!")
+        print(f"🔥 INPUT: {input_str[:200]}..." if len(input_str) > 200 else f"🔥 INPUT: {input_str}")
+        
+        # FORCE FLUSH per assicurarsi che appaia subito
+        import sys
+        sys.stdout.flush()
+        input_preview = input_str[:100] + "..." if len(input_str) > 100 else input_str
+        
+        message = f"🛠️ TOOL_START: {tool_name}"
+        self.execution_logger.info(message)
+        print(f"🔥 EXEC: {message}")
+        
+        if input_preview:
+            self.execution_logger.info(f"📋 TOOL_INPUT: {input_preview}")
+    
+    def on_tool_end(self, output: str, **kwargs: Any) -> None:
+        """Called when a tool finishes executing."""
+        output_preview = output[:200] + "..." if len(output) > 200 else output
+        output_len = len(output)
+        
+        # SUPER AGGRESSIVE LOGGING
+        message = f"✅ TOOL_END: output_len={output_len}"
+        self.execution_logger.info(message)
+        print(f"🔥 EXEC TOOL END: {message}")
+        print("🔥 FORZATA VISIBILITA': TOOL HA FINITO!")
+        print(f"🔥 OUTPUT: {output_preview}")
+        
+        # FORCE FLUSH
+        import sys
+        sys.stdout.flush()
+        
+        if output_preview:
+            self.execution_logger.info(f"📤 TOOL_OUTPUT: {output_preview}")
+    
+    def on_tool_error(self, error: Exception, **kwargs: Any) -> None:
+        """Called when a tool encounters an error."""
+        message = f"❌ TOOL_ERROR: {str(error)[:200]}"
+        self.execution_logger.error(message)
+        print(f"🔥 ERROR: {message}")
+    
+    def on_agent_action(self, action, **kwargs: Any) -> None:
+        """Called when an agent takes an action."""
+        tool_name = getattr(action, 'tool', 'unknown')
+        tool_input = str(getattr(action, 'tool_input', ''))[:100]
+        
+        message = f"🎯 AGENT_ACTION: tool={tool_name}"
+        self.execution_logger.info(message)
+        print(f"🔥 EXEC: {message}")
+        
+        if tool_input:
+            self.execution_logger.info(f"⚙️ ACTION_INPUT: {tool_input}")
+    
+    def on_agent_finish(self, finish, **kwargs: Any) -> None:
+        """Called when an agent finishes."""
+        output = str(getattr(finish, 'return_values', ''))[:100]
+        
+        message = f"🏁 AGENT_FINISH"
+        self.execution_logger.info(message)
+        print(f"🔥 EXEC: {message}")
+        
+        if output:
+            self.execution_logger.info(f"🎉 FINAL_OUTPUT: {output}")
+    
+    def on_chain_start(self, serialized: Dict[str, Any], inputs: Dict[str, Any], **kwargs: Any) -> None:
+        """Called when a chain starts."""
+        chain_name = serialized.get('id', ['unknown'])[-1] if serialized.get('id') else 'unknown'
+        
+        message = f"🔗 CHAIN_START: {chain_name}"
+        self.execution_logger.info(message)
+        print(f"🔥 EXEC: {message}")
+    
+    def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> None:
+        """Called when a chain ends."""
+        message = f"✅ CHAIN_END: keys={list(outputs.keys()) if outputs else []}"
+        self.execution_logger.info(message)
+        print(f"🔥 EXEC: {message}")
+    
+    def on_chain_error(self, error: Exception, **kwargs: Any) -> None:
+        """Called when a chain encounters an error."""
+        message = f"❌ CHAIN_ERROR: {str(error)[:200]}"
+        self.execution_logger.error(message)
+        print(f"🔥 ERROR: {message}")
+
+# Create the global callback handler instance
+deep_planning_callback = DeepPlanningCallbackHandler()
+
+# Configure global LangChain callbacks for LangGraph compatibility
+try:
+    from langchain_core.callbacks import get_callback_manager
+    from langchain_core.globals import set_llm_cache
+    import os
+    
+    # Set environment variable for callback propagation
+    os.environ['LANGCHAIN_TRACING_V2'] = 'false'  # Disable LangSmith to avoid conflicts
+    os.environ['LANGCHAIN_CALLBACKS_ENABLED'] = 'true'
+    
+    # Try to configure global callback manager
+    try:
+        callback_manager = get_callback_manager()
+        if callback_manager:
+            callback_manager.add_handler(deep_planning_callback)
+            print("✅ GLOBAL: Callback handler added to global callback manager")
+        else:
+            print("⚠️ GLOBAL: No global callback manager found")
+    except Exception as e:
+        print(f"⚠️ GLOBAL: Could not add to global callback manager: {e}")
+    
+    global_logger = logging.getLogger('langgraph_global_callbacks')
+    global_logger.info("🌐 GLOBAL: Callback configuration attempted for LangGraph compatibility")
+    
+except ImportError as e:
+    print(f"⚠️ GLOBAL: Could not import callback manager: {e}")
+except Exception as e:
+    print(f"⚠️ GLOBAL: Callback setup failed: {e}")
+
+# Legacy functions for backward compatibility
+def log_from_execution_context(message: str, level: str = "info", context: str = "execution"):
+    """Legacy function - callback system is now preferred."""
+    exec_logger = logging.getLogger(f'langgraph_exec_{context}')
+    exec_logger.setLevel(logging.INFO)
+    log_method = getattr(exec_logger, level.lower(), exec_logger.info)
+    log_method(f"🎯 EXECUTION: {message}")
+    print(f"🔥 LANGGRAPH_EXEC: {message}")
+
+def create_execution_logger():
+    """Legacy function - callback system is now preferred."""
+    exec_logger = logging.getLogger('langgraph_execution')
+    exec_logger.setLevel(logging.INFO)
+    exec_logger.propagate = True
+    return exec_logger
+
+def log_agent_state_change(state: Dict[str, Any], operation: str):
+    """Legacy function - callback system is now preferred."""
+    state_logger = logging.getLogger('langgraph_state')
+    state_logger.setLevel(logging.INFO)
+    message = f"🔄 STATE_{operation.upper()}: "
+    if 'current_phase' in state:
+        message += f"phase={state['current_phase']} "
+    if 'project_id' in state:
+        message += f"project={state['project_id']} "
+    if 'messages' in state:
+        message += f"messages={len(state['messages'])} "
+    state_logger.info(message)
+    print(f"🔥 STATE: {message}")
+
+def log_tool_execution(tool_name: str, args: Dict[str, Any] = None):
+    """Legacy function - callback system is now preferred."""
+    tool_logger = logging.getLogger('langgraph_tools')
+    tool_logger.setLevel(logging.INFO)
+    message = f"🛠️ TOOL_EXEC: {tool_name}"
+    if args:
+        safe_args = {k: v for k, v in args.items() if not any(secret in k.lower() for secret in ['token', 'key', 'password'])}
+        if safe_args:
+            message += f" args={safe_args}"
+    tool_logger.info(message)
+    print(f"🔥 TOOL: {message}")
+
+# ============================================================================
+# ENHANCED AGENT CREATION WITH EXECUTION LOGGING
+# ============================================================================
+
 # Create optimized agent with LLM compression enabled by default
+module_logger = logging.getLogger('deep_planning_module')
+module_logger.info("🚀 MODULE: Starting deep planning agent creation at module level")
+module_logger.info("📋 This is the agent that LangGraph will import!")
+
+# Log that we're creating the execution logger
+execution_logger = create_execution_logger()
+execution_logger.info("🎯 EXECUTION LOGGER: Created for LangGraph runtime visibility")
+
 agent = create_optimized_deep_planning_agent(initial_state, enable_llm_compression=True)
+
+module_logger.info("✅ MODULE: Agent created and available for LangGraph import")
+module_logger.info("🎯 Agent object ready for langgraph.json reference")
+
+# Add execution logging capabilities to the agent
+agent._log_execution = log_from_execution_context
+agent._log_state = log_agent_state_change
+agent._log_tool = log_tool_execution
+
+execution_logger.info("⚡ ENHANCED: Agent equipped with LangGraph execution logging")
+print("🔥 EXECUTION: Agent enhanced with runtime logging capabilities")
 
 # ============================================================================
 # MCP STATE CLEANING INTEGRATION - RISOLVE IL GAP IDENTIFICATO

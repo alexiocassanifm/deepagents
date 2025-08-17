@@ -25,9 +25,10 @@ from context_manager import ContextManager, ContextMetrics, ContextInfo, Cleanin
 from mcp_cleaners import create_default_cleaning_strategies
 
 # Configurazione logging specifico per context tracking
-logging.basicConfig(level=logging.INFO)
+# NON usare basicConfig - usa la configurazione del root logger
 context_logger = logging.getLogger("mcp_context_tracker")
 context_logger.setLevel(logging.INFO)
+context_logger.propagate = True  # Assicurati che propaghi al root logger
 
 
 class MCPToolWrapper:
@@ -146,9 +147,34 @@ class MCPToolWrapper:
     def _wrap_callable_tool(self, tool: Callable, tool_name: str) -> Callable:
         """Wrappa un tool callable (function) preservando completamente la signature."""
         
-        # Se il tool è già wrapped o è un StructuredTool, non wrapparlo di nuovo
-        if hasattr(tool, '__wrapped__') or hasattr(tool, '_schema') or 'StructuredTool' in str(type(tool)):
+        # Se il tool è già wrapped, non wrapparlo di nuovo
+        if hasattr(tool, '__wrapped__'):
             return tool
+        
+        # Se è un StructuredTool, wrappa la sua func direttamente  
+        if hasattr(tool, '_schema') or 'StructuredTool' in str(type(tool)):
+            context_logger.info(f"🔧 WRAPPING StructuredTool: {tool_name}")
+            context_logger.info(f"🔧 TOOL TYPE: {type(tool)}")
+            context_logger.info(f"🔧 HAS FUNC: {hasattr(tool, 'func')}")
+            
+            # Wrap the underlying function instead
+            if hasattr(tool, 'func'):
+                context_logger.info(f"🔧 ACCESSING: tool.func for {tool_name}")
+                original_func = tool.func
+                context_logger.info(f"🔧 FUNC TYPE: {type(original_func)} for {tool_name}")
+                
+                try:
+                    wrapped_func = self._create_function_wrapper(original_func, tool_name)
+                    context_logger.info(f"🔧 WRAPPER CREATED: {tool_name}")
+                    tool.func = wrapped_func
+                    context_logger.info(f"✅ WRAPPED StructuredTool.func for {tool_name}")
+                    return tool
+                except Exception as e:
+                    context_logger.error(f"❌ FAILED to wrap {tool_name}: {type(e).__name__}: {e}")
+                    return tool
+            else:
+                context_logger.warning(f"⚠️ StructuredTool {tool_name} has no func attribute")
+                return tool
         
         try:
             # Cattura la signature originale PRIMA del wrapping
@@ -180,6 +206,14 @@ class MCPToolWrapper:
                 except (AttributeError, TypeError):
                     # Ignora errori su attributi read-only
                     pass
+        
+        return wrapped_function
+    
+    def _create_function_wrapper(self, func: Callable, tool_name: str) -> Callable:
+        """Create a wrapper for a raw function that will be used in StructuredTool.func"""
+        @wraps(func)
+        def wrapped_function(*args, **kwargs):
+            return self._execute_with_cleaning(func, tool_name, *args, **kwargs)
         
         return wrapped_function
     
@@ -236,8 +270,9 @@ class MCPToolWrapper:
             # Incrementa statistiche
             self.stats["total_calls"] += 1
             
-            # Log pre-execution con context length
+            # Log pre-execution con context length - MASSIMA VISIBILITÀ
             context_logger.info(f"🔧 MCP Tool Call: {tool_name}")
+            print(f"🔥 TOOL CALL: {tool_name} - EXECUTING NOW")  # Extra visibility
             self._log_pre_execution_context()
             
             # Esegue il tool originale
@@ -253,6 +288,7 @@ class MCPToolWrapper:
                 )
                 # Log cleaning operation
                 self._log_cleaning_operation(tool_name, cleaning_info, original_size)
+                print(f"✅ TOOL COMPLETED: {tool_name} - Result processed and cleaned")  # Extra visibility
             else:
                 cleaned_result = original_result
                 cleaning_info = self._create_no_cleaning_result(original_result)
