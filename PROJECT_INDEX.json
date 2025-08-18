@@ -293,6 +293,21 @@
         "Configuration Sections"
       ],
       "architecture_hints": []
+    },
+    "specs/deepagents-context-refactor.md": {
+      "sections": [
+        "DeepAgents Context Management Refactor",
+        "Executive Summary",
+        "Current Problem",
+        "Solution Overview",
+        "Current State Analysis",
+        "Problem 1: Indiscriminate Compression",
+        "Problem 2: Architectural Mismatch",
+        "Problem 3: MCP Content Bloat",
+        "Proposed Architecture",
+        "Core Principle: Selective Preservation"
+      ],
+      "architecture_hints": []
     }
   },
   "directory_purposes": {
@@ -320,7 +335,7 @@
       "json": 7,
       "shell": 1
     },
-    "markdown_files": 29
+    "markdown_files": 30
   },
   "files": {
     ".obsidian/workspace.json": {
