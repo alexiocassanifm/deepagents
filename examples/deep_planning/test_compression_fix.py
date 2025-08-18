@@ -95,10 +95,18 @@ def test_compression_hook_fix():
     logger.info(f"✅ Result type: {type(result)}")
     logger.info(f"✅ Result content: {result}")
     
-    # Should return messages update for compression
+    # Should return messages update for compression with RemoveMessage
     assert isinstance(result, dict), f"Expected dict, got {type(result)}"
     assert "messages" in result, f"Expected 'messages' key in result: {result}"
-    assert len(result["messages"]) == 2, f"Expected 2 compressed messages, got {len(result['messages'])}"
+    
+    # Check that first message is RemoveMessage to clear all
+    from langchain_core.messages import RemoveMessage
+    first_message = result["messages"][0]
+    assert isinstance(first_message, RemoveMessage), f"First message should be RemoveMessage, got {type(first_message)}"
+    assert first_message.id == "__remove_all__", f"RemoveMessage should have '__remove_all__' id, got {first_message.id}"
+    
+    # Check that remaining messages are the compressed ones (should be 3 total: RemoveMessage + 2 compressed)
+    assert len(result["messages"]) == 3, f"Expected 3 messages (RemoveMessage + 2 compressed), got {len(result['messages'])}"
     
     logger.info("✅ Test 2 PASSED: Compression returns correct state update")
     

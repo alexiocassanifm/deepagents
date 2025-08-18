@@ -151,11 +151,11 @@ def show_configuration_status():
     # Check environment variables
     compression_key = os.getenv('COMPRESSION_MODEL_API_KEY')
     anthropic_key = os.getenv('ANTHROPIC_API_KEY')
-    model_name = os.getenv('COMPRESSION_MODEL_NAME')
+    model_name = os.getenv('COMPRESSION_MODEL')
     
     print(f"COMPRESSION_MODEL_API_KEY: {'✅ Set' if compression_key else '❌ Not set'}")
     print(f"ANTHROPIC_API_KEY: {'✅ Set' if anthropic_key else '❌ Not set'}")
-    print(f"COMPRESSION_MODEL_NAME: {model_name or 'Not set (will use default)'}")
+    print(f"COMPRESSION_MODEL: {model_name or 'Not set (will use default)'}")
     
     # Check config file
     config_file = Path(__file__).parent / "config" / "context_config.yaml"

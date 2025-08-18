@@ -177,7 +177,7 @@ All essential information has been preserved in the summary above.
             from .llm_compression import LLMCompressor, CompressionStrategy
             
             # Get model configuration from env variables
-            model_name = os.getenv('COMPRESSION_MODEL_NAME', self.llm_config.get('model_name', 'claude-3-haiku-20240307'))
+            model_name = os.getenv('COMPRESSION_MODEL', self.llm_config.get('model_name', 'claude-3-haiku-20240307'))
             api_key = os.getenv('COMPRESSION_MODEL_API_KEY', os.getenv('ANTHROPIC_API_KEY'))
             
             if not api_key:

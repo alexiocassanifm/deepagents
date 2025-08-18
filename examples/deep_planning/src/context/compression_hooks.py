@@ -14,6 +14,7 @@ Key Features:
 import logging
 from typing import Dict, Any, Optional, Callable
 from deepagents.state import DeepAgentState
+from langchain_core.messages import RemoveMessage
 
 # Setup logger for compression hooks
 logger = logging.getLogger(__name__)
@@ -177,10 +178,17 @@ def create_compression_hook(
                 
                 logger.info(f"✅ Context compressed via pre-model hook: {reduction_percentage:.1f}% reduction")
                 
-                # Return state update for LangGraph v2 format
-                # This will permanently update the messages in the graph state
-                monitor_logger.info(f"📦 Returning state update with {len(compacted_messages)} compressed messages")
-                return {"messages": compacted_messages}
+                # Return state update for LangGraph v2 format with RemoveMessage to clear existing messages
+                # This will permanently replace ALL messages in the graph state with compressed ones
+                monitor_logger.info(f"📦 Permanently replacing {len(messages)} messages with {len(compacted_messages)} compressed messages")
+                monitor_logger.info(f"🗑️ Using RemoveMessage to clear existing context before adding compressed messages")
+                
+                return {
+                    "messages": [
+                        RemoveMessage(id="__remove_all__"),  # Clear ALL existing messages first
+                        *compacted_messages  # Then add only the compressed messages
+                    ]
+                }
                 
             else:
                 # No compression needed

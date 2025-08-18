@@ -2745,7 +2745,7 @@
       },
       "classes": {},
       "updated_by_hook": true,
-      "updated_at": "2025-08-18T16:03:22.056230"
+      "updated_at": "2025-08-18T16:14:45.287872"
     },
     "examples/deep_planning/src/context/context_hooks.py": {
       "language": "python",
@@ -5113,7 +5113,25 @@
       },
       "classes": {},
       "updated_by_hook": true,
-      "updated_at": "2025-08-18T16:03:05.033883",
+      "updated_at": "2025-08-18T16:14:57.544602",
+      "purpose": "Test file"
+    },
+    "examples/deep_planning/test_permanent_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "simulate_langgraph_add_messages": "(existing_messages, new_messages)",
+        "test_permanent_compression_simulation": {
+          "doc": "Test that demonstrates how compression permanently reduces token usage.",
+          "calls": [
+            "simulate_langgraph_add_messages"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T16:15:55.927550",
       "purpose": "Test file"
     }
   },

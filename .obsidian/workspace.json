@@ -170,6 +170,7 @@
   },
   "active": "bb3a55b4efe6891e",
   "lastOpenFiles": [
+    "examples/deep_planning/test_permanent_compression.py",
     "examples/deep_planning/test_compression_fix.py",
     "examples/deep_planning/src/context/compact_integration.py.tmp.79466.1755525522785",
     "examples/deep_planning/src/context/compact_integration.py.tmp.79466.1755525503165",
@@ -180,7 +181,6 @@
     "examples/deep_planning/src/context/__pycache__/token_tracking_hooks.cpython-312.pyc",
     "examples/deep_planning/src/context/__pycache__/http_interceptor.cpython-312.pyc",
     "examples/deep_planning/src/core/__pycache__/debug_agent_core.cpython-312.pyc",
-    "examples/deep_planning/src/core/debug_agent_core.py",
     "specs/MCP_TOOLS_DOCUMENTATION.md"
   ]
 }
