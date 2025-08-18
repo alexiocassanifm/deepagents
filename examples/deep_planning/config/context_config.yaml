@@ -1,434 +1,165 @@
 # ================================================================================
-# DEEP PLANNING AGENT - CONTEXT COMPRESSION CONFIGURATION
+# DEEP PLANNING AGENT - SIMPLIFIED CONTEXT MANAGEMENT
 # ================================================================================
 # 
-# This file configures the automatic context compression system
-# for the Deep Planning Agent with LLM integration and POST_TOOL hooks.
+# Simplified configuration focused ONLY on token counting and compression triggers.
+# Uses LiteLLM for accurate token counting across all models (Claude, GPT, LLaMA, etc.)
 #
 # 🎯 WHAT IT CONTROLS:
-# - When automatic context compression triggers
-# - Which MCP tools are cleaned and how
-# - How LLM semantic compression works
-# - Trigger points for automatic hooks after tool calls
+# - When automatic context compression triggers based on token count
+# - Token counting thresholds for different scenarios
 #
 # 🔧 HOW TO MODIFY:
-# - Values 0.0-1.0 are percentages (e.g. 0.85 = 85% context utilization)
+# - Values 0.0-1.0 are percentages of max_context_window
 # - Lower thresholds = more aggressive/frequent compression
 # - Higher thresholds = more conservative/rare compression
 #
 # ================================================================================
 
 # =============================================================================
-# 🧠 AUTOMATIC TRIGGERS FOR CONTEXT COMPRESSION
+# 🧠 TOKEN-BASED COMPRESSION TRIGGERS
 # =============================================================================
 context_management:
   # 📏 Maximum context window size (in tokens)
   # When this size is reached, compression becomes mandatory
-  # Typical: 200K for Claude models, 128K for GPT-4
+  # Typical: 200K for Claude models, 128K for GPT-4, 50K for testing
   max_context_window: 50000
   
   # 🎯 Main threshold for automatic compaction (0.0-1.0)
   # When context reaches this % of max window, compression triggers
-  # Example: 0.85 = compress when reaching 85% of 200K = 170K tokens
-  # LOWERED FOR TESTING: 0.25 = 50k tokens for 200k model
+  # Example: 0.25 = compress when reaching 25% of 50K = 12.5K tokens
   trigger_threshold: 0.25
-  
-  # 🔇 Threshold for MCP noise detection (0.0-1.0) 
-  # If this % of context is "noise" from MCP tools, force cleanup
-  # Example: 0.6 = if 60%+ is verbose MCP output, activate specialized cleanup
-  # LOWERED FOR TESTING: 0.15 = trigger MCP cleanup early
-  mcp_noise_threshold: 0.15
-  
-  # ================================================================================
-  # 🚀 NEW THRESHOLDS FOR SEMANTIC LLM COMPRESSION
-  # ================================================================================
   
   # 🔧 POST_TOOL Hook - Trigger after every tool call (0.0-1.0)
   # The hook checks context after every tool call and compresses if it exceeds this threshold
   # THIS IS THE MOST IMPORTANT THRESHOLD for real-time automatic compression
-  # Example: 0.70 = automatically compress when context > 70% after tool call
-  # 💡 Recommendation: 0.60-0.75 for aggressive behavior, 0.75-0.85 for conservative
-  # LOWERED FOR TESTING: 0.20 = 10k tokens for 50k model  
+  # Example: 0.20 = automatically compress when context > 20% after tool call (10K tokens)
   post_tool_threshold: 0.20
-  
-  # 🔥 Threshold to FORCE LLM compression (0.0-1.0)
-  # If context exceeds this threshold, ALWAYS use LLM compression (never template)
-  # Example: 0.90 = if context > 90%, force LLM even if slower
-  # 💡 Recommendation: 0.85-0.95 to ensure maximum quality in critical situations
-  force_llm_threshold: 0.90
-  
-  # 🧠 Threshold to prefer LLM vs Template (0.0-1.0)
-  # If context > this threshold, prefers LLM compression over template system  
-  # Between post_tool_threshold and force_llm_threshold decides optimal strategy
-  # Example: 0.75 = prefers LLM when context > 75%
-  # 💡 Recommendation: 0.70-0.80 to balance quality/speed
-  llm_compression_threshold: 0.75
-  
-  # ✅ Enable automatic cleanup of MCP tool results
-  # Removes redundant/verbose fields from tools before LLM compression
-  cleaning_enabled: true
   
   # 📦 Enable automatic compaction when thresholds reached
   # If false, system monitors but never compresses automatically
   auto_compaction: true
   
   # 📝 Enable detailed logging of compression operations
-  # Useful for debug and system monitoring
+  # Useful for debug and monitoring token usage
   logging_enabled: true
-  
-  # 🛡️ Always preserve essential fields during cleanup
-  # Prevents accidental removal of critical data (IDs, names, etc.)
-  preserve_essential_fields: true
 
 # =============================================================================
-# 🔄 AUTOMATIC MESSAGE DEDUPLICATION
-# =============================================================================
-deduplication:
-  # ✅ Enable automatic removal of duplicate or very similar messages
-  # Reduces redundancy when user repeats questions or tools return similar results
-  enabled: true
-  
-  # 🎯 Similarity threshold to consider messages as duplicates (0.0-1.0)
-  # Two messages with similarity >= this threshold are considered duplicates
-  # Esempio: 0.90 = rimuove messaggi simili al 90%+
-  # 💡 Consiglio: 0.85-0.95 per evitare rimozioni eccessive mantenendo efficacia
-  similarity_threshold: 0.90
-  
-  # 📚 Numero massimo di messaggi da confrontare per deduplicazione
-  # Confronta ogni nuovo messaggio con gli ultimi N messaggi per trovare duplicati
-  # Valore più alto = detection migliore ma più lento
-  max_history_for_comparison: 50
-  
-  # 📄 Abilita deduplicazione del contenuto di file
-  # Rimuove file content duplicato dai risultati MCP tool
-  deduplicate_file_content: true
-
-# =============================================================================
-# 🧹 STRATEGIE DI PULIZIA PER TOOL MCP SPECIFICI
-# =============================================================================
-# Ogni tool MCP genera output diverso. Queste strategie rimuovono il "rumore"
-# mantenendo solo le informazioni essenziali per ridurre drasticamente la verbosità.
-
-cleaning_strategies:
-  
-  # 📋 Pulizia per General_list_projects (lista progetti)
-  ProjectListCleaner:
-    # ✅ Abilita pulizia automatica per questo tool
-    enabled: true
-    
-    # 🔑 Campi da mantenere sempre (ID e info essenziali)
-    # Altri campi come "metadata", "internal_refs", "timestamps" vengono rimossi
-    keep_fields: 
-      - "project_id"      # ID univoco progetto  
-      - "id"               # ID alternativo
-      - "name"             # Nome progetto
-      - "title"            # Titolo progetto
-      - "description"      # Descrizione progetto
-    
-    # 📊 Numero massimo di progetti da mantenere se non trova target specifico
-    # Se l'utente non ha menzionato un progetto particolare, mantiene solo i primi N
-    max_projects_fallback: 3
-    
-    # 🎯 Cerca nel contesto conversazione per identificare progetto target
-    # Se trova riferimenti a progetti specifici, mantiene solo quelli rilevanti
-    use_context_targeting: true
-    
-  # 💻 Pulizia per Code_find_relevant_code_snippets (ricerca codice)
-  CodeSnippetCleaner:
-    # ✅ Abilita pulizia per risultati di ricerca codice
-    enabled: true
-    
-    # 📝 Campo principale contenente il codice da mantenere sempre
-    # Il contenuto del codice è la parte più importante del risultato
-    primary_field: "text"
-    
-    # 📁 Campi opzionali da mantenere se richiesti nel contesto
-    # Se l'utente ha chiesto informazioni su file specifici, mantiene questi campi
-    optional_fields:
-      - "file_path"        # Percorso del file contenente il codice
-      - "filename"         # Nome del file
-    
-    # 🗑️ Rimuove metadati verbosi di scoring e entity info
-    # I tool MCP spesso includono score di relevance, confidence, entity metadata, etc.
-    remove_metadata: true
-    
-    # ✂️ Limita lunghezza massima dei snippet di codice (caratteri, 0 = no limit)
-    # Previene snippet di codice estremamente lunghi che occupano troppo contesto
-    # 5000 caratteri ≈ 150-200 righe di codice tipiche
-    max_snippet_length: 5000
-    
-  # 📄 Pulizia per documenti e attachments (get_document_content)
-  DocumentCleaner:
-    # ✅ Abilita pulizia per contenuti documento
-    enabled: true
-    
-    # 📋 Campi essenziali da mantenere sempre
-    # Il contenuto del documento è prioritario, altri metadati vengono rimossi
-    essential_fields:
-      - "content"          # Contenuto principale del documento
-      - "text"             # Testo del documento  
-      - "body"             # Corpo del documento
-      - "title"            # Titolo del documento
-      - "name"             # Nome del documento
-    
-    # 🧹 Pattern regex per identificare header/footer/boilerplate da rimuovere
-    # Molti documenti contengono testo ripetitivo che non aggiunge valore
-    header_footer_patterns:
-      - "^={3,}"          # Linee separatrici (es. ================)
-      - "^-{3,}"          # Linee trattino (es. ----------------)  
-      - "^page \\d+"      # Numerazione pagine (es. "page 1 of 10")
-      - "confidential"    # Diciture legali
-      - "proprietary"     # Testo proprietario
-      - "copyright"       # Copyright notice
-      - "©"               # Simbolo copyright
-      - "^generated on"   # Timestamp generazione automatica
-      - "^created by"     # Info autore automatico
-      - "^last updated"   # Data ultimo aggiornamento automatico
-    
-    # 🗑️ Rimuove linee vuote consecutive per compattare il testo
-    # Trasforma "\n\n\n\n" in "\n\n" per ridurre spazio sprecato
-    remove_empty_lines: true
-    
-  # 📖 Pulizia per Studio_list_user_stories (lista user stories)
-  UserStoryListCleaner:
-    # ✅ Abilita pulizia per liste di user stories
-    enabled: true
-    
-    # 🔑 Campi essenziali da mantenere per ogni user story
-    # Rimuove metadati verbosi mantenendo solo info utili per planning
-    essential_fields:
-      - "user_story_id"   # ID univoco user story
-      - "story_id"        # ID alternativo  
-      - "id"              # ID generico
-      - "title"           # Titolo della story
-      - "description"     # Descrizione/contenuto della story 
-      - "status"          # Stato corrente (TODO, In Progress, Done, etc.)
-    
-    # 📊 Numero massimo di stories da mantenere (0 = nessun limite)
-    # Per evitare overflow di contesto con progetti che hanno centinaia di stories
-    # 0 = mantiene tutte le stories trovate
-    max_stories: 0
-    
-    # 🔄 Normalizza campi ID inconsistenti 
-    # Se manca "user_story_id" ma esiste "id", usa "id" come "user_story_id"
-    normalize_ids: true
-    
-  # 🗂️ Pulizia per Code_list_repositories (lista repository)
-  RepositoryListCleaner:
-    # ✅ Abilita pulizia per liste di repository di codice
-    enabled: true
-    
-    # 🔑 Campi essenziali da mantenere per ogni repository
-    # Focus su ID e descrizioni utili, rimuove metadati tecnici interni
-    essential_fields:
-      - "repository_id"   # ID univoco repository
-      - "repo_id"         # ID alternativo
-      - "id"              # ID generico  
-      - "name"            # Nome del repository
-      - "description"     # Descrizione del repository
-    
-    # 📊 Numero massimo di repository da mantenere (0 = nessun limite)
-    # Per progetti con molti microservizi/repository evita overflow
-    max_repositories: 0
-    
-    # 🔄 Normalizza campi ID per consistenza
-    normalize_ids: true
-
-# =============================================================================
-# 📦 CONFIGURAZIONE COMPATTAZIONE AUTOMATICA
+# 📦 COMPACTION CONFIGURATION
 # =============================================================================
 compaction:
-  # 📝 Template per generazione summary quando si usa fallback template system
-  # Quando LLM compression non è disponibile, usa questo formato standard
-  summary_template: "FairMind Context Summary"
+  # 📝 Template for summary generation during compression
+  summary_template: "Context Summary - Deep Planning Session"
   
-  # 📋 Sezioni da includere sempre nel summary compatto  
-  # Ogni sezione cattura aspetti specifici della conversazione per preservarli
-  summary_sections:
-    - "primary_request"     # Richiesta principale utente
-    - "technical_concepts"  # Tecnologie, framework, linguaggi menzionati
-    - "files_and_code"      # File, percorsi, snippet di codice referenziati
-    - "problem_solving"     # Problemi identificati e soluzioni discusse
-    - "pending_tasks"       # Task ancora da completare o in corso
-    - "current_work"        # Lavoro attualmente in svolgimento
-    - "next_steps"          # Prossimi passi pianificati
-    
-  # 🔢 Numero massimo di elementi da mantenere per sezione
-  # Previene sezioni troppo lunghe nel summary, mantiene solo gli elementi più importanti
-  max_elements_per_section:
-    primary_request: 3      # Massimo 3 richieste principali
-    technical_concepts: 20  # Massimo 20 concetti tecnici (tecnologie/framework)
-    files_and_code: 10      # Massimo 10 riferimenti a file/codice
-    problem_solving: 3      # Massimo 3 problemi/soluzioni principali
-    pending_tasks: 5        # Massimo 5 task pendenti più importanti
-    next_steps: 5           # Massimo 5 next steps più rilevanti
-    
-  # 💬 Preserva sempre l'ultimo messaggio dell'utente nel contesto compatto
-  # Importante per mantenere il context di cosa l'utente sta chiedendo ora
+  # 💬 Always preserve the last user message
+  # Important to maintain context of current user request
   preserve_last_user_message: true
   
-  # 🔄 Formato per prompt di continuation compatibile con Claude Code
-  # Standard format per permettere all'agente di riprendere seamless dopo compressione
-  continuation_format: "fairmind_standard"
+  # 🔄 Continuation format for seamless agent resumption after compression
+  continuation_format: "deep_planning_standard"
 
 # =============================================================================
-# ⚡ OTTIMIZZAZIONE PERFORMANCE E CACHING  
+# ⚡ PERFORMANCE OPTIMIZATION
 # =============================================================================
 performance:
-  # 💾 Durata cache per risultati di analisi contesto (secondi)
-  # Evita di rianalizzare continuamente lo stesso contesto se non è cambiato
-  # 60 sec = re-analizza solo se sono passati più di 1 minuto dall'ultima analisi
+  # 💾 Cache duration for context analysis results (seconds)
+  # Avoids re-analyzing same content repeatedly
   analysis_cache_duration: 60
   
-  # 📊 Numero massimo di operazioni di pulizia da tenere in memoria
-  # Per statistiche e debugging. Operazioni più vecchie vengono scartate
-  # 100 = mantiene cronologia delle ultime 100 operazioni di pulizia
-  max_cleaning_history: 100
+  # 🎯 Use LiteLLM for accurate token counting across all models
+  # Supports Claude, GPT, LLaMA, and all models supported by LiteLLM
+  use_litellm_tokenization: true
   
-  # ⏰ Intervallo per controlli automatici di compressione (secondi, 0 = disabilita)
-  # Ogni N secondi controlla se il contesto ha bisogno di compressione preventiva
-  # 30 sec = controlla ogni 30 secondi, 0 = controlla solo su trigger events
-  auto_check_interval: 30
-  
-  # 🎯 Usa tokenizer preciso per conteggio token (richiede libreria tiktoken)
-  # Conteggio accurato vs stima approssimativa. Più lento ma più preciso.
-  # true = usa tiktoken per conteggio esatto, false = usa stima caratteri/4
-  use_precise_tokenization: true
-  
-  # 🔄 Abilita fallback di stima token se tiktoken non disponibile  
-  # Se tiktoken non è installato, usa caratteri/4 come approssimazione
-  # true = continua a funzionare anche senza tiktoken, false = errore se manca
+  # 🔄 Fallback token estimation if LiteLLM unavailable
+  # Uses characters/4 approximation as backup
   fallback_token_estimation: true
 
 # =============================================================================
-# 🎛️ OVERRIDE SPECIFICI PER SINGOLI TOOL MCP
-# =============================================================================
-# Configurazioni speciali per tool che necessitano comportamenti diversi 
-# dal default. Queste impostazioni sovrascrivono le regole generali.
-
-tool_overrides:
-  # 📋 Override per General_list_projects (tool molto verboso)
-  "General_list_projects":
-    # 🔨 Forza sempre pulizia anche se sotto soglia generale
-    # Questo tool è notoriamente verboso, quindi pulisci sempre
-    force_cleaning: true
-    
-    # 📉 Riduzione minima richiesta (percentuale)
-    # Se non raggiunge almeno 50% di riduzione, strategia considerata inefficace
-    min_reduction_required: 50
-    
-  # 💻 Override per Code_find_relevant_code_snippets (context-aware)
-  "Code_find_relevant_code_snippets":
-    # 📁 Mantiene file_path se il contesto conversazione lo richiede
-    # Se utente ha menzionato file specifici, preserva percorsi anche se verbosi
-    context_aware_file_paths: true
-    
-    # 📉 Riduzione minima richiesta per questo tool molto verboso
-    # Tool che restituisce molto codice, richiede riduzione sostanziale per efficacia  
-    min_reduction_required: 70
-    
-  # 📚 Override per General_rag_retrieve_documents (usa strategia specifica)
-  "General_rag_retrieve_documents":
-    # 🧹 Applica strategia DocumentCleaner invece di pulizia generica
-    # I documenti richiedono pulizia specializzata per header/footer/boilerplate
-    use_strategy: "DocumentCleaner"
-    
-    # 📉 Riduzione minima richiesta (documenti spesso hanno molto boilerplate)
-    # Soglia più bassa perché anche piccole riduzioni sono utili per documenti
-    min_reduction_required: 30
-
-# =============================================================================
-# 🔗 INTEGRAZIONE CON DEEP AGENT E LANGGRAPH
-# =============================================================================
-integration:
-  # 🔄 Aggiorna automaticamente lo stato dell'agente dopo compressione
-  # Sincronizza i risultati di compressione con il DeepAgentState di LangGraph
-  update_agent_state: true
-  
-  # 📋 Campi specifici dello state dell'agente da aggiornare durante compressione
-  # Questi campi nel DeepAgentState vengono modificati per riflettere le operazioni
-  state_fields:
-    - "context_history"   # Cronologia contesto completa
-    - "cleaned_context"   # Contesto dopo pulizia MCP
-    - "context_metrics"   # Metriche utilizzo (token count, utilization, etc.)
-    - "mcp_tool_results"  # Risultati tool MCP puliti
-    
-  # 🎯 Eventi personalizzati da triggerare durante il ciclo di compressione
-  # Permette di collegare logica custom a momenti specifici del processo
-  trigger_events:
-    on_cleaning_complete: null     # Dopo pulizia MCP tools
-    on_compaction_triggered: null  # Quando scatta compattazione automatica  
-    on_threshold_reached: null     # Quando raggiunta soglia trigger
-    
-  # 🛠️ Mantieni compatibilità con specifiche compact-implementation.md
-  # Garantisce che il sistema funzioni con le specifiche originali Claude Code
-  claude_code_compatibility: true
-  
-  # 💬 Abilita supporto per slash commands manuali (/compact, /smol)
-  # Permette all'utente di triggerare compressione manuale con comandi  
-  slash_command_support: true
-
-# =============================================================================
-# 📊 MONITORING E ANALYTICS DEL SISTEMA  
+# 📊 MONITORING
 # =============================================================================
 monitoring:
-  # 📈 Raccoglie metriche dettagliate su tutte le operazioni di compressione
-  # Include: tempo di esecuzione, riduzione ottenuta, trigger attivati, errori
+  # 📈 Collect metrics on compression operations
   collect_metrics: true
   
-  # ⏱️ Traccia performance delle operazioni di pulizia MCP tools
-  # Monitora velocità e efficacia di ogni strategia di pulizia applicata
-  track_cleaning_performance: true
-  
-  # 📄 Genera report periodici sulle operazioni (WARNING: può essere verboso)
-  # Crea file di report con statistiche aggregate. Disabilitato per default.
-  generate_reports: false
-  
-  # 📝 Livello di dettaglio dei log (DEBUG, INFO, WARNING, ERROR)
-  # DEBUG = molto verboso, INFO = standard, WARNING/ERROR = solo problemi
+  # 📝 Log level for compression operations
   log_level: "INFO"
   
-  # 📤 Esporta statistiche in file per analisi esterna
-  # Salva metriche in formato strutturato per analisi con altri tool
+  # 📤 Export compression statistics  
   export_statistics: true
-  
-  # 💾 Formato per export statistiche (json, yaml, csv)
-  # json = più dettagliato, yaml = human-readable, csv = per spreadsheet
   export_format: "json"
 
-# =============================================================================
-# 🔬 ADVANCED SETTINGS (Reserved for Future Use)
-# =============================================================================
-# Note: The following advanced features are defined but not yet implemented.
-# They have been removed to avoid confusion. When needed, they can be re-added
-# with proper implementation.
-#
-# Planned features:
-# - Custom cleaning strategies
-# - Pre/post-processing pipelines
-# - ML scoring models integration
-# - Custom regex rules
-# - Domain-specific thresholds
+# ================================================================================
+# 🤖 LLM-BASED COMPRESSION (Enhanced for Software Design)
+# ================================================================================
+llm_compression:
+  # 🎯 Enable LLM-based semantic compression for better accuracy
+  enabled: true
+  
+  # 🧠 Model configuration for compression tasks
+  # Using Haiku for fast, cost-effective compression
+  model_name: "claude-3-haiku-20240307"
+  
+  # 🎛️ Compression type optimized for software design workflows
+  # Options: general, mcp_heavy, code_focused, planning_focused, technical_deep
+  compression_type: "planning_focused"
+  
+  # 📏 Compression strategy and targets
+  strategy: "balanced"  # 50-60% reduction vs aggressive (70-80%) or conservative (30-40%)
+  target_reduction_percentage: 60.0
+  max_output_tokens: 3000
+  
+  # ⏱️ Performance and reliability settings
+  timeout_seconds: 10
+  fallback_to_pattern: true  # Use pattern-matching if LLM fails
+  enable_caching: true  # Cache results to avoid duplicate LLM calls
+  cache_duration_seconds: 300  # 5 minutes
+  
+  # 🎯 Software Design Focus - Elements to preserve
+  preserve_elements:
+    - user_stories
+    - architectural_guidelines
+    - technical_requirements
+    - non_functional_requirements
+    - dependencies
+    - design_decisions
+    - risk_areas
+    - integration_points
+    - security_requirements
+    - performance_requirements
+  
+  # 🔍 Analysis categories for software design
+  analysis_categories:
+    primary_requests: "Main user goals and business requirements"
+    technical_concepts: "Technologies, frameworks, patterns, and architecture decisions"
+    architectural_requirements: "Non-functional requirements (security, scalability, performance)"
+    files_and_code: "Code references, modules, and implementation details"
+    dependencies: "Cross-component dependencies and integration requirements"
+    design_decisions: "Architecture choices and technical trade-offs made"
+    risk_areas: "Potential technical debt and complexity hotspots"
+    current_work: "Active implementation focus and progress"
+    next_steps: "Pending tasks and immediate priorities"
+  
+  # 📊 Quality and monitoring
+  min_success_rate: 0.95  # If success rate drops below this, disable LLM compression
+  max_fallback_rate: 0.10  # Alert if fallback rate exceeds this threshold
 
 # ================================================================================
-# 🎉 FINE CONFIGURAZIONE
+# 📋 CONFIGURATION NOTES
 # ================================================================================
 # 
-# Questo file configura completamente il sistema di compressione contesto.
-# Le impostazioni principali da modificare sono nella sezione "context_management":
+# This simplified configuration focuses on core functionality:
+# - Accurate token counting with LiteLLM (works with all models)
+# - Simple threshold-based compression triggering
+# - Essential logging and monitoring
+# 
+# 🔧 TO ADJUST COMPRESSION BEHAVIOR:
+# - More aggressive: Lower trigger_threshold (0.15-0.20) and post_tool_threshold (0.15-0.18)
+# - More conservative: Raise trigger_threshold (0.30-0.40) and post_tool_threshold (0.25-0.30)
 #
-# 🔧 PER COMPORTAMENTO PIÙ AGGRESSIVO:
-# - Abbassa post_tool_threshold (es. 0.60-0.65)  
-# - Abbassa trigger_threshold (es. 0.75-0.80)
-# - Abbassa mcp_noise_threshold (es. 0.50-0.55)
-#
-# 🛡️ PER COMPORTAMENTO PIÙ CONSERVATIVO:
-# - Alza post_tool_threshold (es. 0.80-0.85)
-# - Alza trigger_threshold (es. 0.90-0.95) 
-# - Alza mcp_noise_threshold (es. 0.70-0.75)
-#
-# 🧠 PER FAVORIRE LLM COMPRESSION:
-# - Abbassa llm_compression_threshold (es. 0.65-0.70)
-# - Abbassa force_llm_threshold (es. 0.85-0.90)
+# 🚀 BENEFITS OF SIMPLIFIED APPROACH:
+# - Universal token counting for all models
+# - No false positives from pattern matching
+# - Clean, maintainable configuration
+# - Focus on what matters: token limits and compression
 #
 # ================================================================================

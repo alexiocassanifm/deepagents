@@ -91,11 +91,17 @@ from .agent_factory import (
     create_simplified_factory
 )
 
+# Import compression hooks for pre_model_hook integration
+from ..context.compression_hooks import (
+    create_compression_hook,
+    create_passthrough_hook
+)
+
 # Check for LLM compression availability
 try:
     from ..context.llm_compression import LLMCompressor, CompressionConfig, CompressionStrategy
     from ..context.context_hooks import ContextHookManager, CompressionHook, HookType
-    from ..context.compact_integration import EnhancedCompactIntegration
+    from ..context.compact_integration import CompactIntegration
     from ..config.config_loader import get_trigger_config, get_context_management_config, print_config_summary
     from ..config.unified_config import get_model_config, get_performance_config
     LLM_COMPRESSION_AVAILABLE = True
@@ -408,7 +414,7 @@ def create_optimized_deep_planning_agent(
         print(f"   📏 Context window: {trigger_config.max_context_window:,} tokens")
         print(f"   🎯 Standard trigger: {trigger_config.trigger_threshold:.0%}")
         print(f"   🔧 POST_TOOL trigger: {trigger_config.post_tool_threshold:.0%}")
-        print(f"   🔇 MCP noise trigger: {trigger_config.mcp_noise_threshold:.0%}")
+        print(f"   📏 Token-based compression: Simplified architecture")
         
         # Get the same model that will be used by the agent
         from deepagents.model import get_model
@@ -453,24 +459,14 @@ def create_optimized_deep_planning_agent(
         print(f"   📉 Target reduction: {compression_config.target_reduction_percentage}%")
         print(f"   ⚙️ Config source: context_config.yaml")
     
-    # Wrap tools with compression hooks BEFORE creating the agent
+    # Note: Tool wrapping is no longer needed - compression now handled by dedicated node
     final_tools = deep_planning_tools
     if enable_llm_compression and enhanced_compact_integration:
-        print("🔗 Wrapping tools with POST_TOOL compression hooks...")
-        
-        from ..context.context_compression import wrap_tools_with_compression_hooks
-        
-        final_tools = wrap_tools_with_compression_hooks(
-            deep_planning_tools,
-            enhanced_compact_integration,
-            mcp_wrapper
-        )
-        
-        print(f"✅ Wrapped {len(final_tools)} tools with POST_TOOL compression hooks")
-        logger.info(f"🔗 Tools wrapped with compression hooks for LangGraph compatibility")
+        print("🧠 Compression will be handled by dedicated compression node in graph")
+        logger.info("🧠 Using compression node instead of tool wrapping for better compatibility")
     else:
-        print("⏭️ Skipping tool wrapping - compression not available or disabled")
-        logger.info("⏭️ Using unwrapped tools (compression disabled)")
+        print("⏭️ No compression - using standard tool execution")
+        logger.info("⏭️ No compression available or disabled")
     
     # Create the agent
     logger.info("🏎️ Assembling final agent with dynamic prompts")
@@ -546,24 +542,44 @@ def create_compatible_deep_agent(*args, **kwargs):
     else:
         logger.info("⏭️ Skipping compatibility fixes (not needed for this model)")
     
-    # Create the agent normally
-    logger.info("🏗️ Creating base deep agent")
-    agent = create_deep_agent(*args, **kwargs)
-    logger.info("✅ Base deep agent created successfully")
+    # Create compression hook if available
+    logger.info("🏗️ Creating deep agent with pre_model_hook integration")
     
-    # Note: Compression hooks are now applied at the tool level before agent creation
-    # This is more compatible with LangGraph's execution model
-    if enhanced_compact_integration and LLM_COMPRESSION_AVAILABLE:
-        print("🔗 POST_TOOL compression hooks active via wrapped tools")
-        print(f"📊 Agent type: {type(agent).__name__}")
+    # Check if compression should be enabled
+    use_compression = enhanced_compact_integration and LLM_COMPRESSION_AVAILABLE
+    
+    if use_compression:
+        print("🧠 Creating agent with PRE_MODEL_HOOK compression...")
+        logger.info("🧠 Using pre_model_hook for automatic compression")
+        
+        # Create compression hook with model name for accurate token counting
+        compression_hook = create_compression_hook(
+            compact_integration=enhanced_compact_integration,
+            mcp_wrapper=mcp_wrapper,
+            model_name=DEFAULT_MODEL  # Pass model name for LiteLLM token counting
+        )
+        
+        # Add compression hook to kwargs
+        kwargs['pre_model_hook'] = compression_hook
+        
+        print("🔗 PRE_MODEL_HOOK active - compression before each LLM call")
+        print(f"🧠 Compression hook: ✅ Created")
         print(f"🔧 Enhanced integration: ✅ Active")
         print(f"🧹 MCP wrapper: {'✅ Active' if mcp_wrapper else '❌ None'}")
-        logger.info("✅ Agent created with compression-enabled tools")
+        logger.info("✅ Compression hook created and configured")
     else:
-        print(f"⏭️ POST_TOOL compression hooks: ❌ Disabled")
+        print("⚠️ Compression not available - using standard agent")
+        logger.info("🏗️ Creating standard deep agent (no compression)")
+        
+        print(f"⏭️ Compression: ❌ Disabled")
         print(f"   - Enhanced integration: {enhanced_compact_integration is not None}")
         print(f"   - LLM compression available: {LLM_COMPRESSION_AVAILABLE}")
-        logger.info("⏭️ Agent created without compression hooks")
+        logger.info("⏭️ No compression hook added")
+    
+    # Create the agent using original create_deep_agent with compression hook
+    agent = create_deep_agent(*args, **kwargs)
+    
+    logger.info("✅ Base deep agent created successfully")
     
     logger.info("🏁 Compatible deep agent creation completed!")
     return agent
@@ -596,7 +612,17 @@ initial_state = {
 }
 
 # Create the agent (this will be used by LangGraph)
-agent = create_optimized_deep_planning_agent(initial_state, enable_llm_compression=True)
+agent_wrapper = create_optimized_deep_planning_agent(initial_state, enable_llm_compression=True)
+
+# The agent is now a standard LangGraph CompiledStateGraph from create_react_agent
+# No need for special extraction - use directly
+agent = agent_wrapper
+print("🔗 Exported standard CompiledStateGraph for LangGraph compatibility")
+if hasattr(agent, 'builder') and hasattr(agent.builder, 'nodes'):
+    node_count = len(agent.builder.nodes) if hasattr(agent.builder.nodes, '__len__') else 'unknown'
+    print(f"📊 Graph nodes: {node_count} (includes task_tool for subagents)")
+else:
+    print("📊 Graph structure: Standard ReAct agent")
 
 print("\n✅ Deep Planning Agent ready for deployment!")
 print("🚀 Use 'langgraph dev' to start the development server")

@@ -1,588 +1,340 @@
 """
-Context Manager per DeepAgents - Sistema di gestione intelligente del contesto con pulizia MCP
+Simplified Context Manager for DeepAgents - Token Counting and Compression Triggers
 
-Questo modulo implementa un sistema avanzato per gestire il contesto conversazionale degli agenti,
-con particolare focus sulla pulizia automatica del rumore proveniente dai tool MCP.
+This module implements a simplified context management system focused solely on:
+- Accurate token counting using LiteLLM (supports all models: Claude, GPT, LLaMA, etc.)
+- Simple threshold-based compression triggering
+- Essential logging and metrics
 
-Funzionalità principali:
-- Tracking automatico delle metriche del contesto
-- Compattazione intelligente quando si raggiunge la soglia
-- Strategie di pulizia specifiche per ogni tipo di tool MCP
-- Integrazione seamless con LangGraph state management
-- Deduplicazione automatica di informazioni ridondanti
-
-Ispirato dalle specifiche di Claude Code compact-implementation per massima compatibilità.
+All MCP detection, pattern matching, and cleaning strategies have been removed
+for maximum simplicity, reliability, and performance.
 """
 
 import json
-import re
 import time
 import logging
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+import yaml
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Dict, Any, List, Optional, Tuple, Union, Set
+from typing import Dict, Any, List, Optional, Tuple
 from enum import Enum
+from pathlib import Path
 
+# Setup logger for context management
+context_manager_logger = logging.getLogger('context_manager')
+
+# LiteLLM for universal token counting
 try:
-    import tiktoken  # Per conteggio token preciso
+    import litellm
+    LITELLM_AVAILABLE = True
+    context_manager_logger.info("✅ LiteLLM available for accurate token counting")
+except ImportError:
+    LITELLM_AVAILABLE = False
+    context_manager_logger.warning("⚠️ LiteLLM not available, falling back to character estimation")
+
+# Tiktoken for fallback token counting
+try:
+    import tiktoken
     TIKTOKEN_AVAILABLE = True
 except ImportError:
     TIKTOKEN_AVAILABLE = False
-
-# Import del config loader per caricare configurazione da YAML
-try:
-    from ..config.config_loader import get_context_management_config
-    CONFIG_LOADER_AVAILABLE = True
-except ImportError:
-    CONFIG_LOADER_AVAILABLE = False
-
-# Logger specifico per context manager
-context_manager_logger = logging.getLogger("context_manager")
-context_manager_logger.setLevel(logging.INFO)
+    context_manager_logger.warning("⚠️ Tiktoken not available for fallback token counting")
 
 
 class CompactTrigger(str, Enum):
-    """Tipi di trigger per la compattazione del contesto."""
+    """Enumeration of compression trigger reasons."""
+    CONTEXT_SIZE = "context_size"
+    POST_TOOL = "post_tool"
     MANUAL = "manual"
-    AUTOMATIC = "automatic" 
-    THRESHOLD = "threshold"
-    MCP_NOISE = "mcp_noise"
 
 
-class CleaningStatus(str, Enum):
-    """Stato delle operazioni di pulizia."""
-    PENDING = "pending"
-    IN_PROGRESS = "in_progress"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    SKIPPED = "skipped"
+@dataclass  
+class CleaningResult:
+    """Stub class for backward compatibility with existing modules."""
+    original_size: int = 0
+    cleaned_size: int = 0
+    strategy_used: str = "none"
+    status: str = "disabled"
 
 
 @dataclass
 class ContextMetrics:
-    """Metriche dettagliate del contesto conversazionale."""
+    """Simplified context metrics focused on token usage."""
     tokens_used: int
     max_context_window: int
     utilization_percentage: float
     trigger_threshold: float
-    mcp_noise_threshold: float
-    mcp_noise_percentage: float = 0.0
-    deduplication_potential: float = 0.0
+    post_tool_threshold: float
     
-    @property
     def should_trigger_compact(self) -> bool:
-        """Determina se deve essere attivata la compattazione."""
-        return (
-            self.utilization_percentage >= self.trigger_threshold or 
-            self.mcp_noise_percentage > self.mcp_noise_threshold
-        )
+        """Check if context should trigger compression based on main threshold."""
+        return self.utilization_percentage >= self.trigger_threshold
+        
+    def should_trigger_post_tool(self) -> bool:
+        """Check if context should trigger compression after tool calls."""
+        return self.utilization_percentage >= self.post_tool_threshold
     
-    @property
     def is_near_limit(self) -> bool:
-        """Indica se siamo vicini al limite del contesto."""
-        # Usa post_tool_threshold o fallback a 70%
-        near_limit_threshold = getattr(self, 'post_tool_threshold', 70.0)
-        return self.utilization_percentage >= near_limit_threshold
-
-
-@dataclass
-class CleaningResult:
-    """Risultato di un'operazione di pulizia."""
-    original_size: int
-    cleaned_size: int
-    reduction_percentage: float
-    strategy_used: str
-    cleaning_status: CleaningStatus
-    preserved_fields: List[str]
-    removed_fields: List[str]
-    timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    @classmethod
-    def from_data(cls, original: Any, cleaned: Any, strategy: str, status: CleaningStatus) -> 'CleaningResult':
-        """Crea un CleaningResult dal confronto di dati originali e puliti."""
-        original_size = len(json.dumps(original, default=str)) if original else 0
-        cleaned_size = len(json.dumps(cleaned, default=str)) if cleaned else 0
-        
-        reduction = ((original_size - cleaned_size) / original_size * 100) if original_size > 0 else 0
-        
-        # Estrae i campi preservati e rimossi se possibile
-        preserved_fields = []
-        removed_fields = []
-        
-        if isinstance(original, dict) and isinstance(cleaned, dict):
-            preserved_fields = list(cleaned.keys())
-            removed_fields = [k for k in original.keys() if k not in cleaned.keys()]
-        
-        return cls(
-            original_size=original_size,
-            cleaned_size=cleaned_size,
-            reduction_percentage=round(reduction, 2),
-            strategy_used=strategy,
-            cleaning_status=status,
-            preserved_fields=preserved_fields,
-            removed_fields=removed_fields
-        )
-
-
-@dataclass 
-class ContextInfo:
-    """Informazioni storiche sul contesto."""
-    session_id: str
-    operation_type: str  # "cleaning", "compaction", "deduplication"
-    before_metrics: ContextMetrics
-    after_metrics: ContextMetrics
-    cleaning_results: List[CleaningResult]
-    timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
-    
-    @property
-    def total_reduction_percentage(self) -> float:
-        """Percentuale totale di riduzione ottenuta."""
-        if not self.cleaning_results:
-            return 0.0
-        
-        total_original = sum(r.original_size for r in self.cleaning_results)
-        total_cleaned = sum(r.cleaned_size for r in self.cleaning_results)
-        
-        if total_original == 0:
-            return 0.0
-            
-        return round((total_original - total_cleaned) / total_original * 100, 2)
-
-
-class CleaningStrategy(ABC):
-    """Interfaccia base per le strategie di pulizia."""
-    
-    def __init__(self, config: Dict[str, Any] = None):
-        self.config = config or {}
-        self.name = self.__class__.__name__
-    
-    @abstractmethod
-    def can_clean(self, tool_name: str, data: Any) -> bool:
-        """Determina se questa strategia può pulire i dati del tool specificato."""
-        pass
-    
-    @abstractmethod
-    def clean(self, data: Any, context: Dict[str, Any] = None) -> Tuple[Any, CleaningResult]:
-        """Pulisce i dati e restituisce il risultato."""
-        pass
-    
-    def estimate_reduction(self, data: Any) -> float:
-        """Stima la percentuale di riduzione possibile."""
-        return 0.0
+        """Check if context is approaching the absolute limit."""
+        return self.utilization_percentage >= 90.0
 
 
 class ContextManager:
     """
-    Gestore principale del contesto conversazionale con pulizia intelligente.
+    Simplified Context Manager for token-based compression triggering.
     
-    Questo sistema:
-    1. Monitora le metriche del contesto in tempo reale
-    2. Applica strategie di pulizia specifiche per tool MCP
-    3. Gestisce la compattazione automatica quando necessario
-    4. Mantiene uno storico delle operazioni per analisi
+    Focuses exclusively on:
+    - Accurate token counting with LiteLLM
+    - Simple threshold comparisons
+    - Essential metrics and logging
     """
     
     def __init__(self, config: Dict[str, Any] = None):
-        self.config = config or self._load_config()
-        self.cleaning_strategies: List[CleaningStrategy] = []
-        self.context_history: List[ContextInfo] = []
-        self.session_id = f"ctx_{int(time.time())}"
+        """Initialize with simplified configuration."""
+        self.config = config if config else self._load_config()
         
-        # Performance configuration from YAML
-        self.use_precise_tokenization = self.config.get("use_precise_tokenization", True)
-        self.analysis_cache_duration = self.config.get("analysis_cache_duration", 60)
-        self.auto_check_interval = self.config.get("auto_check_interval", 30)
-        self.fallback_token_estimation = self.config.get("fallback_token_estimation", True)
+        # Generate session ID for compatibility with CompactSummary
+        from datetime import datetime
+        self.session_id = f"simplified_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
-        # Cache per analysis per evitare rianalisi continue
+        # Cache for analysis results to avoid repeated token counting
         self._analysis_cache = {}
         self._last_analysis_time = 0
         
-        # Inizializza tokenizer per conteggio preciso
-        self.tokenizer = None
-        if TIKTOKEN_AVAILABLE and self.use_precise_tokenization:
-            try:
-                self.tokenizer = tiktoken.encoding_for_model("gpt-4")
-                context_manager_logger.info("✅ Using precise tokenization (tiktoken for gpt-4)")
-            except:
-                try:
-                    self.tokenizer = tiktoken.get_encoding("cl100k_base")
-                    context_manager_logger.info("✅ Using precise tokenization (tiktoken cl100k_base)")
-                except Exception as e:
-                    if self.fallback_token_estimation:
-                        context_manager_logger.warning(f"⚠️ Tiktoken failed, using fallback: {e}")
-                    else:
-                        context_manager_logger.error(f"❌ Tiktoken required but failed: {e}")
-        elif not self.use_precise_tokenization:
-            context_manager_logger.info("🔄 Using fallback tokenization (configured)")
-        else:
-            if self.fallback_token_estimation:
-                context_manager_logger.warning("⚠️ Tiktoken not available, using fallback estimation")
-            else:
-                context_manager_logger.error("❌ Precise tokenization required but tiktoken not available")
+        context_manager_logger.info("🚀 Simplified ContextManager initialized")
+        context_manager_logger.info(f"📏 Max context window: {self.config['max_context_window']:,} tokens")
+        context_manager_logger.info(f"🎯 Trigger threshold: {self.config['trigger_threshold']:.1%}")
+        context_manager_logger.info(f"🔧 Post-tool threshold: {self.config['post_tool_threshold']:.1%}")
     
     def _load_config(self) -> Dict[str, Any]:
-        """Carica configurazione da YAML con fallback a valori predefiniti."""
-        if CONFIG_LOADER_AVAILABLE:
-            try:
-                config = get_context_management_config()
-                context_manager_logger.info("✅ Configuration loaded from context_config.yaml")
-                return config
-            except Exception as e:
-                context_manager_logger.warning(f"⚠️ Failed to load YAML config: {e}")
+        """Load simplified configuration from YAML file."""
+        config_path = Path(__file__).parent.parent.parent / "config" / "context_config.yaml"
         
-        # Fallback ai valori predefiniti
-        context_manager_logger.info("🔄 Using default configuration (YAML not available)")
-        return {
-            "max_context_window": 200000,
-            "trigger_threshold": 0.85,
-            "mcp_noise_threshold": 0.6,
-            "deduplication_enabled": True,
-            "deduplication_similarity": 0.90,
-            "preserve_essential_fields": True,
-            "auto_compaction": True,
-            "logging_enabled": True,
-            # Performance settings fallback
-            "use_precise_tokenization": True,
-            "analysis_cache_duration": 60,
-            "auto_check_interval": 30,
-            "fallback_token_estimation": True
-        }
+        try:
+            with open(config_path, 'r') as file:
+                config_data = yaml.safe_load(file)
+            
+            # Extract essential context management settings
+            context_config = config_data.get('context_management', {})
+            performance_config = config_data.get('performance', {})
+            
+            return {
+                'max_context_window': context_config.get('max_context_window', 50000),
+                'trigger_threshold': context_config.get('trigger_threshold', 0.25) * 100,  # Convert to percentage
+                'post_tool_threshold': context_config.get('post_tool_threshold', 0.20) * 100,  # Convert to percentage
+                'auto_compaction': context_config.get('auto_compaction', True),
+                'logging_enabled': context_config.get('logging_enabled', True),
+                'use_litellm_tokenization': performance_config.get('use_litellm_tokenization', True),
+                'fallback_token_estimation': performance_config.get('fallback_token_estimation', True),
+                'analysis_cache_duration': performance_config.get('analysis_cache_duration', 60)
+            }
+        except Exception as e:
+            context_manager_logger.warning(f"⚠️ Could not load config, using defaults: {e}")
+            return {
+                'max_context_window': 50000,
+                'trigger_threshold': 25.0,
+                'post_tool_threshold': 20.0,
+                'auto_compaction': True,
+                'logging_enabled': True,
+                'use_litellm_tokenization': True,
+                'fallback_token_estimation': True,
+                'analysis_cache_duration': 60
+            }
     
-    def register_cleaning_strategy(self, strategy: CleaningStrategy) -> None:
-        """Registra una nuova strategia di pulizia."""
-        self.cleaning_strategies.append(strategy)
+    def count_tokens(self, messages: List[Dict[str, Any]], model_name: str = None, tools: List = None) -> int:
+        """
+        Count tokens using LiteLLM for maximum accuracy across all models.
+        
+        Args:
+            messages: List of LangChain message dictionaries
+            model_name: Model name for LiteLLM (e.g., 'claude-sonnet-4-20250514')
+            tools: Optional list of tools available to the model
+            
+        Returns:
+            int: Accurate token count that will be sent to the LLM
+        """
+        if not messages:
+            return 0
+            
+        try:
+            # Use LiteLLM for accurate token counting if available and model provided
+            if LITELLM_AVAILABLE and model_name and self.config.get('use_litellm_tokenization', True):
+                context_manager_logger.debug(f"🎯 Using LiteLLM token counting for model: {model_name}")
+                
+                # Convert LangChain messages to format expected by LiteLLM
+                litellm_messages = []
+                for msg in messages:
+                    if isinstance(msg, dict):
+                        # Handle different message formats
+                        if 'content' in msg and 'type' in msg:
+                            # LangChain format
+                            role = 'user' if msg['type'] == 'human' else 'assistant' if msg['type'] == 'ai' else msg.get('role', 'user')
+                            litellm_messages.append({'role': role, 'content': str(msg['content'])})
+                        elif 'role' in msg and 'content' in msg:
+                            # Direct API format
+                            litellm_messages.append({'role': msg['role'], 'content': str(msg['content'])})
+                
+                if litellm_messages:
+                    try:
+                        token_count = litellm.token_counter(
+                            model=model_name,
+                            messages=litellm_messages,
+                            tools=tools
+                        )
+                        context_manager_logger.debug(f"📊 LiteLLM raw token count: {token_count:,} tokens")
+                        
+                        # Apply correction factor for GLM-4.5 based on observed data
+                        if 'glm-4.5' in model_name.lower() or 'z-ai' in model_name.lower():
+                            # Observed: We count 15,445, OpenRouter counts 9,454 = 0.612 ratio
+                            correction_factor = 0.65  # Conservative correction
+                            corrected_count = int(token_count * correction_factor)
+                            context_manager_logger.info(f"🎯 GLM-4.5 token correction: {token_count:,} → {corrected_count:,} (factor: {correction_factor})")
+                            return corrected_count
+                        else:
+                            return token_count
+                            
+                    except Exception as e:
+                        context_manager_logger.warning(f"⚠️ LiteLLM token counting failed for {model_name}: {e}")
+                        # Fall through to tiktoken fallback
+            
+            # Fallback to tiktoken if available
+            if TIKTOKEN_AVAILABLE:
+                context_manager_logger.debug("🔄 Falling back to tiktoken estimation")
+                encoding = tiktoken.encoding_for_model("gpt-4")  # Universal encoding
+                total_chars = sum(len(json.dumps(msg, default=str)) for msg in messages)
+                token_count = len(encoding.encode(json.dumps(messages, default=str)))
+                context_manager_logger.debug(f"📊 Tiktoken estimated count: {token_count:,} tokens")
+                return token_count
+            
+            # Final fallback: character-based estimation
+            if self.config.get('fallback_token_estimation', True):
+                context_manager_logger.debug("⚠️ Using character-based token estimation (chars/4)")
+                total_chars = sum(len(json.dumps(msg, default=str)) for msg in messages)
+                token_count = total_chars // 4  # Rough approximation
+                context_manager_logger.debug(f"📊 Character-based estimated count: {token_count:,} tokens")
+                return token_count
+            
+            context_manager_logger.error("❌ No token counting method available")
+            return 0
+            
+        except Exception as e:
+            context_manager_logger.error(f"❌ Token counting failed: {e}")
+            # Emergency fallback
+            if self.config.get('fallback_token_estimation', True):
+                total_chars = sum(len(json.dumps(msg, default=str)) for msg in messages)
+                return total_chars // 4
+            return 0
     
-    def count_tokens(self, text: str) -> int:
-        """Conta i token in un testo usando tiktoken."""
-        if self.tokenizer:
-            try:
-                return len(self.tokenizer.encode(text))
-            except:
-                pass
-        # Fallback: stima approssimativa
-        return len(text) // 4
-    
-    def analyze_context(self, messages: List[Dict[str, Any]]) -> ContextMetrics:
-        """Analizza le metriche del contesto corrente con cache intelligente."""
-        # Controlla cache se abilitata
+    def analyze_context(self, messages: List[Dict[str, Any]], model_name: str = None, tools: List = None) -> ContextMetrics:
+        """
+        Analyze context and return simplified metrics based on token count.
+        
+        Args:
+            messages: List of conversation messages
+            model_name: Model name for accurate token counting
+            tools: Optional list of available tools
+            
+        Returns:
+            ContextMetrics: Simple metrics with token usage and trigger status
+        """
+        # Check cache first to avoid repeated analysis
         current_time = time.time()
-        cache_key = f"{len(messages)}_{hash(str(messages))}"
+        cache_key = hash(json.dumps(messages, default=str, sort_keys=True))
         
         if (cache_key in self._analysis_cache and 
-            current_time - self._last_analysis_time < self.analysis_cache_duration):
-            context_manager_logger.debug("📋 Using cached context analysis")
+            current_time - self._last_analysis_time < self.config.get('analysis_cache_duration', 60)):
+            context_manager_logger.debug("📋 Using cached analysis results")
             return self._analysis_cache[cache_key]
         
-        total_tokens = 0
-        mcp_tokens = 0
+        # Count tokens using LiteLLM or fallback methods
+        total_tokens = self.count_tokens(messages, model_name, tools)
         
-        for message in messages:
-            content = json.dumps(message, default=str)
-            message_tokens = self.count_tokens(content)
-            total_tokens += message_tokens
-            
-            # Identifica contenuto MCP basandosi sui pattern
-            if self._contains_mcp_content(message):
-                mcp_tokens += message_tokens
-        
+        # Calculate utilization percentage
         max_window = self.config["max_context_window"]
-        utilization = total_tokens / max_window if max_window > 0 else 0
-        mcp_noise = mcp_tokens / total_tokens if total_tokens > 0 else 0
+        utilization = (total_tokens / max_window * 100) if max_window > 0 else 0
         
+        # Create metrics
         metrics = ContextMetrics(
             tokens_used=total_tokens,
             max_context_window=max_window,
-            utilization_percentage=round(utilization * 100, 2),
+            utilization_percentage=round(utilization, 1),
             trigger_threshold=self.config["trigger_threshold"],
-            mcp_noise_threshold=self.config["mcp_noise_threshold"],
-            mcp_noise_percentage=round(mcp_noise * 100, 2)
+            post_tool_threshold=self.config["post_tool_threshold"]
         )
         
-        # Log detailed context analysis
-        context_manager_logger.info(f"📋 Context Analysis: {len(messages)} messages, "
-                                   f"{total_tokens:,} total tokens "
-                                   f"({mcp_tokens:,} MCP tokens, {metrics.mcp_noise_percentage:.1f}% noise)")
+        # Log analysis results
+        if self.config.get('logging_enabled', True):
+            context_manager_logger.info(f"📊 Context Analysis: {len(messages)} messages, "
+                                       f"{total_tokens:,} tokens ({metrics.utilization_percentage:.1f}% utilization)")
+            context_manager_logger.info(f"🎯 Compression needed: "
+                                       f"{'YES' if metrics.should_trigger_compact() else 'NO'} "
+                                       f"(trigger at {metrics.trigger_threshold:.1f}%)")
         
-        # Salva nel cache
+        # Cache results
         self._analysis_cache[cache_key] = metrics
         self._last_analysis_time = current_time
         
-        # Limita dimensione cache (mantieni solo le ultime 10 analisi)
+        # Limit cache size
         if len(self._analysis_cache) > 10:
             oldest_key = min(self._analysis_cache.keys())
             del self._analysis_cache[oldest_key]
         
         return metrics
     
-    def _contains_mcp_content(self, message: Dict[str, Any]) -> bool:
-        """Identifica se un messaggio contiene contenuto MCP."""
-        content_str = json.dumps(message, default=str).lower()
-        
-        mcp_indicators = [
-            "general_list_projects",
-            "code_find_relevant_code_snippets", 
-            "studio_list_",
-            "code_get_",
-            "general_rag_retrieve",
-            "fairmind",
-            "project_id",
-            "entity_id",
-            "repository_id"
-        ]
-        
-        return any(indicator in content_str for indicator in mcp_indicators)
-    
-    def clean_mcp_tool_result(self, tool_name: str, result: Any, context: Dict[str, Any] = None) -> Tuple[Any, CleaningResult]:
+    def should_trigger_compaction(self, messages: List[Dict[str, Any]], trigger_type: str = "standard", 
+                                model_name: str = None, tools: List = None) -> Tuple[bool, CompactTrigger, ContextMetrics]:
         """
-        Pulisce il risultato di un tool MCP usando la strategia appropriata.
+        Determine if compression should be triggered based on context analysis.
         
         Args:
-            tool_name: Nome del tool MCP
-            result: Risultato del tool da pulire
-            context: Contesto aggiuntivo per la pulizia
-        
-        Returns:
-            Tupla (risultato_pulito, informazioni_pulizia)
-        """
-        original_size = len(json.dumps(result, default=str))
-        
-        # 🔍 LOG: Valutazione MCP cleaning
-        context_manager_logger.info(f"🔍 MCP CLEANING EVALUATION - Tool: {tool_name}, "
-                                   f"Size: {original_size:,} chars, "
-                                   f"Strategies available: {len(self.cleaning_strategies)}")
-        
-        # Trova la strategia appropriata
-        for i, strategy in enumerate(self.cleaning_strategies):
-            strategy_name = getattr(strategy, 'name', strategy.__class__.__name__)
-            context_manager_logger.debug(f"🔍 Checking strategy {i+1}/{len(self.cleaning_strategies)}: {strategy_name} for {tool_name}")
-            if strategy.can_clean(tool_name, result):
-                context_manager_logger.info(f"✅ MCP CLEANING TRIGGERED - Strategy: {strategy_name} for {tool_name}")
-                cleaned_result, cleaning_info = strategy.clean(result, context)
-                
-                if cleaning_info.cleaning_status == "completed":
-                    context_manager_logger.info(f"🧹 MCP CLEANING COMPLETED - {strategy_name}: "
-                                               f"{original_size:,} → {cleaning_info.cleaned_size:,} chars "
-                                               f"({cleaning_info.reduction_percentage:.1f}% reduction)")
-                else:
-                    context_manager_logger.warning(f"⚠️ MCP CLEANING FAILED - {strategy_name}: status={cleaning_info.cleaning_status}")
-                
-                return cleaned_result, cleaning_info
-        
-        # Nessuna strategia specifica trovata - pulizia generica
-        context_manager_logger.info(f"⏸️ MCP CLEANING SKIPPED - No specific strategy found for {tool_name}, using generic cleaning")
-        return self._generic_clean(result, tool_name)
-    
-    def _generic_clean(self, data: Any, tool_name: str) -> Tuple[Any, CleaningResult]:
-        """Pulizia generica per tool senza strategia specifica."""
-        if isinstance(data, dict):
-            # Rimuove campi comuni che generano rumore
-            noise_fields = ['metadata', 'internal_id', 'created_at', 'updated_at', 'version']
-            cleaned = {k: v for k, v in data.items() if k not in noise_fields}
+            messages: List of conversation messages
+            trigger_type: Type of trigger check ("standard" or "post_tool")
+            model_name: Model name for token counting
+            tools: Optional list of tools
             
-            result = CleaningResult.from_data(
-                data, cleaned, "GenericCleaner", CleaningStatus.COMPLETED
-            )
-            return cleaned, result
-        
-        # Per dati non-dict, restituisce così come sono
-        result = CleaningResult.from_data(
-            data, data, "NoCleaningNeeded", CleaningStatus.SKIPPED
-        )
-        return data, result
-    
-    def deduplicate_messages(self, messages: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], CleaningResult]:
-        """
-        Rimuove messaggi duplicati o molto simili.
-        
-        Args:
-            messages: Lista di messaggi da deduplicare
-        
         Returns:
-            Tupla (messaggi_deduplicati, informazioni_deduplicazione)
+            Tuple of (should_compress, trigger_reason, metrics)
         """
-        if not self.config["deduplication_enabled"] or len(messages) < 2:
-            result = CleaningResult.from_data(
-                messages, messages, "DeduplicationSkipped", CleaningStatus.SKIPPED
-            )
-            return messages, result
+        metrics = self.analyze_context(messages, model_name, tools)
         
-        deduplicated = []
-        seen_content = set()
-        similarity_threshold = self.config["deduplication_similarity"]
+        if trigger_type == "post_tool":
+            should_compress = metrics.should_trigger_post_tool()
+            trigger_reason = CompactTrigger.POST_TOOL
+        else:
+            should_compress = metrics.should_trigger_compact()
+            trigger_reason = CompactTrigger.CONTEXT_SIZE
         
-        for message in messages:
-            content_hash = self._get_content_hash(message)
-            
-            # Controlla duplicati esatti
-            if content_hash in seen_content:
-                continue
-            
-            # Controlla similarità con messaggi già visti
-            if not self._is_similar_to_existing(message, deduplicated, similarity_threshold):
-                deduplicated.append(message)
-                seen_content.add(content_hash)
+        if should_compress and self.config.get('logging_enabled', True):
+            context_manager_logger.info(f"🚨 COMPRESSION TRIGGERED: {trigger_reason.value} "
+                                       f"({metrics.utilization_percentage:.1f}% > {metrics.trigger_threshold:.1f}%)")
         
-        result = CleaningResult.from_data(
-            messages, deduplicated, "MessageDeduplication", CleaningStatus.COMPLETED
-        )
-        result.metadata = {
-            "original_count": len(messages),
-            "deduplicated_count": len(deduplicated),
-            "removed_count": len(messages) - len(deduplicated)
-        }
-        
-        return deduplicated, result
-    
-    def _get_content_hash(self, message: Dict[str, Any]) -> str:
-        """Genera un hash del contenuto di un messaggio."""
-        content = json.dumps(message, sort_keys=True, default=str)
-        return str(hash(content))
-    
-    def _is_similar_to_existing(self, message: Dict[str, Any], existing: List[Dict[str, Any]], threshold: float) -> bool:
-        """Controlla se un messaggio è simile a quelli esistenti."""
-        message_content = json.dumps(message, default=str)
-        
-        for existing_msg in existing:
-            existing_content = json.dumps(existing_msg, default=str)
-            
-            # Calcola similarità basata su sovrapposizione di caratteri
-            similarity = self._calculate_similarity(message_content, existing_content)
-            if similarity >= threshold:
-                return True
-        
-        return False
-    
-    def _calculate_similarity(self, text1: str, text2: str) -> float:
-        """Calcola la similarità tra due testi."""
-        if not text1 or not text2:
-            return 0.0
-        
-        # Usa l'intersezione dei caratteri come metrica di similarità
-        set1 = set(text1.lower())
-        set2 = set(text2.lower())
-        
-        intersection = len(set1.intersection(set2))
-        union = len(set1.union(set2))
-        
-        return intersection / union if union > 0 else 0.0
-    
-    def should_trigger_compaction(self, messages: List[Dict[str, Any]]) -> Tuple[bool, CompactTrigger, ContextMetrics]:
-        """
-        Determina se dovrebbe essere attivata la compattazione.
-        
-        Args:
-            messages: Messaggi del contesto corrente
-        
-        Returns:
-            Tupla (dovrebbe_compattare, tipo_trigger, metriche)
-        """
-        metrics = self.analyze_context(messages)
-        
-        # 🔍 LOG: Valutazione compattazione 
-        context_manager_logger.info(f"🔍 COMPACTION EVALUATION - Context: {metrics.utilization_percentage:.1f}% utilized "
-                                   f"({metrics.tokens_used:,}/{metrics.max_context_window:,} tokens), "
-                                   f"MCP Noise: {metrics.mcp_noise_percentage:.1f}%, "
-                                   f"Thresholds: trigger={metrics.trigger_threshold*100:.1f}% mcp_noise={metrics.mcp_noise_threshold*100:.1f}%")
-        
-        # Controllo soglia standard
-        if metrics.should_trigger_compact:
-            trigger = CompactTrigger.THRESHOLD if metrics.utilization_percentage >= metrics.trigger_threshold else CompactTrigger.MCP_NOISE
-            context_manager_logger.info(f"✅ COMPACTION TRIGGERED - Reason: {trigger.value}, "
-                                       f"Utilization: {metrics.utilization_percentage:.1f}%, "
-                                       f"MCP Noise: {metrics.mcp_noise_percentage:.1f}%")
-            return True, trigger, metrics
-        
-        context_manager_logger.info(f"⏸️ COMPACTION SKIPPED - Context below thresholds "
-                                   f"(utilization: {metrics.utilization_percentage:.1f}% < {metrics.trigger_threshold*100:.1f}%, "
-                                   f"mcp_noise: {metrics.mcp_noise_percentage:.1f}% < {metrics.mcp_noise_threshold*100:.1f}%)")
-        return False, CompactTrigger.MANUAL, metrics
-    
-    def process_context_cleaning(self, messages: List[Dict[str, Any]], context: Dict[str, Any] = None) -> Tuple[List[Dict[str, Any]], ContextInfo]:
-        """
-        Processo completo di pulizia del contesto.
-        
-        Args:
-            messages: Messaggi da pulire
-            context: Contesto aggiuntivo
-        
-        Returns:
-            Tupla (messaggi_puliti, informazioni_operazione)
-        """
-        before_metrics = self.analyze_context(messages)
-        
-        cleaned_messages = messages.copy()
-        cleaning_results = []
-        
-        # 1. Pulizia dei risultati MCP
-        for i, message in enumerate(cleaned_messages):
-            if self._contains_mcp_content(message):
-                tool_name = self._extract_tool_name(message)
-                if tool_name:
-                    cleaned_content, clean_result = self.clean_mcp_tool_result(tool_name, message, context)
-                    cleaned_messages[i] = cleaned_content
-                    cleaning_results.append(clean_result)
-        
-        # 2. Deduplicazione
-        if self.config["deduplication_enabled"]:
-            cleaned_messages, dedup_result = self.deduplicate_messages(cleaned_messages)
-            cleaning_results.append(dedup_result)
-        
-        after_metrics = self.analyze_context(cleaned_messages)
-        
-        # Crea info sull'operazione
-        context_info = ContextInfo(
-            session_id=self.session_id,
-            operation_type="cleaning",
-            before_metrics=before_metrics,
-            after_metrics=after_metrics,
-            cleaning_results=cleaning_results
-        )
-        
-        # Salva nello storico
-        self.context_history.append(context_info)
-        
-        return cleaned_messages, context_info
-    
-    def _extract_tool_name(self, message: Dict[str, Any]) -> Optional[str]:
-        """Estrae il nome del tool da un messaggio."""
-        content_str = json.dumps(message, default=str).lower()
-        
-        # Pattern per identificare tool MCP
-        tool_patterns = [
-            r'general_list_projects',
-            r'code_find_relevant_code_snippets',
-            r'studio_list_\w+',
-            r'code_get_\w+',
-            r'general_rag_retrieve_\w+'
-        ]
-        
-        for pattern in tool_patterns:
-            match = re.search(pattern, content_str)
-            if match:
-                return match.group(0)
-        
-        return None
+        return should_compress, trigger_reason, metrics
     
     def get_context_summary(self) -> Dict[str, Any]:
-        """Genera un sommario delle operazioni di context management."""
-        if not self.context_history:
-            return {"status": "no_operations", "message": "Nessuna operazione di pulizia eseguita"}
-        
-        total_operations = len(self.context_history)
-        total_reductions = [info.total_reduction_percentage for info in self.context_history]
-        avg_reduction = sum(total_reductions) / len(total_reductions) if total_reductions else 0
-        
-        latest_metrics = self.context_history[-1].after_metrics if self.context_history else None
-        
+        """Get summary of current context manager state."""
         return {
-            "session_id": self.session_id,
-            "total_operations": total_operations,
-            "average_reduction_percentage": round(avg_reduction, 2),
-            "current_utilization": latest_metrics.utilization_percentage if latest_metrics else 0,
-            "current_mcp_noise": latest_metrics.mcp_noise_percentage if latest_metrics else 0,
-            "strategies_registered": len(self.cleaning_strategies),
-            "config": self.config
+            "config": {
+                "max_context_window": self.config["max_context_window"],
+                "trigger_threshold": f"{self.config['trigger_threshold']:.1f}%",
+                "post_tool_threshold": f"{self.config['post_tool_threshold']:.1f}%",
+                "litellm_available": LITELLM_AVAILABLE,
+                "tiktoken_available": TIKTOKEN_AVAILABLE
+            },
+            "cache_stats": {
+                "cached_analyses": len(self._analysis_cache),
+                "last_analysis": datetime.fromtimestamp(self._last_analysis_time).isoformat() if self._last_analysis_time else None
+            }
         }
+
+
+def create_context_manager(config: Dict[str, Any] = None) -> ContextManager:
+    """
+    Factory function to create a simplified ContextManager instance.
+    
+    Args:
+        config: Optional configuration dictionary
+        
+    Returns:
+        ContextManager: Configured context manager instance
+    """
+    return ContextManager(config)

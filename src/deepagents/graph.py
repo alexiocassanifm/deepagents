@@ -33,6 +33,7 @@ def create_deep_agent(
     state_schema: Optional[StateSchemaType] = None,
     enable_planning_approval: bool = False,
     checkpointer: Optional[Union[str, Any]] = None,
+    pre_model_hook: Optional[Callable] = None,
 ):
     """Create a deep agent.
 
@@ -59,6 +60,9 @@ def create_deep_agent(
             - "postgres": Use PostgresSaver (requires configuration)
             - Custom checkpointer instance
             - None: No checkpointing (disables human-in-the-loop features)
+        pre_model_hook: Optional function to process state before each LLM call.
+            Useful for context compression, message filtering, or preprocessing.
+            Function should take DeepAgentState and return modified DeepAgentState.
     """
     prompt = instructions + base_prompt
     built_in_tools = [write_todos, write_file, read_file, ls, edit_file]
@@ -126,7 +130,8 @@ def create_deep_agent(
             model,
             prompt=prompt,
             tools=all_tools,
-            state_schema=state_schema
+            state_schema=state_schema,
+            pre_model_hook=pre_model_hook
         )
     else:
         agent = create_react_agent(
@@ -134,7 +139,8 @@ def create_deep_agent(
             prompt=prompt,
             tools=all_tools,
             state_schema=state_schema,
-            checkpointer=actual_checkpointer
+            checkpointer=actual_checkpointer,
+            pre_model_hook=pre_model_hook
         )
     
     return agent

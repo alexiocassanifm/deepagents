@@ -21,8 +21,12 @@ from functools import wraps
 from typing import Any, Dict, List, Optional, Callable, Union
 from dataclasses import asdict
 
-from ...context.context_manager import ContextManager, ContextMetrics, ContextInfo, CleaningResult
-from .mcp_cleaners import create_default_cleaning_strategies
+# DISABLED: MCP cleaning no longer needed with LiteLLM token counting approach
+# from ...context.context_manager import ContextManager, ContextMetrics, ContextInfo, CleaningResult
+# from .mcp_cleaners import create_default_cleaning_strategies
+
+# Simplified imports for basic functionality
+from ...context.context_manager import ContextManager
 
 # Configurazione logging specifico per context tracking
 # NON usare basicConfig - usa la configurazione del root logger

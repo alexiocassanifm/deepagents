@@ -74,11 +74,11 @@ python tests/test_optimization.py
    - Phase-specific todo generation
    - Context-aware prompt adaptation
 
-6. **Context Management System (`src/context/context_manager.py`, `src/integrations/mcp/mcp_cleaners.py`)**
-   - Intelligent MCP tool result cleaning with 60-80% noise reduction
-   - Automatic context compaction when token limits approached
+6. **Simplified Context Management System (`src/context/context_manager.py`)**
+   - Universal token counting with LiteLLM (supports all models: Claude, GPT, LLaMA, etc.)
+   - Simple threshold-based compression triggering
+   - Real-time accurate token metrics and monitoring
    - Compatible with Claude Code compact-implementation specifications
-   - Real-time context metrics and automatic optimization
 
 ### 🔄 4-Phase Deep Planning Methodology
 
@@ -131,11 +131,11 @@ python tests/test_optimization.py
 - Demo tools when MCP server unavailable
 - Mock data for development and testing
 
-**Context Cleaning & Noise Reduction**
-- Automatic filtering of redundant MCP tool metadata
-- Smart preservation of essential data (project_id, names, code text)
-- Configurable cleaning strategies per tool type
-- Real-time context utilization monitoring
+**Universal Token Counting & Management**
+- LiteLLM-powered accurate token counting for all supported models
+- Simple threshold-based compression without pattern matching
+- Real-time context utilization monitoring with precise metrics
+- No false positives from pattern matching or noise detection
 
 ## Package Structure
 
@@ -173,10 +173,10 @@ FAIRMIND_MCP_TOKEN="your_token_here"
 ```
 
 ### Context Management Configuration (`context_config.yaml`)
-- MCP tool cleaning strategies and thresholds
-- Auto-compaction triggers and summary templates
-- Performance optimization settings
-- Tool-specific overrides and custom rules
+- Simple token-based compression triggers and thresholds
+- LiteLLM configuration for universal model support
+- Essential logging and monitoring settings
+- Performance optimization with accurate token counting
 
 ### LangGraph Configuration (`langgraph.json`)
 - Graph definition: `src.core.agent_core:agent` (module import format)
@@ -206,11 +206,11 @@ FAIRMIND_MCP_TOKEN="your_token_here"
 - Automatic fix application
 - Graceful fallback handling
 
-### 🧹 Intelligent Context Management
-- Automatic MCP tool result cleaning with configurable strategies
-- Real-time context window monitoring and optimization
+### 🧹 Simplified Context Management
+- Universal token counting with LiteLLM for all models
+- Simple threshold-based compression triggering
+- Real-time context window monitoring with accurate metrics
 - Compatible with Claude Code compact-implementation standards
-- Preserves essential information while removing noise
 
 ## File Structure and Responsibilities
 
@@ -242,9 +242,9 @@ src/
 │   └── unified_wrapper.py     # Consolidated tool wrapping
 │
 ├── context/              # Context management
-│   ├── context_manager.py     # Core context management and metrics
+│   ├── context_manager.py     # Simplified token counting and compression triggers
 │   ├── context_compression.py # Context compression utilities
-│   ├── context_hooks.py       # Hook-based context monitoring
+│   ├── compression_hooks.py   # LangGraph pre_model_hook integration
 │   ├── compact_integration.py # Auto-compaction integration
 │   └── llm_compression.py     # LLM-based compression strategies
 │
@@ -309,12 +309,12 @@ archive/                  # Legacy/deprecated files
 4. Create cleaning strategy in `src/integrations/mcp/mcp_cleaners.py` if needed
 5. Add tool configuration to `config/context_config.yaml`
 
-### Customizing Context Cleaning
-1. Create new `CleaningStrategy` subclass in `src/integrations/mcp/mcp_cleaners.py`
-2. Implement `can_clean()` and `clean()` methods
-3. Register strategy in `create_default_cleaning_strategies()`
-4. Add configuration section in `config/context_config.yaml`
-5. Test with realistic data in `tests/test_context_manager.py`
+### Customizing Context Management
+1. Adjust token thresholds in `config/context_config.yaml`
+2. Modify `trigger_threshold` for general compression (default: 25%)
+3. Adjust `post_tool_threshold` for post-tool compression (default: 20%)
+4. Configure `max_context_window` for your model's limits
+5. Test with realistic scenarios to validate thresholds
 
 ## Troubleshooting
 
@@ -334,10 +334,10 @@ archive/                  # Legacy/deprecated files
 - Review phase-specific configurations
 
 ### Context Management Issues
-- Check `config/context_config.yaml` for correct strategy configuration
-- Monitor context metrics with `get_context_summary()`
-- Verify cleaning strategies are registered properly
-- Test with `python tests/test_context_manager.py` for validation
+- Check `config/context_config.yaml` for correct threshold configuration
+- Monitor token usage with simplified context metrics
+- Verify LiteLLM is installed for accurate token counting
+- Test with different models to ensure universal compatibility
 - Enable detailed logging: `setup_compatibility_logging(level="DEBUG")`
 
 ### Package and Import Issues
@@ -349,47 +349,48 @@ archive/                  # Legacy/deprecated files
 
 ## Context Management Features
 
-### 🧹 Automatic MCP Cleaning
-- **ProjectListCleaner**: Reduces project lists to essential data 
-- **CodeSnippetCleaner**: Extracts only code text, removes metadata
-- **DocumentCleaner**: Removes headers/footers, preserves content
-- **UserStoryListCleaner**: Maintains core story info, removes tracking data 
-- **RepositoryListCleaner**: Keeps identifiers, removes detailed metrics
+### 🎯 Universal Token Counting
+- **LiteLLM Integration**: Accurate token counting for all supported models (Claude, GPT, LLaMA, etc.)
+- **Triple Fallback System**: LiteLLM → Tiktoken → Character estimation for maximum compatibility
+- **Real-time Metrics**: Precise token usage and context window utilization
+- **Model Agnostic**: Works seamlessly with any model supported by LiteLLM
 
-### 📊 Context Monitoring
-- Real-time token usage tracking with tiktoken precision
-- MCP noise percentage calculation and alerting
-- Automatic compaction trigger when thresholds exceeded
-- Detailed metrics and reduction statistics
+### 📊 Simplified Monitoring
+- Real-time token usage tracking with LiteLLM precision
+- Simple threshold-based compression triggering
+- Automatic compression when context limits approached
+- Clean metrics without false positives from pattern matching
 - Integration with Claude Code compact-implementation specs
 
-### ⚙️ Configuration & Customization
-- YAML-based configuration for all strategies and thresholds
-- Tool-specific overrides and custom rules
-- Performance monitoring and analytics
-- Graceful fallback when cleaning fails
+### ⚙️ Streamlined Configuration
+- YAML-based configuration with essential settings only
+- Simple thresholds: trigger_threshold and post_tool_threshold
+- Performance optimization with caching and fallback systems
 - Compatible with existing Claude Code workflows
+- Focus on what matters: token limits and compression
 
 ### 🔧 Usage Example
 ```python
 # Import the main agent (after installing package with pip install -e .)
 from src.core.agent_core import agent
 
-# Basic setup with auto-cleaning
-from src.integrations.mcp.mcp_wrapper import wrap_existing_mcp_tools
+# Basic setup with simplified context management
 from src.context.context_manager import ContextManager
 
-# Wrap your MCP tools
-wrapped_tools, wrapper = wrap_existing_mcp_tools(your_mcp_tools)
+# Create context manager with LiteLLM token counting
+context_manager = ContextManager()
 
-# Use wrapped tools - cleaning happens automatically
-result = wrapped_tools[0]()  # Returns cleaned result
+# Monitor token usage for any model
+messages = [{"role": "user", "content": "Your task"}]
+metrics = context_manager.analyze_context(
+    messages, 
+    model_name="claude-sonnet-4-20250514"  # Works with any LiteLLM supported model
+)
 
-# Monitor performance
-stats = wrapper.get_statistics()
-print(f"Average reduction: {stats['average_reduction_percentage']}%")
+print(f"Token usage: {metrics.tokens_used:,} tokens ({metrics.utilization_percentage:.1f}%)")
+print(f"Compression needed: {'Yes' if metrics.should_trigger_compact() else 'No'}")
 
-# Use the main agent
-initial_state = {"messages": [{"role": "user", "content": "Your task"}]}
+# Use the main agent - compression happens automatically via pre_model_hook
+initial_state = {"messages": messages}
 result = agent.invoke(initial_state)
 ```

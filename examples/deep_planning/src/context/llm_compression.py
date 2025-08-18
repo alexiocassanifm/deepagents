@@ -508,8 +508,8 @@ Maintain technical accuracy and implementation context:
         
         try:
             if self.context_manager:
-                # Usa il sistema di pulizia esistente
-                cleaned_messages, cleaning_info = self.context_manager.process_context_cleaning(messages)
+                # Simplified context management - messages pass through unchanged
+                cleaned_messages = messages
                 
                 # Crea summary template-based come fallback
                 fallback_content = self._create_fallback_summary(cleaned_messages)

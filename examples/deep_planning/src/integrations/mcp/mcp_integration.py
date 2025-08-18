@@ -56,7 +56,7 @@ async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[
             from ...context.context_manager import ContextManager
             from ...context.compact_integration import CompactIntegration
             context_manager = ContextManager()
-            compact_integration = CompactIntegration(context_manager)
+            compact_integration = CompactIntegration(context_manager, model_name=os.getenv("DEEPAGENTS_MODEL", "claude-sonnet-4-20250514"))
             logger.info("✅ Created compact integration for fallback tools")
             return get_fallback_tools(), None, compact_integration
         else:
@@ -97,7 +97,7 @@ async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[
             from ...context.context_manager import ContextManager
             from ...context.compact_integration import CompactIntegration
             context_manager = ContextManager()
-            compact_integration = CompactIntegration(context_manager)
+            compact_integration = CompactIntegration(context_manager, model_name=os.getenv("DEEPAGENTS_MODEL", "claude-sonnet-4-20250514"))
             logger.info("✅ Created compact integration for context management")
             return fairmind_tools, None, compact_integration
         else:
@@ -116,7 +116,7 @@ async def load_fairmind_mcp_tools() -> Tuple[List[Any], Optional[Any], Optional[
             from ...context.context_manager import ContextManager
             from ...context.compact_integration import CompactIntegration
             context_manager = ContextManager()
-            compact_integration = CompactIntegration(context_manager)
+            compact_integration = CompactIntegration(context_manager, model_name=os.getenv("DEEPAGENTS_MODEL", "claude-sonnet-4-20250514"))
             logger.info("✅ Created compact integration for demo tools (for testing compression)")
             logger.info("⚠️ Using demo tools (no real MCP connection) without wrapping")
             return demo_tools, None, compact_integration
@@ -241,7 +241,7 @@ def initialize_deep_planning_mcp_tools() -> Tuple[List[Any], Optional[Any], Opti
                 from ..context.context_manager import ContextManager
                 from ..context.compact_integration import CompactIntegration
                 context_manager = ContextManager()
-                compact_integration = CompactIntegration(context_manager)
+                compact_integration = CompactIntegration(context_manager, model_name=os.getenv("DEEPAGENTS_MODEL", "claude-sonnet-4-20250514"))
                 logger.info("✅ Created compact integration for fallback initialization")
                 return get_fallback_tools(), None, compact_integration
             except Exception as context_error:

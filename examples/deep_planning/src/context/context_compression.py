@@ -68,7 +68,7 @@ def check_and_compact_if_needed(
         
         if should_compact:
             logger.info(f"📦 Context compaction triggered: {trigger_type.value}")
-            logger.info(f"📊 Context metrics: {metrics.utilization_percentage:.1f}% utilization, {metrics.mcp_noise_percentage:.1f}% MCP noise")
+            logger.info(f"📊 Context metrics: {metrics.utilization_percentage:.1f}% utilization (simplified context management)")
             
             # Perform automatic compaction
             compacted_messages, summary = compact_integration.perform_automatic_compaction(messages, context)

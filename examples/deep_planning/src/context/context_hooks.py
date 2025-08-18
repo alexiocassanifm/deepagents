@@ -282,12 +282,12 @@ class CompressionHook(Hook):
                 metrics = {
                     "tokens_used": total_tokens,
                     "utilization_percentage": min(total_tokens / 200000 * 100, 100),
-                    "mcp_noise_percentage": 0
+                    "noise_percentage": 0  # Simplified - no MCP noise detection
                 }
         
         # Controlli trigger
         utilization = metrics.get("utilization_percentage", 0)
-        mcp_noise = metrics.get("mcp_noise_percentage", 0)
+        noise_level = metrics.get("noise_percentage", 0)  # Simplified architecture
         
         # Force compression se utilizzo molto alto
         if utilization >= self.trigger_config["force_compression_threshold"]:
@@ -297,9 +297,7 @@ class CompressionHook(Hook):
         if utilization >= self.trigger_config["utilization_threshold"]:
             return True, CompressionType.GENERAL, metrics
         
-        # Trigger per rumore MCP
-        if mcp_noise >= self.trigger_config["mcp_noise_threshold"]:
-            return True, CompressionType.MCP_HEAVY, metrics
+        # Simplified architecture: only token-based compression, no MCP noise detection
         
         return False, CompressionType.GENERAL, metrics
     

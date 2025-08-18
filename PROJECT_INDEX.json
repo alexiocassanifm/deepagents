@@ -1,0 +1,5572 @@
+{
+  "indexed_at": "2025-08-17T20:40:13.978943",
+  "root": ".",
+  "project_structure": {
+    "type": "tree",
+    "root": ".",
+    "tree": [
+      ".",
+      "\u251c\u2500\u2500 deepagents.egg-info/",
+      "\u251c\u2500\u2500 examples/ (59 files)",
+      "\u2502   \u251c\u2500\u2500 atlas/ (4 files)",
+      "\u2502   \u2502   \u251c\u2500\u2500 pyproject.toml",
+      "\u2502   \u2502   \u251c\u2500\u2500 README.md",
+      "\u2502   \u2502   \u2514\u2500\u2500 requirements.txt",
+      "\u2502   \u251c\u2500\u2500 deep_planning/ (52 files)",
+      "\u2502   \u2502   \u251c\u2500\u2500 archive/ (2 files)",
+      "\u2502   \u2502   \u251c\u2500\u2500 config/",
+      "\u2502   \u2502   \u251c\u2500\u2500 deep_planning_agent.egg-info/",
+      "\u2502   \u2502   \u251c\u2500\u2500 docs/",
+      "\u2502   \u2502   \u2502   \u2514\u2500\u2500 README.md",
+      "\u2502   \u2502   \u251c\u2500\u2500 examples/ (1 files)",
+      "\u2502   \u2502   \u251c\u2500\u2500 logs/",
+      "\u2502   \u2502   \u251c\u2500\u2500 scripts/ (2 files)",
+      "\u2502   \u2502   \u251c\u2500\u2500 src/ (33 files)",
+      "\u2502   \u2502   \u2502   \u251c\u2500\u2500 compatibility/ (5 files)",
+      "\u2502   \u2502   \u2502   \u251c\u2500\u2500 config/ (6 files)",
+      "\u2502   \u2502   \u2502   \u251c\u2500\u2500 context/ (7 files)",
+      "\u2502   \u2502   \u2502   \u251c\u2500\u2500 core/ (4 files)",
+      "\u2502   \u2502   \u2502   \u251c\u2500\u2500 integrations/ (5 files)",
+      "\u2502   \u2502   \u2502   \u2502   \u2514\u2500\u2500 mcp/ (4 files)",
+      "\u2502   \u2502   \u2502   \u2514\u2500\u2500 utils/ (5 files)",
+      "\u2502   \u2502   \u251c\u2500\u2500 tests/ (11 files)",
+      "\u2502   \u2502   \u251c\u2500\u2500 pyproject.toml",
+      "\u2502   \u2502   \u251c\u2500\u2500 requirements.txt",
+      "\u2502   \u2502   \u2514\u2500\u2500 setup.py",
+      "\u2502   \u2514\u2500\u2500 research/ (2 files)",
+      "\u2502       \u2514\u2500\u2500 requirements.txt",
+      "\u251c\u2500\u2500 specs/",
+      "\u251c\u2500\u2500 src/ (9 files)",
+      "\u2502   \u2514\u2500\u2500 deepagents/ (9 files)",
+      "\u251c\u2500\u2500 pyproject.toml",
+      "\u2514\u2500\u2500 README.md"
+    ]
+  },
+  "documentation_map": {
+    "MCP_INTEGRATION.md": {
+      "sections": [
+        "MCP Integration with LangGraph",
+        "\u2705 Correct Approach: LangGraph Native MCP",
+        "Configuration",
+        "Usage in Agents",
+        "MCP tools are automatically loaded by LangGraph",
+        "The agent will automatically have access to:",
+        "- mcp__sequential-thinking__sequentialthinking (if configured)",
+        "- Any other MCP tools defined in langgraph.json",
+        "Available MCP Tools",
+        "Benefits of This Approach"
+      ],
+      "architecture_hints": []
+    },
+    "PLANNING_APPROVAL.md": {
+      "sections": [
+        "Human-in-the-Loop Planning Approval",
+        "Overview",
+        "Key Features",
+        "Architecture",
+        "Core Components",
+        "Workflow",
+        "Usage",
+        "Basic Setup",
+        "Define subagent requiring approval",
+        "Create agent with planning approval enabled"
+      ],
+      "architecture_hints": []
+    },
+    "README.md": {
+      "sections": [
+        "\ud83e\udde0\ud83e\udd16Deep Agents",
+        "Installation",
+        "Usage",
+        "Search tool to use to do research",
+        "Prompt prefix to steer the agent to be an expert researcher",
+        "`internet_search`",
+        "Create the agent",
+        "Invoke the agent",
+        "Creating a custom deep agent",
+        "`tools` (Required)"
+      ],
+      "architecture_hints": []
+    },
+    "prompt_improvements_analysis.md": {
+      "sections": [
+        "Deep Planning Agent - Analisi e Miglioramenti dei Prompt",
+        "Sommario Esecutivo",
+        "Analisi Dettagliata",
+        "Confronto Struttura Attuale vs Best Practice LangGraph",
+        "Aree Problematiche Specifiche",
+        "Investigation Agent",
+        "Discussion Agent  ",
+        "Raccomandazioni Specifiche",
+        "1. **Architettura Modulare dei Prompt**",
+        "Il Tuo Ruolo"
+      ],
+      "architecture_hints": []
+    },
+    "CLAUDE.md": {
+      "sections": [
+        "CLAUDE.md",
+        "Project Overview",
+        "Development Commands",
+        "Package Management",
+        "Testing",
+        "Build and Distribution",
+        "Architecture",
+        "Core Components",
+        "Key Patterns",
+        "Dependencies"
+      ],
+      "architecture_hints": []
+    },
+    "specs/compact-implementation.md": {
+      "sections": [
+        "Compact Implementation Analysis",
+        "Overview & Goals",
+        "Architecture Overview",
+        "Context Window Management Flow",
+        "Core Components",
+        "Core Implementation",
+        "Slash Command Integration",
+        "Manual Compact Tool Response",
+        "Automatic Context Management"
+      ],
+      "architecture_hints": []
+    },
+    "specs/deep-planning-implementation.md": {
+      "sections": [
+        "Deep Planning Implementation Analysis",
+        "Overview & Goals",
+        "Core Architecture",
+        "Slash Command System",
+        "Command Processing Flow",
+        "Deep Planning Methodology",
+        "Phase 1: Silent Investigation",
+        "Phase 2: Targeted Discussion",
+        "Phase 3: Structured Planning",
+        "Phase 4: Task Generation  "
+      ],
+      "architecture_hints": []
+    },
+    "examples/deep_planning/CLAUDE.md": {
+      "sections": [
+        "CLAUDE.md",
+        "Project Overview",
+        "Development Commands",
+        "Installation and Setup",
+        "Install this project as a package in development mode",
+        "This automatically installs all dependencies including:",
+        "- deepagents (parent package)",
+        "- langgraph-cli[inmem] (LangGraph development server)",
+        "- langchain-mcp-adapters (MCP integration)",
+        "Alternative: Install dependencies manually"
+      ],
+      "architecture_hints": []
+    },
+    "examples/atlas/README.md": {
+      "sections": [
+        "Atlas - LangChain MCP Codebase Research Agent",
+        "Overview",
+        "Key Features",
+        "Architecture",
+        "Main Agent: Atlas",
+        "Sub-Agents",
+        "MCP Tools Integration",
+        "Setup",
+        "MCP Integration Setup",
+        "HTTP streamable MCP connection"
+      ],
+      "architecture_hints": []
+    },
+    "examples/deep_planning/docs/MODIFICATION_EXAMPLES.md": {
+      "sections": [
+        "Esempi Pratici di Modifica - Deep Planning Agent",
+        "\ud83c\udfaf Esempio 1: Aggiungere un Security Review Agent",
+        "Implementazione Completa",
+        "Aggiungere alla enum PhaseType",
+        "Aggiungere nuova categoria di strumenti",
+        "Configurazione completa della nuova fase",
+        "Aggiungere alla registry delle fasi"
+      ],
+      "architecture_hints": []
+    },
+    "examples/deep_planning/docs/REFACTORING_PLAN.md": {
+      "sections": [
+        "\ud83d\udd27 Deep Planning Prototype - Piano di Refactoring Definitivo",
+        "Sommario Esecutivo",
+        "\ud83d\udea8 Problemi Critici Identificati",
+        "1. **Rumore di Debug Eccessivo** (RISOLTO \u2705)",
+        "2. **Gap nel Sistema di Configurazione** (DA FARE \ud83d\udd04)",
+        "3. **Duplicazione Codice & Bloat** (DA FARE \ud83d\udd04)",
+        "4. **Over-Engineering Architetturale** (DA FARE \ud83d\udd04)",
+        "\ud83c\udfaf Strategia di Refactoring",
+        "\u2705 FASE 1: Pulizia Rumore Debug & Branding (COMPLETATA)",
+        "\u2705 FASE 2: Integrazione Sistema Configurazione (COMPLETATA)"
+      ],
+      "architecture_hints": []
+    },
+    "examples/deep_planning/docs/AGENT_MODIFICATION_GUIDE.md": {
+      "sections": [
+        "Agent Modification Guide",
+        "Panoramica del Sistema",
+        "\ud83c\udfd7\ufe0f Architettura Principale",
+        "\ud83d\udcc1 File Chiave per le Modifiche",
+        "\ud83c\udfaf Modifica dell'Agente Principale (Orchestratore)",
+        "Prompt dell'Orchestratore",
+        "Mission",
+        "Current Context",
+        "Process Flow",
+        "Your Role"
+      ],
+      "architecture_hints": []
+    },
+    "examples/deep_planning/docs/code_quality_review_report.md": {
+      "sections": [
+        "Deep Planning Agent - Comprehensive Code Quality Review Report",
+        "Executive Summary",
+        "Key Strengths",
+        "Key Areas for Improvement",
+        "1. Repository Structure Analysis",
+        "1.1 Project Organization",
+        "1.2 Dependencies Analysis",
+        "Core Dependencies (Low Risk)",
+        "External Dependencies (Well-maintained)",
+        "2. Code Quality Assessment"
+      ],
+      "architecture_hints": []
+    },
+    "examples/deep_planning/docs/README.md": {
+      "sections": [
+        "Deep Planning Agent",
+        "Panoramica",
+        "Caratteristiche Principali",
+        "\u2705 Metodologia Deep Planning a 4 Fasi",
+        "\u2705 Gestione Todo Integrata",
+        "\u2705 Integrazione MCP Fairmind",
+        "\u2705 Human-in-the-Loop Plan Approval",
+        "\u2705 Validazione Piano Strutturata",
+        "\u2705 Orchestrazione Sub-Agenti",
+        "\u2705 Sistema di Compatibilit\u00e0 Modelli"
+      ],
+      "architecture_hints": []
+    },
+    "examples/deep_planning/docs/ENHANCED_LOGGING.md": {
+      "sections": [
+        "Enhanced Context Management Logging",
+        "\ud83c\udd95 Nuove Funzionalit\u00e0 di Logging",
+        "\ud83d\udcca Context Length Tracking",
+        "\ud83e\uddf9 Cleaning Operations",
+        "\ud83d\udd04 Compaction Triggers",
+        "\ud83d\udcdd Esempi di Log",
+        "Tool Call con Cleaning",
+        "Compaction Trigger",
+        "Near Limit Warning",
+        "\ud83d\ude80 Come Attivare il Logging Dettagliato"
+      ],
+      "architecture_hints": []
+    },
+    "examples/deep_planning/docs/README_LLM_COMPRESSION.md": {
+      "sections": [
+        "\ud83e\udde0 LLM Context Compression System",
+        "\ud83c\udfaf **Panoramica**",
+        "\ud83c\udfd7\ufe0f **Architettura**",
+        "\ud83d\udcc1 **Componenti Principali**",
+        "\ud83d\ude80 **Quick Start**",
+        "1. Installazione Dipendenze",
+        "2. Configurazione Base",
+        "Configurazione compressione",
+        "Crea sistema compressione",
+        "3. Integrazione con Deep Planning Agent"
+      ],
+      "architecture_hints": []
+    },
+    "examples/deep_planning/docs/CONFIG_GUIDE.md": {
+      "sections": [
+        "\ud83d\udd27 Configuration Guide - Deep Planning Agent",
+        "Overview",
+        "Configuration Architecture",
+        "Quick Start",
+        "Basic Usage",
+        "Get complete configuration",
+        "Print summary",
+        "Access specific sections",
+        "Validate Configuration",
+        "Configuration Sections"
+      ],
+      "architecture_hints": []
+    }
+  },
+  "directory_purposes": {
+    "specs": "Test specifications",
+    "examples": "API routes and endpoints",
+    "examples/deep_planning": "Test files and test utilities",
+    "examples/atlas": "Test files and test utilities",
+    "src/deepagents": "Data models and schemas",
+    "examples/deep_planning/tests": "Test files and test utilities",
+    "examples/deep_planning/docs": "Project documentation",
+    "examples/deep_planning/scripts": "Build and utility scripts",
+    "examples/deep_planning/src": "Source code root directory",
+    "examples/deep_planning/src/compatibility": "Data models and schemas",
+    "examples/deep_planning/src/config": "Configuration files and settings",
+    "examples/deep_planning/src/utils": "Shared utility functions and helpers"
+  },
+  "stats": {
+    "total_files": 72,
+    "total_directories": 31,
+    "fully_parsed": {
+      "python": 63,
+      "shell": 1
+    },
+    "listed_only": {
+      "json": 7,
+      "shell": 1
+    },
+    "markdown_files": 29
+  },
+  "files": {
+    ".obsidian/workspace.json": {
+      "language": "json",
+      "parsed": false
+    },
+    ".obsidian/app.json": {
+      "language": "json",
+      "parsed": false,
+      "purpose": "Application entry point"
+    },
+    ".obsidian/core-plugins.json": {
+      "language": "json",
+      "parsed": false
+    },
+    ".obsidian/appearance.json": {
+      "language": "json",
+      "parsed": false
+    },
+    "examples/openrouter_glm45_example.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Route definitions",
+      "imports": [
+        "os",
+        "deepagents"
+      ],
+      "functions": {
+        "main": "()"
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "src/deepagents/compatibility.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "inspect",
+        "logging",
+        "typing",
+        "langchain_core.tools"
+      ],
+      "functions": {
+        "fix_tool_signatures_safe": "(tools: List) -> List"
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "src/deepagents/tools.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "langchain_core.tools",
+        "langgraph.types",
+        "langchain_core.messages",
+        "typing",
+        "langgraph.prebuilt",
+        "deepagents.prompts",
+        "deepagents.state",
+        "re"
+      ],
+      "functions": {
+        "write_todos": {
+          "decorators": [
+            "tool"
+          ],
+          "signature": "async (todos: list[Todo], tool_call_id: Annotated[str, InjectedToolCallId]) -> Command"
+        },
+        "ls": {
+          "doc": "List all files",
+          "signature": "async (state: Annotated[DeepAgentState, InjectedState]) -> list[str]"
+        },
+        "read_file": {
+          "decorators": [
+            "tool"
+          ],
+          "doc": "Read file.",
+          "signature": "async (file_path: str, state: Annotated[DeepAgentState, InjectedState], offset: int = 0, limit: int = 2000,) -> str"
+        },
+        "write_file": {
+          "doc": "Write to a file.",
+          "signature": "async (file_path: str, content: str, state: Annotated[DeepAgentState, InjectedState], tool_call_id: Annotated[str, InjectedToolCallId],) -> Command"
+        },
+        "edit_file": {
+          "decorators": [
+            "tool"
+          ],
+          "doc": "Write to a file.",
+          "signature": "async (file_path: str, old_string: str, new_string: str, state: Annotated[DeepAgentState, InjectedState], tool_call_id: Annotated[str, InjectedToolCallId], replace_all: bool = False,) -> str"
+        },
+        "review_plan": {
+          "decorators": [
+            "tool"
+          ],
+          "calls": [
+            "_format_plan_for_review"
+          ],
+          "signature": "async (plan_type: str, plan_content: Dict[str, Any], state: Annotated[DeepAgentState, InjectedState], tool_call_id: Annotated[str, InjectedToolCallId],) -> Command"
+        },
+        "_format_plan_for_review": {
+          "doc": "Format a plan for human review.",
+          "signature": "(plan_type: str, plan_content: Dict[str, Any]) -> str",
+          "called_by": [
+            "review_plan",
+            "DocumentationPlanner.request_plan_approval"
+          ]
+        },
+        "_extract_page_estimate": {
+          "doc": "Extract page estimate from length string.",
+          "signature": "(length_str: str) -> float"
+        },
+        "_parse_human_response": {
+          "doc": "Parse human response into structured action.",
+          "signature": "(response: str) -> Dict[str, Any]"
+        },
+        "_apply_plan_modifications": {
+          "doc": "Apply text-based modifications to a plan.",
+          "signature": "(plan_content: Dict[str, Any], modifications: str) -> Dict[str, Any]"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "src/deepagents/graph.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "deepagents.sub_agent",
+        "deepagents.model",
+        "deepagents.tools",
+        "deepagents.state",
+        "typing",
+        "langchain_core.tools",
+        "langchain_core.language_models",
+        "langgraph.prebuilt",
+        "langgraph.checkpoint.memory",
+        "os",
+        "sys",
+        "langgraph.checkpoint.postgres"
+      ],
+      "functions": {
+        "create_deep_agent": "(tools: Sequence[Union[BaseTool, Callable, dict[str, Any]]], instructions: str, model: Optional[Union[str, LanguageModelLike]] = None, subagents: list[SubAgent] = None, state_schema: Optional[StateSchemaType] = None, enable_planning_approval: bool = False, checkpointer: Optional[Union[str, Any]] = None, pre_model_hook: Optional[Callable] = None,)"
+      },
+      "classes": {},
+      "type_aliases": {
+        "StateSchemaType": "Type[StateSchema]"
+      },
+      "call_graph": {}
+    },
+    "src/deepagents/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "src/deepagents/prompts.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "src/deepagents/model.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Data model",
+      "imports": [
+        "langchain_anthropic",
+        "langchain_litellm",
+        "os"
+      ],
+      "functions": {
+        "get_default_model": {
+          "doc": "Mantiene compatibilit\u00e0 con il modello default Claude",
+          "signature": "()",
+          "called_by": [
+            "get_model"
+          ]
+        },
+        "get_model": {
+          "calls": [
+            "get_default_model"
+          ],
+          "signature": "(model_spec=None)"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "src/deepagents/sub_agent.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "deepagents.prompts",
+        "deepagents.state",
+        "langgraph.prebuilt",
+        "langchain_core.tools",
+        "typing",
+        "langchain_core.tools",
+        "langchain_core.messages",
+        "typing",
+        "langgraph.types",
+        "logging",
+        "langgraph.prebuilt",
+        "logging",
+        "deepagents.tools"
+      ],
+      "functions": {
+        "_create_task_tool": {
+          "calls": [
+            "task"
+          ],
+          "signature": "(tools, instructions, subagents: list[SubAgent], model, state_schema)"
+        }
+      },
+      "classes": {
+        "SubAgent": {
+          "methods": {},
+          "inherits": [
+            "TypedDict"
+          ],
+          "properties": [
+            "name",
+            "description",
+            "prompt",
+            "tools",
+            "requires_approval",
+            "approval_points"
+          ]
+        }
+      },
+      "call_graph": {}
+    },
+    "src/deepagents/planning.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "typing",
+        "langgraph.types",
+        "dataclasses",
+        "enum",
+        "re"
+      ],
+      "functions": {
+        "create_planning_workflow_node": {
+          "doc": "Create a LangGraph node that handles the planning workflow.",
+          "calls": [
+            "create_documentation_plan",
+            "planning_node",
+            "process_approval_response",
+            "request_plan_approval"
+          ],
+          "signature": "(planner: DocumentationPlanner)"
+        }
+      },
+      "classes": {
+        "Plan": {
+          "methods": {},
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Represents an execution plan.",
+          "properties": [
+            "id",
+            "type",
+            "title",
+            "description",
+            "sections",
+            "status",
+            "feedback"
+          ]
+        },
+        "DocumentationPlanner": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, enable_sequential_thinking: bool = False)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "create_documentation_plan": {
+              "calls": [
+                "_generate_sections"
+              ],
+              "signature": "(self, context: Dict[str, Any], requirements: List[str], target_audience: str = \"technical\") -> Plan",
+              "called_by": [
+                "create_planning_workflow_node"
+              ]
+            },
+            "_generate_sections": {
+              "doc": "Generate documentation sections based on context.",
+              "signature": "(self, context: Dict[str, Any], requirements: List[str], target_audience: str) -> List[Dict[str, Any]]",
+              "called_by": [
+                "DocumentationPlanner.create_documentation_plan"
+              ]
+            },
+            "request_plan_approval": {
+              "calls": [
+                "_format_plan_for_review"
+              ],
+              "signature": "(self, plan: Plan) -> Dict[str, Any]",
+              "called_by": [
+                "create_planning_workflow_node"
+              ]
+            },
+            "_format_plan_for_review": {
+              "doc": "Format a plan for human review.",
+              "signature": "(self, plan: Plan) -> str",
+              "called_by": [
+                "review_plan",
+                "DocumentationPlanner.request_plan_approval"
+              ]
+            }
+          },
+          "doc": "Planner specialized for documentation generation with human approval.",
+          "properties": [
+            "enable_sequential_thinking",
+            "context",
+            "requirements",
+            "target_audience",
+            "Plan",
+            "plan"
+          ]
+        }
+      },
+      "call_graph": {},
+      "enums": {
+        "PlanStatus": {
+          "values": [
+            "PENDING",
+            "APPROVED",
+            "REJECTED",
+            "MODIFIED"
+          ],
+          "doc": "Status of a plan."
+        }
+      }
+    },
+    "src/deepagents/state.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "langgraph.prebuilt.chat_agent_executor",
+        "typing",
+        "typing",
+        "typing_extensions"
+      ],
+      "functions": {
+        "file_reducer": "(l, r)",
+        "plan_reducer": {
+          "doc": "Reducer for plans - combines and deduplicates by ID.",
+          "signature": "(l, r)"
+        },
+        "context_history_reducer": {
+          "doc": "Reducer for context history - appends new entries.",
+          "signature": "(l, r)"
+        }
+      },
+      "classes": {
+        "Todo": {
+          "methods": {},
+          "inherits": [
+            "TypedDict"
+          ],
+          "doc": "Todo to track.",
+          "properties": [
+            "content",
+            "status"
+          ]
+        },
+        "PlanInfo": {
+          "methods": {},
+          "inherits": [
+            "TypedDict"
+          ],
+          "doc": "Information about a plan.",
+          "properties": [
+            "id",
+            "type",
+            "title",
+            "description",
+            "sections",
+            "status",
+            "feedback"
+          ]
+        },
+        "ContextMetrics": {
+          "methods": {},
+          "inherits": [
+            "TypedDict"
+          ],
+          "doc": "Metriche del contesto conversazionale.",
+          "properties": [
+            "tokens_used",
+            "max_context_window",
+            "utilization_percentage",
+            "trigger_threshold",
+            "mcp_noise_percentage",
+            "deduplication_potential"
+          ]
+        },
+        "CleaningResult": {
+          "methods": {},
+          "inherits": [
+            "TypedDict"
+          ],
+          "doc": "Risultato di un'operazione di pulizia.",
+          "properties": [
+            "original_size",
+            "cleaned_size",
+            "reduction_percentage",
+            "strategy_used",
+            "cleaning_status",
+            "preserved_fields",
+            "removed_fields",
+            "timestamp",
+            "metadata"
+          ]
+        },
+        "ContextInfo": {
+          "methods": {},
+          "inherits": [
+            "TypedDict"
+          ],
+          "doc": "Informazioni storiche sul contesto.",
+          "properties": [
+            "session_id",
+            "operation_type",
+            "before_metrics",
+            "after_metrics",
+            "cleaning_results",
+            "timestamp"
+          ]
+        },
+        "DeepAgentState": {
+          "methods": {},
+          "inherits": [
+            "AgentState"
+          ],
+          "properties": [
+            "todos",
+            "files",
+            "pending_plans",
+            "pending_plan",
+            "approved_plan",
+            "current_plan",
+            "plan_review_data",
+            "analysis_results",
+            "documentation_requirements",
+            "target_audience",
+            "context_history",
+            "cleaned_context",
+            "context_metrics",
+            "mcp_tool_results",
+            "context_cleaning_enabled",
+            "context_session_id"
+          ]
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/research/langgraph.json": {
+      "language": "json",
+      "parsed": false
+    },
+    "examples/research/research_agent.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "os",
+        "typing",
+        "tavily",
+        "deepagents"
+      ],
+      "functions": {
+        "internet_search": {
+          "doc": "Run a web search",
+          "signature": "(query: str, max_results: int = 5, topic: Literal[\"general\", \"news\", \"finance\"] = \"general\", include_raw_content: bool = False,)"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/test_compression_logging.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "logging",
+        "sys",
+        "os",
+        "pathlib",
+        "src.context.context_manager",
+        "src.context.compact_integration",
+        "src.context.context_compression",
+        "src.integrations.mcp.mcp_cleaners",
+        "traceback"
+      ],
+      "functions": {
+        "setup_test_logging": {
+          "doc": "Setup logging per il test.",
+          "signature": "()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "create_test_messages": {
+          "doc": "Crea messaggi di test per diversi scenari.",
+          "signature": "(scenario: str) -> list",
+          "called_by": [
+            "test_context_manager_evaluation",
+            "test_general_compaction_check"
+          ]
+        },
+        "test_context_manager_evaluation": {
+          "doc": "Test valutazione compressione dal ContextManager.",
+          "calls": [
+            "create_test_messages"
+          ],
+          "signature": "()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "test_mcp_cleaning_evaluation": {
+          "doc": "Test valutazione MCP cleaning.",
+          "signature": "()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "test_general_compaction_check": {
+          "doc": "Test controllo generale di compattazione.",
+          "calls": [
+            "create_test_messages"
+          ],
+          "signature": "()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "main": {
+          "doc": "Funzione principale di test.",
+          "calls": [
+            "setup_test_logging",
+            "test_context_manager_evaluation",
+            "test_general_compaction_check",
+            "test_mcp_cleaning_evaluation"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/setup.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/langgraph.json": {
+      "language": "json",
+      "parsed": false
+    },
+    "examples/atlas/test_planning_workflow.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "sys",
+        "os",
+        "deepagents",
+        "deepagents.planning"
+      ],
+      "functions": {
+        "create_test_atlas_agent": {
+          "doc": "Create a simplified Atlas agent for testing planning functionality.",
+          "calls": [
+            "mock_analyze_project"
+          ],
+          "signature": "()",
+          "called_by": [
+            "simulate_planning_workflow"
+          ]
+        },
+        "simulate_planning_workflow": {
+          "doc": "Simulate the planning workflow without actual LLM calls.",
+          "calls": [
+            "create_test_atlas_agent"
+          ],
+          "signature": "()"
+        },
+        "demo_workflow_steps": {
+          "doc": "Demonstrate the expected workflow steps.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/atlas/demo_planning_approval.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "sys",
+        "os",
+        "deepagents",
+        "langgraph.types",
+        "deepagents"
+      ],
+      "functions": {
+        "create_demo_agent": {
+          "doc": "Create a simple demo agent with planning approval.",
+          "signature": "()",
+          "called_by": [
+            "demo_with_mock_interaction"
+          ]
+        },
+        "demo_with_mock_interaction": {
+          "doc": "Demonstrate the workflow with mock interactions.",
+          "calls": [
+            "create_demo_agent"
+          ],
+          "signature": "()"
+        },
+        "show_configuration_example": {
+          "doc": "Show how to configure the planning approval feature.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/atlas/atlas_agent.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "asyncio",
+        "os",
+        "typing",
+        "deepagents",
+        "langchain_mcp_adapters.client",
+        "langchain_mcp_adapters.tools",
+        "langchain_core.tools",
+        "deepagents"
+      ],
+      "functions": {
+        "load_fairmind_mcp_tools": {
+          "calls": [
+            "get_fallback_tools"
+          ],
+          "signature": "async () -> List[Any]",
+          "called_by": [
+            "initialize_atlas_mcp_tools",
+            "initialize_deep_planning_mcp_tools"
+          ]
+        },
+        "get_fallback_tools": {
+          "calls": [
+            "get_project_overview_demo",
+            "list_projects_demo",
+            "search_code_demo"
+          ],
+          "signature": "() -> List[Any]",
+          "called_by": [
+            "load_fairmind_mcp_tools",
+            "initialize_atlas_mcp_tools",
+            "load_fairmind_mcp_tools",
+            "initialize_deep_planning_mcp_tools",
+            "get_mcp_status"
+          ]
+        },
+        "initialize_atlas_mcp_tools": {
+          "calls": [
+            "get_fallback_tools",
+            "load_fairmind_mcp_tools"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/atlas/langgraph.json": {
+      "language": "json",
+      "parsed": false
+    },
+    "examples/deep_planning/archive/compression_node.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "typing",
+        "deepagents.state",
+        ".compact_integration",
+        ".compact_integration",
+        "..config.config_loader"
+      ],
+      "functions": {
+        "create_compression_node": "(compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, node_name: str = \"compress_context\") -> CompressionNode",
+        "compress_context_node": {
+          "calls": [
+            "process_compression"
+          ],
+          "signature": "async (state: DeepAgentState, compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None) -> Dict[str, Any]"
+        }
+      },
+      "classes": {
+        "CompressionNode": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, node_name: str = \"compress_context\")",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "__call__": {
+              "calls": [
+                "process_compression"
+              ],
+              "signature": "async (self, state: DeepAgentState) -> Dict[str, Any]",
+              "called_by": [
+                "UnifiedWrapper._wrap_tool_object",
+                "MCPToolWrapper._wrap_tool_object"
+              ]
+            },
+            "process_compression": {
+              "signature": "async (self, state: DeepAgentState) -> Dict[str, Any]",
+              "called_by": [
+                "CompressionNode.__call__",
+                "compress_context_node"
+              ]
+            },
+            "get_statistics": "(self) -> Dict[str, Any]",
+            "reset_statistics": {
+              "doc": "Reset compression statistics.",
+              "signature": "(self)"
+            }
+          },
+          "properties": [
+            "compact_integration",
+            "mcp_wrapper",
+            "node_name",
+            "state",
+            "state"
+          ]
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/archive/graph_with_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "typing",
+        "deepagents.state",
+        "langchain_core.tools",
+        "langchain_core.language_models",
+        "langchain_core.messages",
+        "langgraph.graph",
+        "langgraph.prebuilt",
+        "langgraph.checkpoint.memory",
+        "..context.compression_node",
+        "os",
+        "sys",
+        "deepagents.model",
+        "langgraph.checkpoint.postgres",
+        "deepagents.tools",
+        "deepagents.model",
+        "deepagents.model"
+      ],
+      "functions": {
+        "create_compressed_react_agent": "(model: Union[str, LanguageModelLike], tools: Sequence[Union[BaseTool, Callable, dict[str, Any]]], prompt: str, state_schema: Optional[StateSchemaType] = None, checkpointer: Optional[Union[str, Any]] = None, compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None) -> CompressedReactAgent",
+        "create_compression_compatible_agent": "(tools: Sequence[Union[BaseTool, Callable, dict[str, Any]]], instructions: str, model: Optional[Union[str, LanguageModelLike]] = None, subagents: list = None, state_schema: Optional[StateSchemaType] = None, enable_planning_approval: bool = False, checkpointer: Optional[Union[str, Any]] = None, compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, **kwargs) -> CompressedReactAgent"
+      },
+      "classes": {
+        "CompressedReactAgent": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "_build_graph"
+              ],
+              "signature": "(self, model: LanguageModelLike, tools: List[BaseTool], prompt: str, state_schema: Optional[StateSchemaType] = None, checkpointer: Optional[Any] = None, compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "_build_graph": {
+              "signature": "(self) -> Any",
+              "called_by": [
+                "CompressedReactAgent.__init__"
+              ]
+            },
+            "_call_model": {
+              "calls": [
+                "ainvoke"
+              ],
+              "signature": "async (self, state: DeepAgentState) -> Dict[str, Any]"
+            },
+            "_should_continue": "(self, state: DeepAgentState) -> str",
+            "invoke": {
+              "calls": [
+                "invoke"
+              ],
+              "signature": "(self, input_data: Dict[str, Any], config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]",
+              "called_by": [
+                "CompressedReactAgent.invoke"
+              ]
+            },
+            "ainvoke": {
+              "calls": [
+                "ainvoke"
+              ],
+              "signature": "async (self, input_data: Dict[str, Any], config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]",
+              "called_by": [
+                "CompressedReactAgent.ainvoke",
+                "test_hook_registration",
+                "test_optimized_compressor",
+                "CompressedReactAgent._call_model"
+              ]
+            },
+            "stream": {
+              "calls": [
+                "stream"
+              ],
+              "signature": "(self, input_data: Dict[str, Any], config: Optional[Dict[str, Any]] = None)",
+              "called_by": [
+                "CompressedReactAgent.stream"
+              ]
+            },
+            "astream": {
+              "calls": [
+                "astream"
+              ],
+              "signature": "async (self, input_data: Dict[str, Any], config: Optional[Dict[str, Any]] = None)",
+              "called_by": [
+                "CompressedReactAgent.astream"
+              ]
+            },
+            "get_compression_stats": "(self) -> Dict[str, Any]"
+          },
+          "properties": [
+            "model",
+            "tools",
+            "prompt",
+            "state_schema",
+            "checkpointer",
+            "compact_integration",
+            "mcp_wrapper",
+            "state",
+            "state",
+            "input_data",
+            "config",
+            "input_data",
+            "config",
+            "input_data",
+            "config",
+            "input_data",
+            "config"
+          ]
+        }
+      },
+      "type_aliases": {
+        "StateSchemaType": "Type[StateSchema]"
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_create_agent.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "sys",
+        "os",
+        "compatibility_layer",
+        "langgraph.prebuilt",
+        "langchain_core.tools",
+        "deepagents.model",
+        "deepagents.tools",
+        "inspect"
+      ],
+      "functions": {
+        "test_tool": {
+          "decorators": [
+            "tool"
+          ],
+          "doc": "A simple test tool.",
+          "signature": "(input: str) -> str"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_compatibility.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "asyncio",
+        "sys",
+        "os",
+        "src.compatibility.tool_compatibility",
+        "src.compatibility.model_compatibility",
+        "langchain_core.tools"
+      ],
+      "functions": {
+        "test_json_parsing": {
+          "doc": "Test JSON string parsing functionality.",
+          "signature": "()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "test_todo_validation": {
+          "doc": "Test todo structure validation.",
+          "signature": "()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "test_model_registry": {
+          "doc": "Test model compatibility registry.",
+          "signature": "()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "test_write_todos_wrapper": {
+          "doc": "Test the write_todos wrapper with different input formats.",
+          "calls": [
+            "mock_write_todos"
+          ],
+          "signature": "async ()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "test_environment_detection": {
+          "doc": "Test environment variable detection.",
+          "signature": "()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "run_all_tests": {
+          "doc": "Run all compatibility tests.",
+          "calls": [
+            "test_environment_detection",
+            "test_json_parsing",
+            "test_model_registry",
+            "test_todo_validation",
+            "test_write_todos_wrapper"
+          ],
+          "signature": "async ()"
+        },
+        "demo_model_reports": {
+          "doc": "Show detailed compatibility reports for different models.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_logging.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "logging",
+        "os",
+        "sys",
+        "json",
+        "pathlib",
+        "typing",
+        "mcp_wrapper",
+        "context_manager"
+      ],
+      "functions": {
+        "test_logging_setup": {
+          "doc": "Test the logging configuration from deep_planning_agent.py",
+          "signature": "()"
+        },
+        "show_recent_logs": {
+          "doc": "Show recent log entries from debug.log",
+          "signature": "()"
+        },
+        "test_enhanced_logging": {
+          "doc": "Test enhanced logging for context management.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_dynamic_system.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "sys",
+        "os",
+        "typing",
+        "dataclasses",
+        "dynamic_agent_factory",
+        "prompt_config",
+        "prompt_templates"
+      ],
+      "functions": {
+        "create_test_tools": {
+          "doc": "Create mock tools for testing.",
+          "signature": "() -> List[MockTool]",
+          "called_by": [
+            "test_dynamic_factory_creation",
+            "test_phase_specific_agents",
+            "test_context_aware_generation",
+            "test_phase_validation",
+            "test_complete_workflow_simulation"
+          ]
+        },
+        "create_test_states": {
+          "doc": "Create various test states for different scenarios.",
+          "signature": "() -> Dict[str, Dict[str, Any]]",
+          "called_by": [
+            "test_phase_specific_agents",
+            "test_context_aware_generation",
+            "test_phase_validation"
+          ]
+        },
+        "test_dynamic_factory_creation": {
+          "doc": "Test 1: Dynamic Agent Factory Creation",
+          "calls": [
+            "create_test_tools"
+          ],
+          "signature": "() -> bool"
+        },
+        "test_phase_specific_agents": {
+          "doc": "Test 2: Phase-Specific Agent Generation",
+          "calls": [
+            "create_test_states",
+            "create_test_tools"
+          ],
+          "signature": "() -> bool"
+        },
+        "test_context_aware_generation": {
+          "doc": "Test 3: Context-Aware TODO and Prompt Generation",
+          "calls": [
+            "create_test_states",
+            "create_test_tools"
+          ],
+          "signature": "() -> bool"
+        },
+        "test_phase_validation": {
+          "doc": "Test 4: Phase Validation and Transitions",
+          "calls": [
+            "create_test_states",
+            "create_test_tools"
+          ],
+          "signature": "() -> bool"
+        },
+        "test_complete_workflow_simulation": {
+          "doc": "Test 5: Complete Workflow Simulation",
+          "calls": [
+            "create_test_tools"
+          ],
+          "signature": "() -> bool"
+        },
+        "run_all_tests": {
+          "doc": "Run all tests and return overall success.",
+          "signature": "() -> bool"
+        }
+      },
+      "classes": {
+        "MockTool": {
+          "methods": {},
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Mock tool for testing.",
+          "properties": [
+            "name",
+            "description"
+          ]
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_phase4_integrations.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "asyncio",
+        "logging",
+        "sys",
+        "typing",
+        "pathlib",
+        "optimized_llm_compressor",
+        "llm_compression",
+        "yaml",
+        "context_hooks",
+        "llm_compression",
+        "re",
+        "validation_chains"
+      ],
+      "functions": {
+        "test_optimized_compressor": {
+          "doc": "Test the OptimizedLLMCompressor integration.",
+          "calls": [
+            "ainvoke"
+          ],
+          "signature": "async ()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "test_advanced_config_handling": {
+          "doc": "Test that advanced config sections are properly handled.",
+          "signature": "()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "test_hook_registration": {
+          "doc": "Test that all MCP hook types are registered.",
+          "calls": [
+            "ainvoke"
+          ],
+          "signature": "async ()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "test_error_handling": {
+          "doc": "Test that error handling uses logging instead of bare pass.",
+          "signature": "()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "test_validation_chains": {
+          "doc": "Test validation chain completeness.",
+          "signature": "()",
+          "called_by": [
+            "run_all_tests"
+          ]
+        },
+        "run_all_tests": {
+          "doc": "Run all integration tests.",
+          "calls": [
+            "test_advanced_config_handling",
+            "test_error_handling",
+            "test_hook_registration",
+            "test_optimized_compressor",
+            "test_validation_chains"
+          ],
+          "signature": "async ()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_context_manager.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "json",
+        "pytest",
+        "time",
+        "yaml",
+        "typing",
+        "unittest.mock",
+        "context_manager",
+        "mcp_cleaners",
+        "mcp_wrapper",
+        "compact_integration"
+      ],
+      "functions": {},
+      "classes": {
+        "TestProjectListCleaner": {
+          "methods": {
+            "setup_method": "(self)",
+            "test_can_clean_project_list": {
+              "doc": "Testa identificazione di liste progetti.",
+              "signature": "(self)"
+            },
+            "test_clean_project_list_basic": {
+              "doc": "Testa pulizia base di lista progetti.",
+              "signature": "(self)"
+            },
+            "test_clean_with_context_targeting": {
+              "doc": "Testa targeting di progetto specifico via contesto.",
+              "signature": "(self)"
+            },
+            "test_estimate_reduction": {
+              "doc": "Testa stima di riduzione.",
+              "signature": "(self)"
+            }
+          },
+          "doc": "Test per ProjectListCleaner."
+        },
+        "TestCodeSnippetCleaner": {
+          "methods": {
+            "setup_method": "(self)",
+            "test_can_clean_code_snippets": {
+              "doc": "Testa identificazione di code snippets.",
+              "signature": "(self)"
+            },
+            "test_clean_code_snippets": {
+              "doc": "Testa pulizia di code snippets.",
+              "signature": "(self)"
+            },
+            "test_clean_with_file_paths": {
+              "doc": "Testa pulizia mantenendo file paths quando richiesto.",
+              "signature": "(self)"
+            }
+          },
+          "doc": "Test per CodeSnippetCleaner."
+        },
+        "TestDocumentCleaner": {
+          "methods": {
+            "setup_method": "(self)",
+            "test_can_clean_documents": {
+              "doc": "Testa identificazione di documenti.",
+              "signature": "(self)"
+            },
+            "test_clean_document": {
+              "doc": "Testa pulizia di documento.",
+              "signature": "(self)"
+            }
+          },
+          "doc": "Test per DocumentCleaner."
+        },
+        "TestUserStoryListCleaner": {
+          "methods": {
+            "setup_method": "(self)",
+            "test_clean_user_stories": {
+              "doc": "Testa pulizia di user stories.",
+              "signature": "(self)"
+            }
+          },
+          "doc": "Test per UserStoryListCleaner."
+        },
+        "TestContextManager": {
+          "methods": {
+            "setup_method": "(self)",
+            "test_analyze_context_basic": {
+              "doc": "Testa analisi base del contesto.",
+              "signature": "(self)"
+            },
+            "test_clean_mcp_tool_result": {
+              "doc": "Testa pulizia di risultati MCP tools.",
+              "signature": "(self)"
+            },
+            "test_process_context_cleaning": {
+              "doc": "Testa processo completo di pulizia del contesto.",
+              "signature": "(self)"
+            },
+            "test_should_trigger_compaction": {
+              "doc": "Testa logica di trigger per compattazione.",
+              "signature": "(self)"
+            }
+          },
+          "doc": "Test per ContextManager integration."
+        },
+        "TestMCPWrapper": {
+          "methods": {
+            "setup_method": "(self)",
+            "test_wrap_callable_tool": {
+              "doc": "Testa wrapping di tool callable.",
+              "calls": [
+                "mock_list_projects"
+              ],
+              "signature": "(self)"
+            },
+            "mock_list_projects": {
+              "signature": "()",
+              "called_by": [
+                "TestMCPWrapper.test_wrap_tool_list",
+                "TestMCPWrapper.test_wrap_callable_tool"
+              ]
+            },
+            "test_wrap_tool_list": {
+              "doc": "Testa wrapping di lista di tools.",
+              "calls": [
+                "mock_find_code",
+                "mock_list_projects",
+                "mock_non_mcp_tool"
+              ],
+              "signature": "(self)"
+            },
+            "mock_find_code": {
+              "signature": "()",
+              "called_by": [
+                "TestMCPWrapper.test_wrap_tool_list"
+              ]
+            },
+            "mock_non_mcp_tool": {
+              "signature": "()",
+              "called_by": [
+                "TestMCPWrapper.test_wrap_tool_list"
+              ]
+            },
+            "test_error_handling": {
+              "doc": "Testa gestione errori graceful.",
+              "calls": [
+                "failing_tool"
+              ],
+              "signature": "(self)",
+              "called_by": [
+                "run_all_tests"
+              ]
+            },
+            "failing_tool": {
+              "signature": "()",
+              "called_by": [
+                "TestMCPWrapper.test_error_handling"
+              ]
+            }
+          },
+          "doc": "Test per MCPWrapper integration."
+        },
+        "TestCompactIntegration": {
+          "methods": {
+            "setup_method": "(self)",
+            "test_generate_summary": {
+              "doc": "Testa generazione di summary completo.",
+              "signature": "(self)"
+            },
+            "test_should_trigger_compaction": {
+              "doc": "Testa logica di trigger per compattazione.",
+              "signature": "(self)"
+            },
+            "test_perform_automatic_compaction": {
+              "doc": "Testa compattazione automatica completa.",
+              "signature": "(self)"
+            }
+          },
+          "doc": "Test per CompactIntegration."
+        },
+        "TestPerformance": {
+          "methods": {
+            "test_cleaning_reduction_targets": {
+              "doc": "Verifica che le riduzioni raggiungano i target attesi.",
+              "signature": "(self)"
+            },
+            "test_context_manager_performance": {
+              "doc": "Testa performance del context manager.",
+              "signature": "(self)"
+            }
+          },
+          "doc": "Test di performance e riduzioni."
+        },
+        "TestEndToEnd": {
+          "methods": {
+            "test_complete_workflow": {
+              "doc": "Testa workflow completo con configurazione da YAML.",
+              "signature": "(self)"
+            }
+          },
+          "doc": "Test end-to-end completi."
+        },
+        "TestCompatibility": {
+          "methods": {
+            "test_real_mcp_data_formats": {
+              "doc": "Testa con formati dati reali da MCP tools.",
+              "signature": "(self)"
+            },
+            "test_edge_cases": {
+              "doc": "Testa casi limite.",
+              "signature": "(self)"
+            }
+          },
+          "doc": "Test di compatibilit\u00e0 con formati reali."
+        }
+      },
+      "constants": {
+        "SAMPLE_PROJECT_LIST": "collection",
+        "SAMPLE_CODE_SNIPPETS": "collection",
+        "SAMPLE_DOCUMENT_CONTENT": "collection",
+        "SAMPLE_USER_STORIES": "collection",
+        "SAMPLE_REPOSITORIES": "collection"
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_config_integration.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "sys",
+        "os",
+        "typing",
+        "config_loader",
+        "context_manager",
+        "enhanced_compact_integration",
+        "context_manager",
+        "mcp_cleaners",
+        "llm_compression",
+        "config_loader"
+      ],
+      "functions": {
+        "test_config_loader": {
+          "doc": "Test del config loader.",
+          "signature": "()"
+        },
+        "test_context_manager": {
+          "doc": "Test del context manager con configurazione.",
+          "signature": "()"
+        },
+        "test_enhanced_compact_integration": {
+          "doc": "Test di enhanced compact integration.",
+          "signature": "()"
+        },
+        "test_mcp_cleaners": {
+          "doc": "Test delle MCP cleaning strategies.",
+          "signature": "()"
+        },
+        "test_llm_compression": {
+          "doc": "Test di LLM compression.",
+          "signature": "()"
+        },
+        "main": {
+          "doc": "Esegue tutti i test di integrazione.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_optimization.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "sys",
+        "os",
+        "typing",
+        "optimized_prompts",
+        "prompt_templates",
+        "prompt_config"
+      ],
+      "functions": {
+        "test_optimization_stats": {
+          "doc": "Test that optimization statistics are loaded correctly.",
+          "signature": "()"
+        },
+        "test_template_variable_injection": {
+          "doc": "Test that template variables are properly injected.",
+          "signature": "()"
+        },
+        "test_todo_generation": {
+          "doc": "Test dynamic todo generation for different phases.",
+          "signature": "()"
+        },
+        "test_tool_context_generation": {
+          "doc": "Test tool context generation and filtering.",
+          "signature": "()"
+        },
+        "test_phase_configurations": {
+          "doc": "Test phase configuration system.",
+          "signature": "()"
+        },
+        "test_agent_configs": {
+          "doc": "Test agent configuration loading.",
+          "signature": "()"
+        },
+        "test_context_report_generation": {
+          "doc": "Test context report generation for debugging.",
+          "signature": "()"
+        },
+        "run_all_tests": {
+          "doc": "Run all optimization tests.",
+          "signature": "()"
+        }
+      },
+      "classes": {
+        "MockTool": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, name: str, description: str = \"\")",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            }
+          },
+          "doc": "Mock tool for testing purposes."
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_mcp_state_cleaning.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "json",
+        "typing",
+        "mcp_wrapper"
+      ],
+      "functions": {
+        "create_mock_raw_mcp_response": {
+          "doc": "Crea una risposta MCP raw con tutti i metadati rumorosi.",
+          "signature": "() -> str",
+          "called_by": [
+            "test_mcp_state_cleaning"
+          ]
+        },
+        "test_mcp_state_cleaning": {
+          "doc": "Test principale per verificare il cleaning dello stato MCP.",
+          "calls": [
+            "create_mock_raw_mcp_response"
+          ],
+          "signature": "()"
+        },
+        "test_integration_gap_resolution": {
+          "doc": "Test specifico per verificare che il gap di integrazione sia risolto.",
+          "signature": "()"
+        }
+      },
+      "classes": {
+        "MockToolMessage": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, content: str, name: str = \"General_list_projects\", tool_call_id: str = None)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            }
+          }
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_hook_integration.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "asyncio",
+        "os",
+        "typing",
+        "agent_core",
+        "agent_core",
+        "config_loader",
+        "enhanced_compact_integration",
+        "context_manager",
+        "llm_compression",
+        "deepagents.model",
+        "traceback"
+      ],
+      "functions": {
+        "test_llm_compression_import": {
+          "doc": "Testa che tutti i moduli si importino correttamente.",
+          "signature": "()",
+          "called_by": [
+            "test_hook_integration"
+          ]
+        },
+        "test_hook_integration": {
+          "doc": "Testa la creazione di un agent con hook integrati.",
+          "calls": [
+            "test_llm_compression_import"
+          ],
+          "signature": "async ()"
+        },
+        "test_agent_usage_example": {
+          "doc": "Esempio di utilizzo dell'agent con hook integrati.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/tests/test_all_tools.py": {
+      "language": "python",
+      "parsed": false,
+      "purpose": "Test file"
+    },
+    "examples/deep_planning/examples/integration_example.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "asyncio",
+        "os",
+        "typing",
+        "agent_core",
+        "mcp_integration",
+        "llm_compression",
+        "context_hooks",
+        "enhanced_compact_integration",
+        "deepagents.model",
+        "deepagents.state"
+      ],
+      "functions": {
+        "create_enhanced_deep_planning_agent": {
+          "signature": "async (enable_llm_compression: bool = True, compression_config: Optional[CompressionConfig] = None, model_name: Optional[str] = None) -> tuple",
+          "called_by": [
+            "test_compression_integration",
+            "demonstrate_usage"
+          ]
+        },
+        "test_compression_integration": {
+          "doc": "Test end-to-end dell'integrazione compressione LLM.",
+          "calls": [
+            "create_enhanced_deep_planning_agent"
+          ],
+          "signature": "async ()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "demonstrate_usage": {
+          "doc": "Dimostra l'utilizzo del sistema enhanced.",
+          "calls": [
+            "create_enhanced_deep_planning_agent"
+          ],
+          "signature": "async ()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "main": {
+          "doc": "Funzione principale per test e dimostrazione.",
+          "calls": [
+            "demonstrate_usage",
+            "test_compression_integration"
+          ],
+          "signature": "async ()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/scripts/watch_my_logs.sh": {
+      "language": "shell",
+      "parsed": false
+    },
+    "examples/deep_planning/scripts/monitor_logs.sh": {
+      "language": "shell",
+      "parsed": true,
+      "functions": {
+        "colorize_line": {
+          "doc": "Function to colorize output",
+          "signature": "()"
+        }
+      },
+      "variables": [
+        "LOG_FILE",
+        "COLORS",
+        "RED",
+        "GREEN",
+        "YELLOW",
+        "BLUE",
+        "PURPLE",
+        "CYAN",
+        "WHITE",
+        "NC"
+      ],
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/compatibility/tool_compatibility.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "json",
+        "logging",
+        "typing",
+        "functools",
+        "langchain_core.tools",
+        "langchain_core.tools.base"
+      ],
+      "functions": {
+        "safe_json_parse": {
+          "signature": "(value: Any) -> Any",
+          "called_by": [
+            "create_write_todos_wrapper"
+          ]
+        },
+        "validate_todo_structure": {
+          "signature": "(todos: List[Dict[str, Any]]) -> List[Dict[str, Any]]",
+          "called_by": [
+            "create_write_todos_wrapper"
+          ]
+        },
+        "create_write_todos_wrapper": {
+          "calls": [
+            "safe_json_parse",
+            "validate_todo_structure",
+            "write_todos_compatible"
+          ],
+          "signature": "(original_write_todos_tool: BaseTool) -> BaseTool",
+          "called_by": [
+            "apply_tool_compatibility_fixes"
+          ]
+        },
+        "apply_tool_compatibility_fixes": {
+          "calls": [
+            "create_write_todos_wrapper"
+          ],
+          "signature": "(tools: List[Any], model_name: str = None) -> List[Any]"
+        },
+        "setup_compatibility_logging": "(level: str = \"INFO\") -> None"
+      },
+      "classes": {
+        "ToolCompatibilityError": {
+          "methods": {},
+          "inherits": [
+            "Exception"
+          ],
+          "type": "exception",
+          "doc": "Raised when tool compatibility fixes fail."
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/compatibility/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/compatibility/compatibility_layer.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "sys",
+        "builtins",
+        "typing",
+        "typing",
+        "typing_extensions",
+        "pydantic",
+        "pydantic.fields",
+        "pydantic.dataclasses",
+        "pydantic._internal._typing_extra",
+        "pydantic.json_schema",
+        "pydantic_core",
+        "typing",
+        "importlib",
+        "inspect",
+        "typing",
+        "langchain_core.tools"
+      ],
+      "functions": {
+        "setup_type_patches": {
+          "calls": [
+            "apply_module_patches"
+          ],
+          "signature": "()",
+          "called_by": [
+            "ensure_compatibility"
+          ]
+        },
+        "apply_module_patches": {
+          "signature": "(module_patches: Dict[str, List[str]])",
+          "called_by": [
+            "setup_type_patches"
+          ]
+        },
+        "get_compatibility_info": {
+          "signature": "() -> Dict[str, Any]",
+          "called_by": [
+            "print_compatibility_report"
+          ]
+        },
+        "print_compatibility_report": {
+          "calls": [
+            "get_compatibility_info"
+          ],
+          "signature": "()"
+        },
+        "fix_tool_signatures": "(tools)",
+        "ensure_compatibility": {
+          "calls": [
+            "setup_type_patches"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/compatibility/unified_wrapper.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "typing",
+        "functools",
+        "dataclasses",
+        "..context.context_manager",
+        "..integrations.mcp.mcp_cleaners"
+      ],
+      "functions": {
+        "create_unified_wrapper": {
+          "signature": "(context_manager: ContextManager, llm_compressor: Optional[Any] = None, config: Optional[Dict[str, Any]] = None) -> UnifiedWrapper",
+          "called_by": [
+            "wrap_tools_unified"
+          ]
+        },
+        "wrap_tools_unified": {
+          "calls": [
+            "create_unified_wrapper",
+            "wrap_tools"
+          ],
+          "signature": "(tools: List[Any], context_manager: ContextManager, llm_compressor: Optional[Any] = None, config: Optional[Dict[str, Any]] = None) -> tuple[List[Any], UnifiedWrapper]"
+        }
+      },
+      "classes": {
+        "UnifiedConfig": {
+          "methods": {},
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Configuration for unified wrapper.",
+          "properties": [
+            "enable_mcp_cleaning",
+            "enable_compression_hooks",
+            "compression_threshold",
+            "mcp_noise_threshold",
+            "post_tool_threshold"
+          ]
+        },
+        "UnifiedWrapper": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, original_tool, wrapper)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "wrap_tool": {
+              "calls": [
+                "_extract_tool_name",
+                "_wrap_callable",
+                "_wrap_tool_object"
+              ],
+              "signature": "(self, tool: Any, tool_name: Optional[str] = None) -> Any",
+              "called_by": [
+                "UnifiedWrapper.wrap_tools",
+                "MCPToolWrapper.wrap_tool_list"
+              ]
+            },
+            "wrap_tools": {
+              "calls": [
+                "wrap_tool"
+              ],
+              "signature": "(self, tools: List[Any]) -> List[Any]",
+              "called_by": [
+                "wrap_tools_unified"
+              ]
+            },
+            "_wrap_callable": {
+              "doc": "Wrap a callable tool.",
+              "calls": [
+                "_clean_mcp_result",
+                "_is_mcp_tool",
+                "_should_compress",
+                "_trigger_compression",
+                "wrapped_func"
+              ],
+              "signature": "(self, func: Callable, tool_name: str) -> Callable",
+              "called_by": [
+                "UnifiedWrapper._wrap_tool_object",
+                "UnifiedWrapper.wrap_tool",
+                "UnifiedWrapper.run"
+              ]
+            },
+            "wrapped_func": {
+              "decorators": [
+                "wraps"
+              ],
+              "calls": [
+                "_clean_mcp_result",
+                "_is_mcp_tool",
+                "_should_compress",
+                "_trigger_compression"
+              ],
+              "signature": "(*args, **kwargs)",
+              "called_by": [
+                "UnifiedWrapper._wrap_callable"
+              ]
+            },
+            "_wrap_tool_object": {
+              "doc": "Wrap a tool object with run or __call__ method.",
+              "calls": [
+                "__call__",
+                "__init__",
+                "_wrap_callable",
+                "run"
+              ],
+              "signature": "(self, tool: Any, tool_name: str) -> Any",
+              "called_by": [
+                "MCPToolWrapper.wrap_tool",
+                "UnifiedWrapper.wrap_tool"
+              ]
+            },
+            "run": {
+              "calls": [
+                "_wrap_callable"
+              ],
+              "signature": "(self, *args, **kwargs)",
+              "called_by": [
+                "UnifiedWrapper._wrap_tool_object",
+                "MCPToolWrapper._wrap_tool_object",
+                "MCPToolWrapper.__call__",
+                "UnifiedWrapper.__call__"
+              ]
+            },
+            "__call__": {
+              "calls": [
+                "run"
+              ],
+              "signature": "(self, *args, **kwargs)",
+              "called_by": [
+                "UnifiedWrapper._wrap_tool_object",
+                "MCPToolWrapper._wrap_tool_object"
+              ]
+            },
+            "_extract_tool_name": {
+              "doc": "Extract tool name from various tool types.",
+              "signature": "(self, tool: Any) -> str",
+              "called_by": [
+                "MCPToolWrapper.wrap_tool",
+                "ContextManager.process_context_cleaning",
+                "UnifiedWrapper.wrap_tool",
+                "MCPToolWrapper.wrap_tool_list"
+              ]
+            },
+            "_is_mcp_tool": {
+              "doc": "Check if tool is an MCP tool.",
+              "signature": "(self, tool_name: str) -> bool",
+              "called_by": [
+                "UnifiedWrapper._wrap_callable",
+                "UnifiedWrapper.wrapped_func",
+                "MCPToolWrapper._is_mcp_tool_message",
+                "MCPToolWrapper.wrap_tool_list"
+              ]
+            },
+            "_clean_mcp_result": {
+              "doc": "Apply MCP cleaning to tool result.",
+              "signature": "(self, result: Any, tool_name: str) -> Any",
+              "called_by": [
+                "UnifiedWrapper._wrap_callable",
+                "UnifiedWrapper.wrapped_func"
+              ]
+            },
+            "_should_compress": {
+              "doc": "Check if compression should be triggered.",
+              "signature": "(self) -> bool",
+              "called_by": [
+                "UnifiedWrapper._wrap_callable",
+                "UnifiedWrapper.wrapped_func"
+              ]
+            },
+            "_trigger_compression": {
+              "doc": "Trigger LLM compression.",
+              "signature": "(self)",
+              "called_by": [
+                "UnifiedWrapper._wrap_callable",
+                "UnifiedWrapper.wrapped_func"
+              ]
+            },
+            "get_statistics": {
+              "doc": "Get wrapper statistics.",
+              "signature": "(self) -> Dict[str, Any]"
+            }
+          },
+          "properties": [
+            "context_manager",
+            "llm_compressor",
+            "config",
+            "tool",
+            "tool_name",
+            "tools"
+          ]
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/compatibility/model_compatibility.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Data model",
+      "imports": [
+        "os",
+        "re",
+        "logging",
+        "typing",
+        "dataclasses",
+        "enum"
+      ],
+      "functions": {
+        "detect_model_from_environment": "() -> Optional[str]",
+        "should_apply_compatibility_fixes": {
+          "calls": [
+            "get_profile_for_model"
+          ],
+          "signature": "(model_name: str, registry: ModelCompatibilityRegistry = None) -> bool"
+        },
+        "get_required_fixes": {
+          "calls": [
+            "get_profile_for_model"
+          ],
+          "signature": "(model_name: str, registry: ModelCompatibilityRegistry = None) -> Set[str]"
+        },
+        "print_model_compatibility_report": {
+          "calls": [
+            "get_profile_for_model"
+          ],
+          "signature": "(model_name: str, registry: ModelCompatibilityRegistry = None)"
+        }
+      },
+      "classes": {
+        "ModelCompatibilityProfile": {
+          "methods": {
+            "matches_model": {
+              "doc": "Check if this profile matches the given model name.",
+              "signature": "(self, model_name: str) -> bool",
+              "called_by": [
+                "ModelCompatibilityRegistry.get_profile_for_model"
+              ]
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Configuration profile for a specific model.",
+          "properties": [
+            "name",
+            "patterns",
+            "compatibility_level",
+            "known_issues",
+            "fixes_needed",
+            "notes"
+          ]
+        },
+        "ModelCompatibilityRegistry": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "_setup_default_profiles"
+              ],
+              "signature": "(self)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "_setup_default_profiles": {
+              "doc": "Setup default compatibility profiles for known models.",
+              "signature": "(self)",
+              "called_by": [
+                "ModelCompatibilityRegistry.__init__"
+              ]
+            },
+            "get_profile_for_model": {
+              "calls": [
+                "matches_model"
+              ],
+              "signature": "(self, model_name: str) -> Optional[ModelCompatibilityProfile]",
+              "called_by": [
+                "get_required_fixes",
+                "print_model_compatibility_report",
+                "should_apply_compatibility_fixes"
+              ]
+            },
+            "register_model": {
+              "doc": "Register a new model compatibility profile.",
+              "signature": "(self, profile: ModelCompatibilityProfile)"
+            },
+            "list_known_models": {
+              "doc": "List all known model names.",
+              "signature": "(self) -> List[str]"
+            }
+          },
+          "doc": "Registry of model compatibility profiles.",
+          "properties": [
+            "model_name"
+          ]
+        }
+      },
+      "call_graph": {},
+      "enums": {
+        "CompatibilityLevel": {
+          "values": [
+            "NONE",
+            "MINIMAL",
+            "MODERATE",
+            "EXTENSIVE"
+          ],
+          "doc": "Levels of compatibility fixes needed."
+        }
+      }
+    },
+    "examples/deep_planning/src/context/context_manager.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "create_context_manager": "(config: Dict[str, Any] = None) -> ContextManager"
+      },
+      "classes": {
+        "CleaningResult": {
+          "methods": {},
+          "doc": "Stub class for backward compatibility with existing modules.",
+          "properties": [
+            "original_size",
+            "cleaned_size",
+            "strategy_used",
+            "status"
+          ]
+        },
+        "ContextMetrics": {
+          "methods": {
+            "should_trigger_compact": {
+              "doc": "Check if context should trigger compression based on main threshold.",
+              "signature": "(self) -> bool"
+            },
+            "should_trigger_post_tool": {
+              "doc": "Check if context should trigger compression after tool calls.",
+              "signature": "(self) -> bool"
+            },
+            "is_near_limit": {
+              "doc": "Check if context is approaching the absolute limit.",
+              "signature": "(self) -> bool"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Simplified context metrics focused on token usage.",
+          "properties": [
+            "tokens_used",
+            "max_context_window",
+            "utilization_percentage",
+            "trigger_threshold",
+            "post_tool_threshold"
+          ]
+        },
+        "ContextManager": {
+          "methods": {
+            "__init__": {
+              "doc": "Initialize with simplified configuration.",
+              "calls": [
+                "_load_config"
+              ],
+              "signature": "(self, config: Dict[str, Any] = None)"
+            },
+            "_load_config": {
+              "doc": "Load simplified configuration from YAML file.",
+              "signature": "(self) -> Dict[str, Any]"
+            },
+            "count_tokens": "(self, messages: List[Dict[str, Any]], model_name: str = None, tools: List = None) -> int",
+            "analyze_context": {
+              "calls": [
+                "count_tokens",
+                "should_trigger_compact"
+              ],
+              "signature": "(self, messages: List[Dict[str, Any]], model_name: str = None, tools: List = None) -> ContextMetrics"
+            },
+            "should_trigger_compaction": {
+              "calls": [
+                "analyze_context",
+                "should_trigger_compact",
+                "should_trigger_post_tool"
+              ],
+              "signature": "(self, messages: List[Dict[str, Any]], trigger_type: str = \"standard\", model_name: str = None, tools: List = None) -> Tuple[bool, CompactTrigger, ContextMetrics]"
+            },
+            "get_context_summary": {
+              "doc": "Get summary of current context manager state.",
+              "signature": "(self) -> Dict[str, Any]"
+            }
+          },
+          "properties": [
+            "messages",
+            "model_name",
+            "tools",
+            "int",
+            "messages",
+            "model_name",
+            "tools",
+            "ContextMetrics",
+            "messages",
+            "trigger_type",
+            "model_name",
+            "tools"
+          ]
+        }
+      },
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T15:26:13.402093"
+    },
+    "examples/deep_planning/src/context/context_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "check_and_compact_if_needed": "(messages: List[Dict[str, Any]], context: Dict[str, Any] = None, compact_integration: Optional[Any] = None) -> Tuple[List[Dict[str, Any]], Optional[str]]",
+        "get_compaction_metrics": "(compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None) -> Optional[Dict[str, Any]]",
+        "wrap_tools_with_compression_hooks": {
+          "calls": [
+            "create_wrapped_tool_func",
+            "new_invoke",
+            "sync_wrapper",
+            "wrapped_tool_with_state"
+          ],
+          "signature": "(tools: List[Any], enhanced_compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None) -> List[Any]"
+        },
+        "wrap_agent_with_compression_hooks": {
+          "calls": [
+            "wrapped_ainvoke",
+            "wrapped_astream",
+            "wrapped_invoke",
+            "wrapped_stream"
+          ],
+          "signature": "(agent: Any, hook_manager: Optional[Any] = None, enhanced_compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None) -> Any"
+        },
+        "get_compression_status": "(compact_integration: Optional[Any] = None, enhanced_compact_integration: Optional[Any] = None) -> Dict[str, Any]",
+        "print_compression_status": {
+          "calls": [
+            "get_compression_status"
+          ],
+          "signature": "(compact_integration: Optional[Any] = None, enhanced_compact_integration: Optional[Any] = None)"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T14:49:13.183142"
+    },
+    "examples/deep_planning/src/context/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/context/llm_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "_load_compression_config": {
+          "doc": "Carica configurazione compressione da YAML.",
+          "signature": "() -> Dict[str, Any]"
+        }
+      },
+      "classes": {
+        "CompressionConfig": {
+          "methods": {
+            "from_yaml": {
+              "decorators": [
+                "classmethod"
+              ],
+              "doc": "Crea configurazione caricando da YAML.",
+              "calls": [
+                "_load_compression_config"
+              ],
+              "signature": "(cls) -> 'CompressionConfig'"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Configurazione per compressione LLM.",
+          "properties": [
+            "strategy",
+            "target_reduction_percentage",
+            "max_output_tokens",
+            "preserve_last_n_messages",
+            "preserve_patterns",
+            "compression_timeout",
+            "enable_fallback"
+          ]
+        },
+        "LLMCompressionResult": {
+          "methods": {},
+          "doc": "Risultato di compressione LLM.",
+          "properties": [
+            "original_messages",
+            "compressed_content",
+            "compression_type",
+            "actual_reduction_percentage",
+            "tokens_before",
+            "tokens_after",
+            "processing_time",
+            "success",
+            "fallback_used",
+            "preserved_elements",
+            "compression_metadata",
+            "timestamp"
+          ]
+        },
+        "LLMCompressor": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "_load_compression_prompts"
+              ],
+              "signature": "(self, model: LanguageModelLike, config: CompressionConfig = None, context_manager: ContextManager = None)"
+            },
+            "_load_compression_prompts": {
+              "doc": "Carica i prompts di compressione ottimizzati.",
+              "signature": "(self) -> Dict[CompressionType, str]"
+            }
+          }
+        }
+      },
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T14:50:01.789007"
+    },
+    "examples/deep_planning/src/context/compact_integration.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {},
+      "classes": {
+        "CompactSummary": {
+          "methods": {
+            "total_reduction_percentage": {
+              "decorators": [
+                "property"
+              ],
+              "doc": "Calcola la riduzione percentuale totale.",
+              "signature": "(self) -> float"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Risultato di una compattazione del contesto.",
+          "properties": [
+            "session_id",
+            "trigger_type",
+            "summary_content",
+            "before_metrics",
+            "after_metrics",
+            "preserved_elements",
+            "technical_concepts",
+            "pending_tasks",
+            "current_work",
+            "next_steps",
+            "timestamp"
+          ]
+        },
+        "CompactIntegration": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "_initialize_llm_compressor",
+                "_load_llm_compression_config",
+                "_load_summary_template"
+              ],
+              "signature": "(self, context_manager: ContextManager, model_name: str = None)"
+            },
+            "_load_summary_template": {
+              "doc": "Carica il template per generazione summary compatibile con Claude Code.",
+              "signature": "(self) -> str"
+            }
+          }
+        }
+      },
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T15:58:42.847666"
+    },
+    "examples/deep_planning/src/context/compression_hooks.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "create_compression_hook": {
+          "calls": [
+            "compression_hook"
+          ],
+          "signature": "(compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, model_name: Optional[str] = None) -> Callable[[DeepAgentState], DeepAgentState]"
+        },
+        "create_passthrough_hook": {
+          "calls": [
+            "passthrough_hook"
+          ],
+          "signature": "() -> Callable[[DeepAgentState], DeepAgentState]"
+        },
+        "get_hook_statistics": "(hook_function: Callable) -> Dict[str, Any]"
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T16:03:22.056230"
+    },
+    "examples/deep_planning/src/context/context_hooks.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "load_context_config": {
+          "calls": [
+            "load_context_config"
+          ],
+          "signature": "(config_path: Optional[str] = None) -> Dict[str, Any]"
+        },
+        "with_context_hooks": {
+          "calls": [
+            "decorator",
+            "execute_hooks",
+            "my_agent_function",
+            "with_context_hooks",
+            "wrapper"
+          ],
+          "signature": "(hook_manager: ContextHookManager)"
+        },
+        "create_hooked_deep_agent": {
+          "calls": [
+            "with_context_hooks"
+          ],
+          "signature": "async (tools, instructions, model=None, hook_manager=None, config_path=None, **kwargs)"
+        }
+      },
+      "classes": {
+        "HookContext": {
+          "methods": {},
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Contesto passato agli hook durante l'esecuzione.",
+          "properties": [
+            "hook_type",
+            "state",
+            "metadata",
+            "timestamp",
+            "execution_path"
+          ]
+        },
+        "Hook": {
+          "methods": {
+            "__init__": "(self, name: str, priority: HookPriority = HookPriority.NORMAL)",
+            "execute": {
+              "decorators": [
+                "abstractmethod"
+              ],
+              "doc": "Esegue la logica dell'hook.",
+              "signature": "async (self, context: HookContext) -> Optional[Dict[str, Any]]"
+            },
+            "can_execute": {
+              "doc": "Determina se l'hook pu\u00f2 essere eseguito in questo contesto.",
+              "signature": "(self, context: HookContext) -> bool"
+            }
+          },
+          "inherits": [
+            "ABC"
+          ],
+          "abstract": true,
+          "doc": "Interfaccia base per hook."
+        },
+        "ValidationHook": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "__init__",
+                "load_context_config"
+              ],
+              "signature": "(self, compressor: LLMCompressor, priority: HookPriority = HookPriority.HIGH, config_path: Optional[str] = None)"
+            },
+            "execute": {
+              "doc": "Perform lightweight validation without compression.",
+              "calls": [
+                "_extract_messages_from_state"
+              ],
+              "signature": "async (self, context: HookContext) -> Optional[Dict[str, Any]]"
+            },
+            "_extract_messages_from_state": {
+              "doc": "Extract messages from DeepAgentState.",
+              "signature": "(self, state: DeepAgentState) -> List[Dict[str, Any]]"
+            }
+          },
+          "inherits": [
+            "Hook"
+          ],
+          "doc": "Hook for lightweight validation and preparation before operations."
+        },
+        "CompressionHook": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "__init__",
+                "load_context_config"
+              ],
+              "signature": "(self, compressor: LLMCompressor, trigger_config: Dict[str, Any] = None, priority: HookPriority = HookPriority.HIGH, config_path: Optional[str] = None)"
+            },
+            "execute": {
+              "doc": "Esegue compressione se necessaria.",
+              "calls": [
+                "_apply_compression_to_state",
+                "_extract_messages_from_state",
+                "_should_trigger_compression"
+              ],
+              "signature": "async (self, context: HookContext) -> Optional[Dict[str, Any]]"
+            },
+            "_should_trigger_compression": {
+              "doc": "Determina se deve essere attivata la compressione.",
+              "calls": [
+                "_extract_messages_from_state"
+              ],
+              "signature": "async (self, state: DeepAgentState) -> tuple[bool, CompressionType, ContextMetrics]"
+            },
+            "_extract_messages_from_state": {
+              "doc": "Estrae messaggi dal DeepAgentState.",
+              "signature": "(self, state: DeepAgentState) -> List[Dict[str, Any]]"
+            },
+            "_apply_compression_to_state": {
+              "doc": "Applica il risultato della compressione al state.",
+              "signature": "(self, state: DeepAgentState, result: LLMCompressionResult) -> Dict[str, Any]"
+            }
+          },
+          "inherits": [
+            "Hook"
+          ],
+          "doc": "Hook specializzato per compressione LLM del contesto."
+        },
+        "ContextHookManager": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "register_hook"
+              ],
+              "signature": "(self, compressor: LLMCompressor, config: Dict[str, Any] = None, config_path: Optional[str] = None)"
+            },
+            "register_hook": {
+              "doc": "Registra un hook per un tipo specifico.",
+              "signature": "(self, hook_type: HookType, hook: Hook) -> None"
+            },
+            "unregister_hook": {
+              "doc": "Rimuove un hook.",
+              "signature": "(self, hook_type: HookType, hook_name: str) -> bool"
+            },
+            "execute_hooks": {
+              "doc": "Esegue tutti gli hook per il tipo specificato.",
+              "calls": [
+                "can_execute",
+                "execute"
+              ],
+              "signature": "async (self, hook_type: HookType, state: DeepAgentState, metadata: Dict[str, Any] = None) -> Optional[Dict[str, Any]]"
+            },
+            "get_hook_stats": {
+              "doc": "Restituisce statistiche degli hook.",
+              "signature": "(self) -> Dict[str, Any]"
+            }
+          }
+        },
+        "HookMonitor": {
+          "methods": {
+            "__init__": "(self, hook_manager: ContextHookManager)",
+            "log_execution": {
+              "doc": "Registra esecuzione hook per analisi.",
+              "signature": "(self, hook_type: HookType, result: Dict[str, Any]) -> None"
+            },
+            "get_performance_report": {
+              "doc": "Genera report delle performance hook.",
+              "calls": [
+                "get_hook_stats"
+              ],
+              "signature": "(self) -> Dict[str, Any]"
+            }
+          },
+          "doc": "Monitor per analisi performance e debugging hook."
+        }
+      },
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T14:49:50.727328"
+    },
+    "examples/deep_planning/src/core/phase_orchestration.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "typing",
+        "..config.prompt_config",
+        ".agent_factory"
+      ],
+      "functions": {
+        "format_todos_for_prompt": "(todos: List[Dict[str, Any]]) -> str",
+        "format_outputs_list": "(outputs: List[str]) -> str",
+        "format_validation_rules": "(rules) -> str",
+        "format_interaction_points": "(interaction_points: List[str]) -> str",
+        "format_validation_result": "(validation_result: Dict[str, Any]) -> str",
+        "validate_and_transition_phase": {
+          "signature": "(current_phase: str, state: Dict[str, Any], tools: List[Any]) -> Tuple[bool, str, List[str]]",
+          "called_by": [
+            "auto_advance_phase_if_ready"
+          ]
+        },
+        "get_phase_progress_report": "(state: Dict[str, Any], tools: List[Any]) -> Dict[str, Any]",
+        "auto_advance_phase_if_ready": {
+          "calls": [
+            "validate_and_transition_phase"
+          ],
+          "signature": "(state: Dict[str, Any], tools: List[Any]) -> Tuple[bool, Dict[str, Any]]"
+        },
+        "get_phase_status": {
+          "signature": "(state: Dict[str, Any]) -> Dict[str, Any]",
+          "called_by": [
+            "print_phase_status"
+          ]
+        },
+        "print_phase_status": {
+          "calls": [
+            "get_phase_status"
+          ],
+          "signature": "(state: Dict[str, Any])"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/core/agent_factory.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "typing",
+        "..config.prompt_config",
+        "..config.prompt_templates"
+      ],
+      "functions": {
+        "create_simplified_factory": {
+          "doc": "Create a new simplified agent factory.",
+          "signature": "(tools: List[Any]) -> SimplifiedAgentFactory"
+        }
+      },
+      "classes": {
+        "SimplifiedAgentFactory": {
+          "methods": {
+            "__init__": {
+              "doc": "Initialize factory with available tools.",
+              "signature": "(self, available_tools: List[Any])",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "create_phase_agent": {
+              "calls": [
+                "_build_prompt"
+              ],
+              "signature": "(self, phase_type: PhaseType, state: Dict[str, Any]) -> Dict[str, Any]"
+            },
+            "_build_prompt": {
+              "doc": "Build a simple, focused prompt for the phase.",
+              "signature": "(self, phase_config, dynamic_todos: List[Dict[str, Any]], state: Dict[str, Any]) -> str",
+              "called_by": [
+                "SimplifiedAgentFactory.create_phase_agent"
+              ]
+            }
+          },
+          "properties": [
+            "phase_type",
+            "state"
+          ]
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/core/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/core/agent_core.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "create_optimized_subagent": "(agent_name: str, phase: str, tools: List[Any], state: Dict[str, Any]) -> Dict[str, Any]",
+        "create_dynamic_subagents": {
+          "calls": [
+            "create_fallback_subagent"
+          ],
+          "signature": "(tools: List[Any], current_state: Dict[str, Any]) -> List[Dict[str, Any]]"
+        },
+        "create_fallback_subagent": {
+          "doc": "Create a fallback sub-agent if dynamic creation fails.",
+          "calls": [
+            "create_optimized_subagent"
+          ],
+          "signature": "(phase: str, tools: List[Any], state: Dict[str, Any]) -> Optional[Dict[str, Any]]"
+        },
+        "generate_optimized_main_prompt": "(current_phase: str, state: Dict[str, Any], tools: List[Any]) -> str",
+        "print_optimization_report": {
+          "doc": "Print optimization statistics report.",
+          "signature": "()"
+        },
+        "create_optimized_deep_planning_agent": {
+          "calls": [
+            "create_compatible_deep_agent",
+            "create_dynamic_subagents",
+            "generate_optimized_main_prompt"
+          ],
+          "signature": "(initial_state: Dict[str, Any] = None, enable_llm_compression: bool = True) -> Any"
+        },
+        "create_compatible_deep_agent": "(*args, **kwargs)"
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T14:50:13.211583"
+    },
+    "examples/deep_planning/src/config/config_loader.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Configuration",
+      "imports": [
+        "yaml",
+        "os",
+        "typing",
+        "dataclasses",
+        "os"
+      ],
+      "functions": {
+        "get_trigger_config": {
+          "doc": "Accesso rapido alla configurazione trigger.",
+          "calls": [
+            "get_trigger_config"
+          ],
+          "signature": "() -> TriggerConfig",
+          "called_by": [
+            "get_trigger_config",
+            "ConfigLoader.print_trigger_summary"
+          ]
+        },
+        "get_context_management_config": {
+          "doc": "Accesso rapido alla configurazione context management.",
+          "calls": [
+            "get_context_management_config"
+          ],
+          "signature": "() -> Dict[str, Any]",
+          "called_by": [
+            "get_context_management_config"
+          ]
+        },
+        "get_full_config": {
+          "doc": "Accesso alla configurazione completa.",
+          "calls": [
+            "load_config"
+          ],
+          "signature": "() -> FullConfig",
+          "called_by": [
+            "validate_configuration",
+            "log_configuration_status"
+          ]
+        },
+        "print_config_summary": {
+          "doc": "Stampa riassunto configurazione.",
+          "calls": [
+            "print_trigger_summary"
+          ],
+          "signature": "()",
+          "called_by": [
+            "log_configuration_status"
+          ]
+        },
+        "reload_config": {
+          "doc": "Ricarica configurazione da file.",
+          "calls": [
+            "load_config"
+          ],
+          "signature": "()"
+        },
+        "validate_configuration": {
+          "doc": "Valida la configurazione caricata e restituisce report di validazione.",
+          "calls": [
+            "get_full_config"
+          ],
+          "signature": "() -> Dict[str, Any]",
+          "called_by": [
+            "log_configuration_status"
+          ]
+        },
+        "log_configuration_status": {
+          "doc": "Stampa stato completo della configurazione con validazione.",
+          "calls": [
+            "get_full_config",
+            "print_config_summary",
+            "validate_configuration"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {
+        "TriggerConfig": {
+          "methods": {},
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Configurazione centralizzata per tutti i trigger points.",
+          "properties": [
+            "max_context_window",
+            "trigger_threshold",
+            "mcp_noise_threshold",
+            "llm_compression_threshold",
+            "force_llm_threshold",
+            "post_tool_threshold",
+            "min_reduction_threshold",
+            "preserve_last_n_messages",
+            "compression_timeout",
+            "enable_fallback",
+            "deduplication_enabled",
+            "similarity_threshold"
+          ]
+        },
+        "FullConfig": {
+          "methods": {},
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Configurazione completa caricata da YAML.",
+          "properties": [
+            "triggers",
+            "context_management",
+            "cleaning_strategies",
+            "deduplication",
+            "compaction",
+            "performance",
+            "monitoring",
+            "integration"
+          ]
+        },
+        "ConfigLoader": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, config_path: str = None)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "load_config": {
+              "doc": "Carica configurazione da YAML con fallback a default.",
+              "calls": [
+                "_parse_yaml_config"
+              ],
+              "signature": "(self) -> FullConfig",
+              "called_by": [
+                "get_full_config",
+                "ConfigLoader.get_trigger_config",
+                "reload_config",
+                "ConfigLoader.get_context_management_config"
+              ]
+            },
+            "_parse_yaml_config": {
+              "doc": "Converte YAML data in FullConfig strutturata.",
+              "signature": "(self, yaml_data: Dict[str, Any]) -> FullConfig",
+              "called_by": [
+                "ConfigLoader.load_config"
+              ]
+            },
+            "get_trigger_config": {
+              "doc": "Ottiene configurazione trigger centralizzata.",
+              "calls": [
+                "load_config"
+              ],
+              "signature": "(self) -> TriggerConfig",
+              "called_by": [
+                "get_trigger_config",
+                "ConfigLoader.print_trigger_summary"
+              ]
+            },
+            "get_context_management_config": {
+              "doc": "Ottiene configurazione context management.",
+              "calls": [
+                "load_config"
+              ],
+              "signature": "(self) -> Dict[str, Any]",
+              "called_by": [
+                "get_context_management_config"
+              ]
+            },
+            "print_trigger_summary": {
+              "doc": "Stampa riassunto dei trigger configurati.",
+              "calls": [
+                "get_trigger_config"
+              ],
+              "signature": "(self)",
+              "called_by": [
+                "print_config_summary"
+              ]
+            }
+          },
+          "doc": "Caricatore centralizzato della configurazione YAML."
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/config/prompt_templates.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "typing",
+        "re"
+      ],
+      "functions": {
+        "generate_phase_todos": {
+          "signature": "(phase: str, context: dict) -> List[Dict[str, Any]]",
+          "called_by": [
+            "generate_all_phase_contexts"
+          ]
+        },
+        "generate_phase_context": {
+          "signature": "(phase: str, state: dict) -> dict",
+          "called_by": [
+            "inject_dynamic_context",
+            "create_context_report",
+            "generate_all_phase_contexts"
+          ]
+        },
+        "get_tool_context": {
+          "signature": "(phase: str, available_tools: List[Any]) -> dict",
+          "called_by": [
+            "inject_dynamic_context",
+            "create_context_report",
+            "generate_all_phase_contexts"
+          ]
+        },
+        "categorize_tools_by_function": "(tools: List[Any]) -> dict",
+        "inject_dynamic_context": {
+          "calls": [
+            "calculate_completion_percentage",
+            "generate_phase_context",
+            "get_agent_context_summary",
+            "get_expected_outputs",
+            "get_next_action",
+            "get_phase_criteria",
+            "get_recommended_agent",
+            "get_tool_context",
+            "get_validation_checklist"
+          ],
+          "signature": "(prompt_template: str, phase: str, state: dict, tools: List[Any]) -> str"
+        },
+        "calculate_completion_percentage": {
+          "doc": "Calculate overall process completion percentage.",
+          "signature": "(phase: str) -> int",
+          "called_by": [
+            "inject_dynamic_context",
+            "create_context_report",
+            "generate_all_phase_contexts",
+            "generate_orchestrator_context"
+          ]
+        },
+        "get_recommended_agent": {
+          "doc": "Get the recommended agent for current phase.",
+          "signature": "(phase: str) -> str",
+          "called_by": [
+            "inject_dynamic_context",
+            "get_next_action",
+            "create_context_report",
+            "generate_all_phase_contexts",
+            "generate_orchestrator_context"
+          ]
+        },
+        "get_expected_outputs": {
+          "doc": "Get expected outputs for current phase.",
+          "signature": "(phase: str) -> str",
+          "called_by": [
+            "inject_dynamic_context",
+            "generate_all_phase_contexts",
+            "generate_orchestrator_context"
+          ]
+        },
+        "get_phase_criteria": {
+          "doc": "Get success criteria for current phase.",
+          "signature": "(phase: str) -> str",
+          "called_by": [
+            "inject_dynamic_context",
+            "generate_orchestrator_context"
+          ]
+        },
+        "get_validation_checklist": {
+          "doc": "Get validation checklist for phase completion.",
+          "signature": "(phase: str) -> str",
+          "called_by": [
+            "inject_dynamic_context",
+            "create_context_report"
+          ]
+        },
+        "get_next_action": {
+          "doc": "Determine the next recommended action.",
+          "calls": [
+            "get_recommended_agent"
+          ],
+          "signature": "(phase: str, state: dict) -> str",
+          "called_by": [
+            "inject_dynamic_context",
+            "create_context_report",
+            "generate_orchestrator_context"
+          ]
+        },
+        "get_agent_context_summary": {
+          "doc": "Generate a summary of context to pass to sub-agent.",
+          "signature": "(state: dict, phase: str) -> str",
+          "called_by": [
+            "inject_dynamic_context",
+            "generate_orchestrator_context"
+          ]
+        },
+        "validate_template_variables": {
+          "signature": "(template: str) -> List[str]",
+          "called_by": [
+            "get_missing_variables"
+          ]
+        },
+        "get_missing_variables": {
+          "calls": [
+            "validate_template_variables"
+          ],
+          "signature": "(template: str, context: dict) -> List[str]"
+        },
+        "create_context_report": {
+          "calls": [
+            "calculate_completion_percentage",
+            "generate_phase_context",
+            "get_next_action",
+            "get_recommended_agent",
+            "get_tool_context",
+            "get_validation_checklist"
+          ],
+          "signature": "(phase: str, state: dict, tools: List[Any]) -> dict"
+        },
+        "generate_all_phase_contexts": {
+          "calls": [
+            "calculate_completion_percentage",
+            "generate_phase_context",
+            "generate_phase_todos",
+            "get_expected_outputs",
+            "get_recommended_agent",
+            "get_tool_context"
+          ],
+          "signature": "(state: dict, tools: List[Any]) -> dict"
+        },
+        "generate_orchestrator_context": {
+          "calls": [
+            "calculate_completion_percentage",
+            "get_agent_context_summary",
+            "get_expected_outputs",
+            "get_next_action",
+            "get_phase_criteria",
+            "get_recommended_agent"
+          ],
+          "signature": "(current_phase: str, state: dict, tools: List[Any]) -> dict"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/config/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/config/prompt_config.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Configuration",
+      "imports": [
+        "typing",
+        "dataclasses",
+        "enum"
+      ],
+      "functions": {
+        "get_phase_config": {
+          "doc": "Get configuration for a specific phase.",
+          "signature": "(phase: PhaseType) -> PhaseConfig",
+          "called_by": [
+            "get_tools_for_phase",
+            "validate_phase_completion",
+            "get_phase_summary"
+          ]
+        },
+        "get_current_phase_config": {
+          "doc": "Get configuration for a phase by string name.",
+          "signature": "(phase_name: str) -> Optional[PhaseConfig]"
+        },
+        "get_next_phase": {
+          "doc": "Get the next phase in the sequence.",
+          "signature": "(current_phase: PhaseType) -> Optional[PhaseType]"
+        },
+        "get_transition_requirements": {
+          "doc": "Get requirements for transitioning from current phase.",
+          "signature": "(current_phase: PhaseType) -> List[str]"
+        },
+        "get_tools_for_phase": {
+          "doc": "Filter available tools to those relevant for a specific phase.",
+          "calls": [
+            "get_phase_config"
+          ],
+          "signature": "(phase: PhaseType, available_tools: List[Any]) -> List[Any]"
+        },
+        "validate_phase_completion": {
+          "doc": "Validate that a phase has been completed according to its configuration.",
+          "calls": [
+            "get_phase_config"
+          ],
+          "signature": "(phase: PhaseType, state: Dict[str, Any]) -> Dict[str, Any]"
+        },
+        "get_phase_summary": {
+          "doc": "Get a summary of phase configuration for display.",
+          "calls": [
+            "get_phase_config"
+          ],
+          "signature": "(phase: PhaseType) -> Dict[str, Any]"
+        }
+      },
+      "classes": {
+        "ValidationRule": {
+          "methods": {},
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Configuration for a single validation rule.",
+          "properties": [
+            "name",
+            "description",
+            "required",
+            "validation_function",
+            "error_message",
+            "success_message"
+          ]
+        },
+        "PhaseConfig": {
+          "methods": {},
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Complete configuration for a single phase.",
+          "properties": [
+            "name",
+            "phase_type",
+            "emoji",
+            "goal",
+            "agent_name",
+            "duration_estimate",
+            "completion_weight",
+            "required_tool_categories",
+            "optional_tool_categories",
+            "required_outputs",
+            "optional_outputs",
+            "validation_level",
+            "validation_rules",
+            "transition_criteria",
+            "blocking_conditions",
+            "interaction_points",
+            "requires_user_input",
+            "requires_approval",
+            "approval_message"
+          ]
+        }
+      },
+      "constants": {
+        "DISCUSSION_PHASE_CONFIG": "value",
+        "PLANNING_PHASE_CONFIG": "value",
+        "TASK_GENERATION_PHASE_CONFIG": "value",
+        "TOOL_CATEGORY_CONFIGS": "collection",
+        "PHASE_TRANSITIONS": "collection"
+      },
+      "variables": [
+        "PHASE_CONFIGS"
+      ],
+      "call_graph": {},
+      "enums": {
+        "PhaseType": {
+          "values": [
+            "INVESTIGATION",
+            "DISCUSSION",
+            "PLANNING",
+            "TASK_GENERATION",
+            "COMPLETE"
+          ],
+          "doc": "Enumeration of deep planning phases."
+        },
+        "ValidationLevel": {
+          "values": [
+            "STRICT",
+            "MODERATE",
+            "FLEXIBLE"
+          ],
+          "doc": "Validation strictness levels."
+        },
+        "ToolCategory": {
+          "values": [
+            "PROJECT_DISCOVERY",
+            "CODE_ANALYSIS",
+            "DOCUMENTATION",
+            "FILE_OPERATIONS",
+            "REQUIREMENTS_MANAGEMENT",
+            "VALIDATION",
+            "APPROVAL"
+          ],
+          "doc": "Tool categorization for phase filtering."
+        }
+      }
+    },
+    "examples/deep_planning/src/config/optimized_prompts.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/config/unified_config.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Configuration",
+      "imports": [
+        "os",
+        "yaml",
+        "logging",
+        "typing",
+        "dataclasses",
+        "pathlib",
+        "enum",
+        ".prompt_config",
+        ".prompt_config",
+        "json"
+      ],
+      "functions": {
+        "get_config": {
+          "doc": "Get unified configuration.",
+          "signature": "() -> UnifiedConfig",
+          "called_by": [
+            "get_full_config"
+          ]
+        },
+        "get_model_config": {
+          "doc": "Get model configuration.",
+          "signature": "() -> ModelConfig"
+        },
+        "get_context_config": {
+          "doc": "Get context management configuration.",
+          "signature": "() -> ContextManagementConfig",
+          "called_by": [
+            "get_trigger_config",
+            "get_context_management_config"
+          ]
+        },
+        "get_performance_config": {
+          "doc": "Get performance configuration.",
+          "signature": "() -> PerformanceConfig"
+        },
+        "get_logging_config": {
+          "doc": "Get logging configuration.",
+          "signature": "() -> LoggingConfig"
+        },
+        "get_mcp_config": {
+          "doc": "Get MCP configuration.",
+          "signature": "() -> MCPConfig"
+        },
+        "get_config_value": {
+          "doc": "Get configuration value by path.",
+          "calls": [
+            "get"
+          ],
+          "signature": "(path: str, default: Any = None) -> Any"
+        },
+        "set_config_value": {
+          "doc": "Set configuration value by path.",
+          "calls": [
+            "set"
+          ],
+          "signature": "(path: str, value: Any)"
+        },
+        "reload_config": {
+          "doc": "Reload configuration from sources.",
+          "calls": [
+            "reload"
+          ],
+          "signature": "(yaml_path: Optional[str] = None)"
+        },
+        "validate_config": {
+          "doc": "Validate current configuration.",
+          "calls": [
+            "validate"
+          ],
+          "signature": "() -> Dict[str, Any]"
+        },
+        "print_config_summary": {
+          "doc": "Print configuration summary.",
+          "calls": [
+            "print_summary"
+          ],
+          "signature": "()",
+          "called_by": [
+            "log_configuration_status"
+          ]
+        },
+        "export_config": {
+          "doc": "Export configuration to file.",
+          "calls": [
+            "export"
+          ],
+          "signature": "(path: str, format: str = \"yaml\")"
+        },
+        "get_trigger_config": {
+          "doc": "Backwards compatibility for old trigger config.",
+          "calls": [
+            "get_context_config"
+          ],
+          "signature": "()",
+          "called_by": [
+            "get_trigger_config",
+            "ConfigLoader.print_trigger_summary"
+          ]
+        },
+        "get_context_management_config": {
+          "doc": "Backwards compatibility for old context management config.",
+          "calls": [
+            "get_context_config"
+          ],
+          "signature": "()",
+          "called_by": [
+            "get_context_management_config"
+          ]
+        },
+        "get_full_config": {
+          "doc": "Backwards compatibility for old full config.",
+          "calls": [
+            "get_config"
+          ],
+          "signature": "()",
+          "called_by": [
+            "validate_configuration",
+            "log_configuration_status"
+          ]
+        }
+      },
+      "classes": {
+        "ModelConfig": {
+          "methods": {
+            "__post_init__": {
+              "doc": "Override with environment variables if present.",
+              "signature": "(self)"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Model and LLM-specific configuration.",
+          "properties": [
+            "default_model",
+            "max_output_tokens",
+            "temperature",
+            "top_p",
+            "enable_compatibility_fixes",
+            "model_timeout"
+          ]
+        },
+        "PerformanceConfig": {
+          "methods": {
+            "__post_init__": {
+              "doc": "Override with environment variables if present.",
+              "signature": "(self)"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Performance and optimization settings.",
+          "properties": [
+            "analysis_cache_duration",
+            "max_cleaning_history",
+            "auto_check_interval",
+            "use_precise_tokenization",
+            "fallback_token_estimation",
+            "compression_timeout",
+            "max_retries",
+            "backoff_factor",
+            "requests_per_hour",
+            "max_backoff_seconds",
+            "cache_ttl",
+            "max_cache_size"
+          ]
+        },
+        "ContextManagementConfig": {
+          "methods": {
+            "__post_init__": {
+              "doc": "Override with environment variables if present.",
+              "signature": "(self)"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Context and compression management configuration.",
+          "properties": [
+            "max_context_window",
+            "trigger_threshold",
+            "mcp_noise_threshold",
+            "post_tool_threshold",
+            "llm_compression_threshold",
+            "force_llm_threshold",
+            "cleaning_enabled",
+            "auto_compaction",
+            "preserve_essential_fields",
+            "deduplication_enabled",
+            "similarity_threshold",
+            "max_history_for_comparison",
+            "max_projects_fallback",
+            "max_snippet_length",
+            "max_stories",
+            "max_repositories"
+          ]
+        },
+        "LoggingConfig": {
+          "methods": {
+            "__post_init__": {
+              "doc": "Override with environment variables if present.",
+              "signature": "(self)"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Logging and monitoring configuration.",
+          "properties": [
+            "log_level",
+            "log_file",
+            "collect_metrics",
+            "track_cleaning_performance",
+            "generate_reports",
+            "export_statistics",
+            "export_format",
+            "max_log_size"
+          ]
+        },
+        "MCPConfig": {
+          "methods": {
+            "__post_init__": {
+              "doc": "Load from environment variables.",
+              "signature": "(self)"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "MCP (Model Context Protocol) configuration.",
+          "properties": [
+            "mcp_url",
+            "mcp_token",
+            "enable_mcp_cleaning",
+            "mcp_timeout"
+          ]
+        },
+        "UnifiedConfig": {
+          "methods": {
+            "merge_yaml_config": {
+              "doc": "Merge settings from YAML file.",
+              "calls": [
+                "get"
+              ],
+              "signature": "(self, yaml_path: str)",
+              "called_by": [
+                "ConfigurationManager.reload"
+              ]
+            },
+            "validate": {
+              "doc": "Validate configuration and return validation report.",
+              "signature": "(self) -> Dict[str, Any]",
+              "called_by": [
+                "ConfigurationManager.validate",
+                "ConfigurationManager.reload",
+                "Validator.handle",
+                "validate_config"
+              ]
+            },
+            "to_dict": {
+              "doc": "Convert configuration to dictionary.",
+              "signature": "(self) -> Dict[str, Any]",
+              "called_by": [
+                "ConfigurationManager.export",
+                "ConfigurationManager.get",
+                "ValidationChain.validate"
+              ]
+            },
+            "print_summary": {
+              "doc": "Print configuration summary.",
+              "signature": "(self)",
+              "called_by": [
+                "ConfigurationManager.print_summary",
+                "print_config_summary"
+              ]
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Complete unified configuration.",
+          "properties": [
+            "model",
+            "performance",
+            "context",
+            "logging",
+            "mcp",
+            "phases",
+            "custom_settings",
+            "config_version",
+            "config_source"
+          ]
+        },
+        "ConfigurationManager": {
+          "methods": {
+            "__new__": {
+              "calls": [
+                "__new__"
+              ],
+              "signature": "(cls)",
+              "called_by": [
+                "ConfigurationManager.__new__"
+              ]
+            },
+            "__init__": {
+              "calls": [
+                "reload"
+              ],
+              "signature": "(self)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "reload": {
+              "doc": "Reload configuration from all sources.",
+              "calls": [
+                "merge_yaml_config",
+                "validate"
+              ],
+              "signature": "(self, yaml_path: Optional[str] = None)",
+              "called_by": [
+                "ConfigurationManager.config",
+                "reload_config",
+                "ConfigurationManager.__init__"
+              ]
+            },
+            "config": {
+              "decorators": [
+                "property"
+              ],
+              "doc": "Get current configuration.",
+              "calls": [
+                "reload"
+              ],
+              "signature": "(self) -> UnifiedConfig"
+            },
+            "get": {
+              "doc": "Get configuration value by dot-separated path.",
+              "calls": [
+                "to_dict"
+              ],
+              "signature": "(self, path: str, default: Any = None) -> Any",
+              "called_by": [
+                "get_config_value",
+                "PerformanceMonitor.get_current_performance",
+                "UnifiedConfig.merge_yaml_config",
+                "PerformanceOptimizer.optimized_compress"
+              ]
+            },
+            "set": {
+              "doc": "Set configuration value by dot-separated path.",
+              "signature": "(self, path: str, value: Any)",
+              "called_by": [
+                "set_config_value"
+              ]
+            },
+            "print_summary": {
+              "doc": "Print configuration summary.",
+              "calls": [
+                "print_summary"
+              ],
+              "signature": "(self)",
+              "called_by": [
+                "ConfigurationManager.print_summary",
+                "print_config_summary"
+              ]
+            },
+            "validate": {
+              "doc": "Validate current configuration.",
+              "calls": [
+                "validate"
+              ],
+              "signature": "(self) -> Dict[str, Any]",
+              "called_by": [
+                "ConfigurationManager.validate",
+                "ConfigurationManager.reload",
+                "Validator.handle",
+                "validate_config"
+              ]
+            },
+            "export": {
+              "doc": "Export configuration to file.",
+              "calls": [
+                "to_dict"
+              ],
+              "signature": "(self, path: str, format: str = \"yaml\")",
+              "called_by": [
+                "export_config"
+              ]
+            }
+          },
+          "doc": "Singleton manager for unified configuration."
+        }
+      },
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/utils/debug_tools.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/utils/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/utils/validation_chains.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "typing",
+        "dataclasses",
+        "enum",
+        "abc"
+      ],
+      "functions": {
+        "create_default_validation_chain": {
+          "doc": "Create the default validation chain for the system.",
+          "calls": [
+            "add_validator"
+          ],
+          "signature": "() -> ValidationChain"
+        },
+        "create_strict_validation_chain": {
+          "doc": "Create a strict validation chain with all checks as critical.",
+          "calls": [
+            "add_validator"
+          ],
+          "signature": "() -> ValidationChain"
+        }
+      },
+      "classes": {
+        "ValidationResult": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, valid: bool, level: ValidationLevel = ValidationLevel.INFO, message: str = \"\", errors: List[str] = None, warnings: List[str] = None, data: Dict[str, Any] = None)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "to_dict": {
+              "doc": "Convert to dictionary representation.",
+              "signature": "(self) -> Dict[str, Any]",
+              "called_by": [
+                "ConfigurationManager.export",
+                "ConfigurationManager.get",
+                "ValidationChain.validate"
+              ]
+            }
+          },
+          "doc": "Result of a validation check."
+        },
+        "Validator": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, name: str, level: ValidationLevel = ValidationLevel.WARNING)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "set_next": {
+              "doc": "Set the next validator in the chain.",
+              "signature": "(self, validator: 'Validator') -> 'Validator'",
+              "called_by": [
+                "ValidationChain.add_validator"
+              ]
+            },
+            "validate": {
+              "decorators": [
+                "abstractmethod"
+              ],
+              "doc": "Perform validation.",
+              "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
+              "called_by": [
+                "ConfigurationManager.validate",
+                "ConfigurationManager.reload",
+                "Validator.handle",
+                "validate_config"
+              ]
+            },
+            "handle": {
+              "doc": "Handle validation and pass to next in chain.",
+              "calls": [
+                "handle",
+                "validate"
+              ],
+              "signature": "(self, data: Any, context: Dict[str, Any] = None) -> List[ValidationResult]",
+              "called_by": [
+                "ValidationChain.validate",
+                "Validator.handle"
+              ]
+            }
+          },
+          "inherits": [
+            "ABC"
+          ],
+          "abstract": true,
+          "doc": "Abstract base class for validators."
+        },
+        "ContextValidator": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "__init__"
+              ],
+              "signature": "(self, max_tokens: int = 50000, warning_threshold: float = 0.8)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "validate": {
+              "doc": "Validate context size and utilization.",
+              "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
+              "called_by": [
+                "ConfigurationManager.validate",
+                "ConfigurationManager.reload",
+                "Validator.handle",
+                "validate_config"
+              ]
+            }
+          },
+          "inherits": [
+            "Validator"
+          ],
+          "doc": "Validates context size and utilization."
+        },
+        "MessageStructureValidator": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "__init__"
+              ],
+              "signature": "(self)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "validate": {
+              "doc": "Validate message structure.",
+              "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
+              "called_by": [
+                "ConfigurationManager.validate",
+                "ConfigurationManager.reload",
+                "Validator.handle",
+                "validate_config"
+              ]
+            }
+          },
+          "inherits": [
+            "Validator"
+          ],
+          "doc": "Validates message structure and format."
+        },
+        "PhaseTransitionValidator": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "__init__"
+              ],
+              "signature": "(self)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "validate": {
+              "doc": "Validate phase transition requirements.",
+              "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
+              "called_by": [
+                "ConfigurationManager.validate",
+                "ConfigurationManager.reload",
+                "Validator.handle",
+                "validate_config"
+              ]
+            }
+          },
+          "inherits": [
+            "Validator"
+          ],
+          "doc": "Validates phase transitions in the deep planning system."
+        },
+        "CompressionValidator": {
+          "methods": {
+            "__init__": {
+              "calls": [
+                "__init__"
+              ],
+              "signature": "(self)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "validate": {
+              "doc": "Validate compression result.",
+              "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
+              "called_by": [
+                "ConfigurationManager.validate",
+                "ConfigurationManager.reload",
+                "Validator.handle",
+                "validate_config"
+              ]
+            }
+          },
+          "inherits": [
+            "Validator"
+          ],
+          "doc": "Validates compression operations and results."
+        },
+        "ValidationChain": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, name: str = \"default\")",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "add_validator": {
+              "doc": "Add a validator to the chain.",
+              "calls": [
+                "set_next"
+              ],
+              "signature": "(self, validator: Validator) -> 'ValidationChain'",
+              "called_by": [
+                "create_strict_validation_chain",
+                "create_default_validation_chain"
+              ]
+            },
+            "validate": {
+              "doc": "Run the validation chain.",
+              "calls": [
+                "handle",
+                "to_dict"
+              ],
+              "signature": "(self, data: Any, context: Dict[str, Any] = None) -> Dict[str, Any]",
+              "called_by": [
+                "ConfigurationManager.validate",
+                "ConfigurationManager.reload",
+                "Validator.handle",
+                "validate_config"
+              ]
+            }
+          },
+          "doc": "Manages a chain of validators."
+        }
+      },
+      "call_graph": {},
+      "enums": {
+        "ValidationLevel": {
+          "values": [
+            "CRITICAL",
+            "WARNING",
+            "INFO"
+          ],
+          "doc": "Validation severity levels."
+        }
+      }
+    },
+    "examples/deep_planning/src/utils/performance_optimizer.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "asyncio",
+        "hashlib",
+        "json",
+        "time",
+        "abc",
+        "collections",
+        "dataclasses",
+        "datetime",
+        "typing",
+        "enum",
+        "aiofiles",
+        "aiofiles.os",
+        "logging",
+        "unified_config"
+      ],
+      "functions": {},
+      "classes": {
+        "PerformanceMetrics": {
+          "methods": {},
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Metriche delle performance del sistema.",
+          "properties": [
+            "avg_compression_time",
+            "avg_token_throughput",
+            "cache_hit_rate",
+            "rate_limit_errors",
+            "timeouts",
+            "total_requests",
+            "successful_requests",
+            "failed_requests",
+            "current_queue_size",
+            "last_updated"
+          ]
+        },
+        "RateLimitConfig": {
+          "methods": {
+            "__post_init__": {
+              "doc": "Load from unified config if available.",
+              "signature": "(self)"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Configurazione rate limiting.",
+          "properties": [
+            "requests_per_minute",
+            "requests_per_hour",
+            "burst_allowance",
+            "backoff_multiplier",
+            "max_backoff_seconds",
+            "adaptive_adjustment"
+          ]
+        },
+        "RateLimiter": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, config: RateLimitConfig)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "acquire": {
+              "doc": "Acquisisce permesso per una richiesta.",
+              "calls": [
+                "_cleanup_old_requests",
+                "acquire"
+              ],
+              "signature": "async (self) -> bool",
+              "called_by": [
+                "PerformanceOptimizer.optimized_compress",
+                "RateLimiter.acquire"
+              ]
+            },
+            "_cleanup_old_requests": {
+              "doc": "Rimuove richieste vecchie dalle code.",
+              "signature": "(self, current_time: float)",
+              "called_by": [
+                "RateLimiter.acquire"
+              ]
+            },
+            "handle_error": {
+              "doc": "Gestisce errore e aggiorna backoff.",
+              "signature": "(self, error_type: str = \"rate_limit\")",
+              "called_by": [
+                "PerformanceOptimizer.optimized_compress"
+              ]
+            }
+          },
+          "doc": "Rate limiter intelligente con backoff adattivo."
+        },
+        "CompressionCache": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, strategy: CacheStrategy = CacheStrategy.MEMORY, max_memory_items: int = 1000, cache_dir: str = \"cache/compression\", ttl_seconds: int = 3600)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "_generate_cache_key": {
+              "doc": "Genera chiave cache basata su contenuto e configurazione.",
+              "signature": "(self, messages: List[Dict[str, Any]], config: Dict[str, Any]) -> str",
+              "called_by": [
+                "CompressionCache.get",
+                "CompressionCache.put"
+              ]
+            },
+            "get": {
+              "doc": "Recupera risultato dalla cache.",
+              "calls": [
+                "_generate_cache_key",
+                "_read_from_disk"
+              ],
+              "signature": "async (self, messages: List[Dict[str, Any]], config: Dict[str, Any]) -> Optional[Dict[str, Any]]",
+              "called_by": [
+                "get_config_value",
+                "PerformanceMonitor.get_current_performance",
+                "UnifiedConfig.merge_yaml_config",
+                "PerformanceOptimizer.optimized_compress"
+              ]
+            },
+            "put": {
+              "doc": "Salva risultato in cache.",
+              "calls": [
+                "_evict_if_needed",
+                "_generate_cache_key",
+                "_write_to_disk"
+              ],
+              "signature": "async (self, messages: List[Dict[str, Any]], config: Dict[str, Any], result: Dict[str, Any])",
+              "called_by": [
+                "PerformanceOptimizer.optimized_compress"
+              ]
+            },
+            "_evict_if_needed": {
+              "doc": "Rimuove elementi vecchi se cache piena.",
+              "signature": "async (self)",
+              "called_by": [
+                "CompressionCache.put"
+              ]
+            },
+            "_read_from_disk": {
+              "doc": "Legge da cache su disk.",
+              "signature": "async (self, cache_key: str) -> Optional[Dict[str, Any]]",
+              "called_by": [
+                "CompressionCache.get"
+              ]
+            },
+            "_write_to_disk": {
+              "doc": "Scrive su cache disk.",
+              "signature": "async (self, cache_key: str, cached_item: Dict[str, Any])",
+              "called_by": [
+                "CompressionCache.put"
+              ]
+            },
+            "get_stats": {
+              "doc": "Restituisce statistiche cache.",
+              "signature": "(self) -> Dict[str, Any]",
+              "called_by": [
+                "PerformanceOptimizer.get_comprehensive_stats",
+                "PerformanceOptimizer.health_check"
+              ]
+            }
+          },
+          "doc": "Cache per risultati di compressione con supporto persistenza."
+        },
+        "PerformanceMonitor": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, window_size: int = 100)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "record_compression": {
+              "doc": "Registra una compressione completata.",
+              "signature": "(self, processing_time: float, tokens_processed: int)",
+              "called_by": [
+                "PerformanceOptimizer.optimized_compress"
+              ]
+            },
+            "record_error": {
+              "doc": "Registra un errore.",
+              "signature": "(self, error_type: str)",
+              "called_by": [
+                "PerformanceOptimizer.optimized_compress"
+              ]
+            },
+            "get_current_performance": {
+              "doc": "Calcola metriche performance correnti.",
+              "calls": [
+                "get"
+              ],
+              "signature": "(self) -> PerformanceMetrics",
+              "called_by": [
+                "PerformanceMonitor.get_performance_level",
+                "PerformanceOptimizer.health_check",
+                "PerformanceOptimizer.get_comprehensive_stats"
+              ]
+            },
+            "get_performance_level": {
+              "doc": "Determina livello performance corrente.",
+              "calls": [
+                "get_current_performance"
+              ],
+              "signature": "(self) -> PerformanceLevel",
+              "called_by": [
+                "PerformanceOptimizer.get_comprehensive_stats",
+                "PerformanceOptimizer.health_check",
+                "PerformanceOptimizer._auto_tune_if_needed"
+              ]
+            }
+          },
+          "doc": "Monitor delle performance in tempo reale."
+        },
+        "PerformanceOptimizer": {
+          "methods": {
+            "__init__": {
+              "signature": "(self, rate_limit_config: RateLimitConfig = None, cache_strategy: CacheStrategy = CacheStrategy.HYBRID, enable_auto_tuning: bool = True)",
+              "called_by": [
+                "ValidationHook.__init__",
+                "PhaseTransitionValidator.__init__",
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "ContextValidator.__init__"
+              ]
+            },
+            "optimized_compress": {
+              "calls": [
+                "_auto_tune_if_needed",
+                "acquire",
+                "get",
+                "handle_error",
+                "put",
+                "record_compression",
+                "record_error"
+              ],
+              "signature": "async (self, compressor_func: Callable, messages: List[Dict[str, Any]], config: Dict[str, Any]) -> Dict[str, Any]"
+            },
+            "_auto_tune_if_needed": {
+              "doc": "Auto-tuning dei parametri basato su performance.",
+              "calls": [
+                "get_performance_level"
+              ],
+              "signature": "async (self)",
+              "called_by": [
+                "PerformanceOptimizer.optimized_compress"
+              ]
+            },
+            "get_comprehensive_stats": {
+              "doc": "Restituisce statistiche complete del sistema.",
+              "calls": [
+                "get_current_performance",
+                "get_performance_level",
+                "get_stats"
+              ],
+              "signature": "(self) -> Dict[str, Any]"
+            },
+            "health_check": {
+              "doc": "Health check del sistema di ottimizzazione.",
+              "calls": [
+                "get_current_performance",
+                "get_performance_level",
+                "get_stats"
+              ],
+              "signature": "async (self) -> Dict[str, Any]"
+            }
+          },
+          "properties": [
+            "compressor_func",
+            "messages",
+            "config"
+          ]
+        }
+      },
+      "call_graph": {},
+      "enums": {
+        "CacheStrategy": {
+          "values": [
+            "MEMORY",
+            "DISK",
+            "HYBRID",
+            "REDIS"
+          ],
+          "doc": "Strategie di caching disponibili."
+        },
+        "PerformanceLevel": {
+          "values": [
+            "OPTIMAL",
+            "GOOD",
+            "DEGRADED",
+            "CRITICAL"
+          ],
+          "doc": "Livelli di performance del sistema."
+        }
+      }
+    },
+    "examples/deep_planning/src/utils/logging_setup.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "sys",
+        "mcp_wrapper",
+        "configure_detailed_logging",
+        "mcp_wrapper"
+      ],
+      "functions": {
+        "setup_detailed_logging": {
+          "doc": "Configura logging dettagliato per tutto il sistema context management.",
+          "signature": "()"
+        },
+        "example_usage": {
+          "doc": "Esempio di utilizzo con logging dettagliato.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/src/integrations/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/integrations/mcp/mcp_wrapper.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "create_mcp_wrapper": "(config: Dict[str, Any] = None) -> MCPToolWrapper",
+        "wrap_existing_mcp_tools": {
+          "calls": [
+            "create_mcp_wrapper",
+            "wrap_tool_list"
+          ],
+          "signature": "(tools: List[Any], config: Dict[str, Any] = None) -> tuple[List[Any], MCPToolWrapper]"
+        }
+      },
+      "classes": {
+        "MCPToolWrapper": {
+          "methods": {
+            "__init__": "(self, original_tool, wrapper_instance, name)",
+            "wrap_tool": {
+              "calls": [
+                "_extract_tool_name",
+                "_wrap_callable_tool",
+                "_wrap_tool_object"
+              ],
+              "signature": "(self, tool: Any, tool_name: Optional[str] = None) -> Any"
+            },
+            "wrap_tool_list": {
+              "calls": [
+                "_extract_tool_name",
+                "_is_mcp_tool",
+                "wrap_tool"
+              ],
+              "signature": "(self, tools: List[Any]) -> List[Any]"
+            },
+            "_extract_tool_name": {
+              "doc": "Estrae il nome del tool da vari tipi di oggetti tool.",
+              "signature": "(self, tool: Any) -> str"
+            },
+            "_is_mcp_tool": {
+              "doc": "Determina se un tool \u00e8 un tool MCP basandosi sul nome.",
+              "signature": "(self, tool_name: str) -> bool"
+            },
+            "_wrap_callable_tool": {
+              "doc": "Wrappa un tool callable (function) preservando completamente la signature.",
+              "calls": [
+                "_create_function_wrapper",
+                "_execute_with_cleaning",
+                "wrapped_function"
+              ],
+              "signature": "(self, tool: Callable, tool_name: str) -> Callable"
+            },
+            "wrapped_function": {
+              "decorators": [
+                "wraps"
+              ],
+              "calls": [
+                "_execute_with_cleaning"
+              ],
+              "signature": "(*args, **kwargs)"
+            },
+            "_create_function_wrapper": {
+              "doc": "Create a wrapper for a raw function that will be used in StructuredTool.func",
+              "calls": [
+                "_execute_with_cleaning",
+                "wrapped_function"
+              ],
+              "signature": "(self, func: Callable, tool_name: str) -> Callable"
+            },
+            "_wrap_tool_object": {
+              "doc": "Wrappa un tool object.",
+              "calls": [
+                "__call__",
+                "__init__",
+                "_execute_with_cleaning",
+                "run"
+              ],
+              "signature": "(self, tool: Any, tool_name: str) -> Any"
+            },
+            "run": {
+              "calls": [
+                "_execute_with_cleaning"
+              ],
+              "signature": "(self, *args, **kwargs)"
+            },
+            "__call__": {
+              "calls": [
+                "_execute_with_cleaning",
+                "run"
+              ],
+              "signature": "(self, *args, **kwargs)"
+            },
+            "_execute_with_cleaning": {
+              "calls": [
+                "_check_and_log_compaction_trigger",
+                "_clean_tool_result",
+                "_create_no_cleaning_result",
+                "_log_cleaning_operation",
+                "_log_error",
+                "_log_post_execution_context",
+                "_log_pre_execution_context",
+                "_log_tool_call"
+              ],
+              "signature": "(self, tool_func: Callable, tool_name: str, *args, **kwargs) -> Any"
+            },
+            "_clean_tool_result": {
+              "doc": "Applica pulizia al risultato del tool.",
+              "signature": "(self, tool_name: str, result: Any, args: tuple, kwargs: dict) -> tuple[Any, CleaningResult]"
+            },
+            "_create_no_cleaning_result": {
+              "doc": "Crea un CleaningResult per quando la pulizia \u00e8 disabilitata.",
+              "signature": "(self, result: Any) -> CleaningResult"
+            },
+            "_log_tool_call": {
+              "doc": "Registra una chiamata al tool per analisi successive.",
+              "signature": "(self, tool_name: str, args: tuple, kwargs: dict, original_result: Any, cleaned_result: Any, cleaning_info: CleaningResult, execution_time: float) -> None"
+            },
+            "_log_error": {
+              "doc": "Registra un errore di esecuzione del tool.",
+              "signature": "(self, tool_name: str, args: tuple, kwargs: dict, error: Exception, execution_time: float) -> None"
+            },
+            "get_statistics": {
+              "doc": "Restituisce statistiche delle operazioni di wrapping.",
+              "signature": "(self) -> Dict[str, Any]"
+            },
+            "get_recent_calls": {
+              "doc": "Restituisce le chiamate recenti ai tool.",
+              "signature": "(self, limit: int = 10) -> List[Dict[str, Any]]"
+            },
+            "reset_statistics": {
+              "doc": "Resetta le statistiche.",
+              "signature": "(self) -> None"
+            },
+            "clean_message_list": {
+              "calls": [
+                "_clean_tool_message_content",
+                "_create_cleaned_tool_message",
+                "_is_mcp_tool_message",
+                "_log_message_cleaning"
+              ],
+              "signature": "(self, messages: List[Any]) -> List[Any]"
+            },
+            "_is_mcp_tool_message": {
+              "doc": "Verifica se un messaggio \u00e8 un ToolMessage MCP che necessita pulizia.",
+              "calls": [
+                "_is_mcp_tool"
+              ],
+              "signature": "(self, message: Any) -> bool"
+            },
+            "_clean_tool_message_content": {
+              "doc": "Pulisce il contenuto di un ToolMessage.",
+              "calls": [
+                "_clean_tool_result"
+              ],
+              "signature": "(self, message: Any) -> Any"
+            },
+            "_create_cleaned_tool_message": {
+              "doc": "Crea una copia del ToolMessage con contenuto pulito.",
+              "signature": "(self, original_message: Any, cleaned_content: Any) -> Any"
+            },
+            "_log_pre_execution_context": {
+              "doc": "Log del contesto prima dell'esecuzione del tool.",
+              "signature": "(self) -> None"
+            },
+            "_log_post_execution_context": {
+              "doc": "Log del contesto dopo l'esecuzione del tool.",
+              "signature": "(self, execution_time: float) -> None"
+            },
+            "_log_cleaning_operation": {
+              "doc": "Log delle operazioni di pulizia.",
+              "signature": "(self, tool_name: str, cleaning_info: CleaningResult, original_size: int) -> None"
+            },
+            "_check_and_log_compaction_trigger": {
+              "doc": "Verifica e log dei trigger di compattazione.",
+              "calls": [
+                "_trigger_context_compaction"
+              ],
+              "signature": "(self) -> None"
+            },
+            "_trigger_context_compaction": {
+              "doc": "Esegue la compattazione del contesto.",
+              "signature": "(self, messages: List[Any], trigger_type: Any, metrics: ContextMetrics) -> None"
+            },
+            "_log_message_cleaning": {
+              "doc": "Log dell'operazione di pulizia messaggio.",
+              "signature": "(self, original_message: Any, cleaned_message: Any) -> None"
+            }
+          },
+          "properties": [
+            "tool",
+            "tool_name",
+            "tools",
+            "tool_func",
+            "tool_name",
+            "messages"
+          ]
+        }
+      },
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T10:19:00.517071"
+    },
+    "examples/deep_planning/src/integrations/mcp/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "examples/deep_planning/src/integrations/mcp/mcp_cleaners.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "create_default_cleaning_strategies": {
+          "doc": "Disabled - returns empty list.",
+          "signature": "(config=None)"
+        }
+      },
+      "classes": {
+        "CleaningStrategy": {
+          "methods": {},
+          "doc": "Disabled stub for backward compatibility."
+        }
+      },
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T10:21:29.071153"
+    },
+    "examples/deep_planning/src/integrations/mcp/mcp_integration.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "load_fairmind_mcp_tools": {
+          "calls": [
+            "filter_relevant_fairmind_tools",
+            "get_fallback_tools"
+          ],
+          "signature": "async () -> Tuple[List[Any], Optional[Any], Optional[Any]]"
+        },
+        "filter_relevant_fairmind_tools": "(tools: List[Any]) -> List[Any]",
+        "get_fallback_tools": {
+          "calls": [
+            "get_project_overview_demo",
+            "list_projects_demo",
+            "search_code_demo"
+          ],
+          "signature": "() -> List[Any]"
+        },
+        "initialize_deep_planning_mcp_tools": {
+          "calls": [
+            "get_fallback_tools",
+            "load_fairmind_mcp_tools"
+          ],
+          "signature": "() -> Tuple[List[Any], Optional[Any], Optional[Any]]"
+        },
+        "get_mcp_status": {
+          "calls": [
+            "get_fallback_tools"
+          ],
+          "signature": "() -> Dict[str, Any]"
+        },
+        "print_mcp_status": {
+          "calls": [
+            "get_mcp_status"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T10:20:52.467877"
+    },
+    "examples/deep_planning/test_threshold_fix.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "test_threshold_logic": {
+          "doc": "Test that compression triggers at the correct threshold",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T09:03:29.819478",
+      "purpose": "Test file"
+    },
+    "examples/deep_planning/test_token_counting.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "test_token_counting": {
+          "doc": "Test different token counting methods",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T09:16:40.964103",
+      "purpose": "Test file"
+    },
+    "examples/deep_planning/test_tiktoken_counting.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "count_tokens": {
+          "doc": "Count tokens using tiktoken or fallback",
+          "signature": "(text)"
+        },
+        "test_real_token_counting": {
+          "doc": "Test with actual message structure",
+          "calls": [
+            "count_tokens"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T09:17:47.574717",
+      "purpose": "Test file"
+    },
+    "examples/deep_planning/test_langchain_messages.py": {
+      "language": "python",
+      "parsed": false,
+      "functions": {},
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T09:22:02.989995",
+      "purpose": "Test file"
+    },
+    "examples/deep_planning/test_token_fix.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "test_token_counting_fixes": {
+          "doc": "Test the fixed token counting system",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T09:26:43.608545",
+      "purpose": "Test file"
+    },
+    "examples/deep_planning/src/context/token_tracking_hooks.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "count_tokens_multiple_methods": "(messages: List[Dict[str, Any]], model_name: str = \"z-ai/glm-4.5\") -> Dict[str, int]",
+        "log_message_details": {
+          "doc": "Log detailed information about messages for debugging.",
+          "signature": "(messages: List[Any], prefix: str = \"\") -> None"
+        },
+        "create_enhanced_token_tracking_hook": {
+          "calls": [
+            "count_tokens_multiple_methods",
+            "enhanced_compression_hook",
+            "log_message_details"
+          ],
+          "signature": "(compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, model_name: Optional[str] = \"z-ai/glm-4.5\") -> Callable[[DeepAgentState], DeepAgentState]"
+        },
+        "create_passthrough_token_tracking_hook": {
+          "calls": [
+            "count_tokens_multiple_methods",
+            "passthrough_hook"
+          ],
+          "signature": "() -> Callable[[DeepAgentState], DeepAgentState]"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T15:37:49.141107"
+    },
+    "examples/deep_planning/src/context/http_interceptor.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "log_request_details": {
+          "doc": "Log detailed information about HTTP requests to OpenRouter.",
+          "signature": "(url: str, payload: Dict[str, Any], headers: Dict[str, str]) -> None"
+        },
+        "log_response_details": {
+          "doc": "Log detailed information about HTTP responses from OpenRouter.",
+          "signature": "(response: Any) -> None"
+        },
+        "patch_httpx": {
+          "doc": "Patch httpx.post to intercept OpenRouter requests.",
+          "calls": [
+            "log_request_details",
+            "log_response_details",
+            "patched_post"
+          ],
+          "signature": "()"
+        },
+        "patch_requests": {
+          "doc": "Patch requests.post to intercept OpenRouter requests.",
+          "calls": [
+            "log_request_details",
+            "log_response_details",
+            "patched_post"
+          ],
+          "signature": "()"
+        },
+        "enable_openrouter_logging": {
+          "doc": "Enable comprehensive OpenRouter request/response logging.",
+          "calls": [
+            "patch_httpx",
+            "patch_requests"
+          ],
+          "signature": "()"
+        },
+        "disable_openrouter_logging": {
+          "doc": "Disable OpenRouter logging by restoring original functions.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T15:38:30.881188"
+    },
+    "examples/deep_planning/src/core/debug_agent_core.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "create_debug_agent_with_enhanced_tracking": "(enable_compression=True)",
+        "test_token_tracking": {
+          "doc": "Test the token tracking capabilities with a simple conversation.",
+          "calls": [
+            "create_debug_agent_with_enhanced_tracking"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T15:43:03.512579"
+    },
+    "examples/deep_planning/test_token_tracking.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "test_minimal_tracking": {
+          "doc": "Test token tracking with a minimal agent configuration.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T15:43:33.122562",
+      "purpose": "Test file"
+    },
+    "examples/deep_planning/test_llm_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "test_llm_compression_integration": {
+          "doc": "Test dell'integrazione LLM compression.",
+          "signature": "()"
+        },
+        "show_configuration_status": {
+          "doc": "Mostra lo stato della configurazione.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T15:58:00.336197",
+      "purpose": "Test file"
+    },
+    "examples/deep_planning/test_compression_fix.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "test_compression_hook_fix": {
+          "doc": "Test that the compression hook properly returns state updates for LangGraph v2.",
+          "signature": "()"
+        },
+        "test_return_format_validation": {
+          "doc": "Validate that the hook return format matches LangGraph v2 expectations.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T16:03:05.033883",
+      "purpose": "Test file"
+    }
+  },
+  "dependency_graph": {
+    "examples/openrouter_glm45_example.py": [
+      "os",
+      "deepagents"
+    ],
+    "src/deepagents/compatibility.py": [
+      "inspect",
+      "logging",
+      "typing",
+      "langchain_core.tools"
+    ],
+    "src/deepagents/tools.py": [
+      "langchain_core.tools",
+      "langgraph.types",
+      "langchain_core.messages",
+      "typing",
+      "langgraph.prebuilt",
+      "deepagents.prompts",
+      "deepagents.state",
+      "re"
+    ],
+    "src/deepagents/graph.py": [
+      "deepagents.sub_agent",
+      "deepagents.model",
+      "deepagents.tools",
+      "deepagents.state",
+      "typing",
+      "langchain_core.tools",
+      "langchain_core.language_models",
+      "langgraph.prebuilt",
+      "langgraph.checkpoint.memory",
+      "os",
+      "sys",
+      "langgraph.checkpoint.postgres"
+    ],
+    "src/deepagents/model.py": [
+      "langchain_anthropic",
+      "langchain_litellm",
+      "os"
+    ],
+    "src/deepagents/sub_agent.py": [
+      "deepagents.prompts",
+      "deepagents.state",
+      "langgraph.prebuilt",
+      "langchain_core.tools",
+      "typing",
+      "langchain_core.tools",
+      "langchain_core.messages",
+      "typing",
+      "langgraph.types",
+      "logging",
+      "langgraph.prebuilt",
+      "logging",
+      "deepagents.tools"
+    ],
+    "src/deepagents/planning.py": [
+      "typing",
+      "langgraph.types",
+      "dataclasses",
+      "enum",
+      "re"
+    ],
+    "src/deepagents/state.py": [
+      "langgraph.prebuilt.chat_agent_executor",
+      "typing",
+      "typing",
+      "typing_extensions"
+    ],
+    "examples/research/research_agent.py": [
+      "os",
+      "typing",
+      "tavily",
+      "deepagents"
+    ],
+    "examples/deep_planning/test_compression_logging.py": [
+      "logging",
+      "sys",
+      "os",
+      "pathlib",
+      "src.context.context_manager",
+      "src.context.compact_integration",
+      "src.context.context_compression",
+      "src.integrations.mcp.mcp_cleaners",
+      "traceback"
+    ],
+    "examples/atlas/test_planning_workflow.py": [
+      "sys",
+      "os",
+      "deepagents",
+      "deepagents.planning"
+    ],
+    "examples/atlas/demo_planning_approval.py": [
+      "sys",
+      "os",
+      "deepagents",
+      "langgraph.types",
+      "deepagents"
+    ],
+    "examples/atlas/atlas_agent.py": [
+      "asyncio",
+      "os",
+      "typing",
+      "deepagents",
+      "langchain_mcp_adapters.client",
+      "langchain_mcp_adapters.tools",
+      "langchain_core.tools",
+      "deepagents"
+    ],
+    "examples/deep_planning/archive/compression_node.py": [
+      "logging",
+      "typing",
+      "deepagents.state"
+    ],
+    "examples/deep_planning/archive/graph_with_compression.py": [
+      "logging",
+      "typing",
+      "deepagents.state",
+      "langchain_core.tools",
+      "langchain_core.language_models",
+      "langchain_core.messages",
+      "langgraph.graph",
+      "langgraph.prebuilt",
+      "langgraph.checkpoint.memory",
+      "os",
+      "sys",
+      "deepagents.model",
+      "langgraph.checkpoint.postgres",
+      "deepagents.tools",
+      "deepagents.model",
+      "deepagents.model"
+    ],
+    "examples/deep_planning/tests/test_create_agent.py": [
+      "sys",
+      "os",
+      "compatibility_layer",
+      "langgraph.prebuilt",
+      "langchain_core.tools",
+      "deepagents.model",
+      "deepagents.tools",
+      "inspect"
+    ],
+    "examples/deep_planning/tests/test_compatibility.py": [
+      "asyncio",
+      "sys",
+      "os",
+      "src.compatibility.tool_compatibility",
+      "src.compatibility.model_compatibility",
+      "langchain_core.tools"
+    ],
+    "examples/deep_planning/tests/test_logging.py": [
+      "logging",
+      "os",
+      "sys",
+      "json",
+      "pathlib",
+      "typing",
+      "mcp_wrapper",
+      "context_manager"
+    ],
+    "examples/deep_planning/tests/test_dynamic_system.py": [
+      "sys",
+      "os",
+      "typing",
+      "dataclasses",
+      "dynamic_agent_factory",
+      "prompt_config",
+      "prompt_templates"
+    ],
+    "examples/deep_planning/tests/test_phase4_integrations.py": [
+      "asyncio",
+      "logging",
+      "sys",
+      "typing",
+      "pathlib",
+      "optimized_llm_compressor",
+      "llm_compression",
+      "yaml",
+      "context_hooks",
+      "llm_compression",
+      "re",
+      "validation_chains"
+    ],
+    "examples/deep_planning/tests/test_context_manager.py": [
+      "json",
+      "pytest",
+      "time",
+      "yaml",
+      "typing",
+      "unittest.mock",
+      "context_manager",
+      "mcp_cleaners",
+      "mcp_wrapper",
+      "compact_integration"
+    ],
+    "examples/deep_planning/tests/test_config_integration.py": [
+      "sys",
+      "os",
+      "typing",
+      "config_loader",
+      "context_manager",
+      "enhanced_compact_integration",
+      "context_manager",
+      "mcp_cleaners",
+      "llm_compression",
+      "config_loader"
+    ],
+    "examples/deep_planning/tests/test_optimization.py": [
+      "sys",
+      "os",
+      "typing",
+      "optimized_prompts",
+      "prompt_templates",
+      "prompt_config"
+    ],
+    "examples/deep_planning/tests/test_mcp_state_cleaning.py": [
+      "json",
+      "typing",
+      "mcp_wrapper"
+    ],
+    "examples/deep_planning/tests/test_hook_integration.py": [
+      "asyncio",
+      "os",
+      "typing",
+      "agent_core",
+      "agent_core",
+      "config_loader",
+      "enhanced_compact_integration",
+      "context_manager",
+      "llm_compression",
+      "deepagents.model",
+      "traceback"
+    ],
+    "examples/deep_planning/examples/integration_example.py": [
+      "asyncio",
+      "os",
+      "typing",
+      "agent_core",
+      "mcp_integration",
+      "llm_compression",
+      "context_hooks",
+      "enhanced_compact_integration",
+      "deepagents.model",
+      "deepagents.state"
+    ],
+    "examples/deep_planning/src/compatibility/tool_compatibility.py": [
+      "json",
+      "logging",
+      "typing",
+      "functools",
+      "langchain_core.tools",
+      "langchain_core.tools.base"
+    ],
+    "examples/deep_planning/src/compatibility/compatibility_layer.py": [
+      "logging",
+      "sys",
+      "builtins",
+      "typing",
+      "typing",
+      "typing_extensions",
+      "pydantic",
+      "pydantic.fields",
+      "pydantic.dataclasses",
+      "pydantic._internal._typing_extra",
+      "pydantic.json_schema",
+      "pydantic_core",
+      "typing",
+      "importlib",
+      "inspect",
+      "typing",
+      "langchain_core.tools"
+    ],
+    "examples/deep_planning/src/compatibility/unified_wrapper.py": [
+      "logging",
+      "typing",
+      "functools",
+      "dataclasses"
+    ],
+    "examples/deep_planning/src/compatibility/model_compatibility.py": [
+      "os",
+      "re",
+      "logging",
+      "typing",
+      "dataclasses",
+      "enum"
+    ],
+    "examples/deep_planning/src/context/context_manager.py": [
+      "json",
+      "re",
+      "time",
+      "logging",
+      "abc",
+      "dataclasses",
+      "datetime",
+      "typing",
+      "enum",
+      "tiktoken  # Per conteggio token preciso"
+    ],
+    "examples/deep_planning/src/context/context_compression.py": [
+      "asyncio",
+      "logging",
+      "typing",
+      "datetime",
+      "langchain_core.tools",
+      "langgraph.prebuilt",
+      "typing"
+    ],
+    "examples/deep_planning/src/context/llm_compression.py": [
+      "asyncio",
+      "json",
+      "time",
+      "datetime",
+      "typing",
+      "dataclasses",
+      "enum",
+      "langchain_core.language_models",
+      "langchain_core.messages",
+      "re"
+    ],
+    "examples/deep_planning/src/context/compact_integration.py": [
+      "json",
+      "time",
+      "datetime",
+      "typing",
+      "dataclasses",
+      "re",
+      "re",
+      "re",
+      "re"
+    ],
+    "examples/deep_planning/src/context/compression_hooks.py": [
+      "logging",
+      "typing",
+      "deepagents.state"
+    ],
+    "examples/deep_planning/src/context/context_hooks.py": [
+      "asyncio",
+      "json",
+      "time",
+      "yaml",
+      "os",
+      "abc",
+      "typing",
+      "dataclasses",
+      "enum",
+      "functools",
+      "pathlib",
+      "langchain_core.language_models",
+      "langgraph.types",
+      "deepagents.state",
+      "deepagents.graph"
+    ],
+    "examples/deep_planning/src/core/phase_orchestration.py": [
+      "logging",
+      "typing"
+    ],
+    "examples/deep_planning/src/core/agent_factory.py": [
+      "typing"
+    ],
+    "examples/deep_planning/src/core/agent_core.py": [
+      "os",
+      "logging",
+      "asyncio",
+      "typing",
+      "deepagents",
+      "deepagents.model",
+      "deepagents.tools",
+      "deepagents.tools"
+    ],
+    "examples/deep_planning/src/config/config_loader.py": [
+      "yaml",
+      "os",
+      "typing",
+      "dataclasses",
+      "os"
+    ],
+    "examples/deep_planning/src/config/prompt_templates.py": [
+      "typing",
+      "re"
+    ],
+    "examples/deep_planning/src/config/prompt_config.py": [
+      "typing",
+      "dataclasses",
+      "enum"
+    ],
+    "examples/deep_planning/src/config/unified_config.py": [
+      "os",
+      "yaml",
+      "logging",
+      "typing",
+      "dataclasses",
+      "pathlib",
+      "enum",
+      "json"
+    ],
+    "examples/deep_planning/src/utils/validation_chains.py": [
+      "logging",
+      "typing",
+      "dataclasses",
+      "enum",
+      "abc"
+    ],
+    "examples/deep_planning/src/utils/performance_optimizer.py": [
+      "asyncio",
+      "hashlib",
+      "json",
+      "time",
+      "abc",
+      "collections",
+      "dataclasses",
+      "datetime",
+      "typing",
+      "enum",
+      "aiofiles",
+      "aiofiles.os",
+      "logging",
+      "unified_config"
+    ],
+    "examples/deep_planning/src/utils/logging_setup.py": [
+      "logging",
+      "sys",
+      "mcp_wrapper",
+      "configure_detailed_logging",
+      "mcp_wrapper"
+    ],
+    "examples/deep_planning/src/integrations/mcp/mcp_wrapper.py": [
+      "asyncio",
+      "json",
+      "time",
+      "inspect",
+      "logging",
+      "functools",
+      "typing",
+      "dataclasses"
+    ],
+    "examples/deep_planning/src/integrations/mcp/mcp_cleaners.py": [
+      "json",
+      "re",
+      "logging",
+      "typing",
+      "dataclasses"
+    ],
+    "examples/deep_planning/src/integrations/mcp/mcp_integration.py": [
+      "asyncio",
+      "os",
+      "logging",
+      "typing",
+      "langchain_mcp_adapters.client",
+      "langchain_mcp_adapters.tools",
+      "langchain_core.tools"
+    ]
+  },
+  "staleness_check": 1754851214.271985
+}
