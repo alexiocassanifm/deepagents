@@ -17,6 +17,7 @@ import logging
 import asyncio
 from typing import Dict, Any, List, Optional, Tuple
 from deepagents import create_deep_agent
+from deepagents.tools import write_todos, read_file, write_file, ls, edit_file
 
 # Setup logging
 logging.basicConfig(
@@ -460,7 +461,10 @@ def create_optimized_deep_planning_agent(
         print(f"   ⚙️ Config source: context_config.yaml")
     
     # Note: Tool wrapping is no longer needed - compression now handled by dedicated node
-    final_tools = deep_planning_tools
+    # Combine MCP tools with deepagents filesystem tools
+    filesystem_tools = [write_todos, read_file, write_file, ls, edit_file]
+    final_tools = deep_planning_tools + filesystem_tools
+    logger.info(f"🛠️ Combined MCP tools ({len(deep_planning_tools)}) with filesystem tools ({len(filesystem_tools)})")
     if enable_llm_compression and enhanced_compact_integration:
         print("🧠 Compression will be handled by dedicated compression node in graph")
         logger.info("🧠 Using compression node instead of tool wrapping for better compatibility")

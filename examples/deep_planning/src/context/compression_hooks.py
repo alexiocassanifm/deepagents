@@ -6,20 +6,27 @@ create_react_agent pre_model_hook parameter for automatic context compression.
 
 Key Features:
 - Clean integration with create_react_agent
-- Preserves all original agent functionality  
-- Automatic compression before LLM calls
-- Compatible with existing CompactIntegration
+- Selective compression preserving critical elements (todos, virtual FS, system messages)
+- Agent-driven MCP content archiving
+- Compatible with deepagents architecture
 """
 
 import logging
 from typing import Dict, Any, Optional, Callable
 from deepagents.state import DeepAgentState
-from langchain_core.messages import RemoveMessage
 
 # Setup logger for compression hooks
 logger = logging.getLogger(__name__)
 
-# Import dependencies if available
+# Import compression dependencies
+try:
+    from .selective_compression import SelectiveCompressor, create_smart_compression_hook
+    SELECTIVE_COMPRESSION_AVAILABLE = True
+except ImportError:
+    SELECTIVE_COMPRESSION_AVAILABLE = False
+    logger.warning("⚠️ Selective compression not available")
+
+# Fallback to existing CompactIntegration if available
 try:
     from .compact_integration import CompactIntegration
     COMPACT_AVAILABLE = True
@@ -31,7 +38,8 @@ except ImportError:
 def create_compression_hook(
     compact_integration: Optional[Any] = None,
     mcp_wrapper: Optional[Any] = None,
-    model_name: Optional[str] = None
+    model_name: Optional[str] = None,
+    use_selective_compression: bool = True
 ) -> Callable[[DeepAgentState], DeepAgentState]:
     """
     Create a compression hook for use with create_react_agent's pre_model_hook.
@@ -40,9 +48,10 @@ def create_compression_hook(
     the message history if needed, keeping the agent within token limits.
     
     Args:
-        compact_integration: CompactIntegration instance for compression
+        compact_integration: CompactIntegration instance for compression (legacy)
         mcp_wrapper: MCP wrapper for additional context management  
         model_name: Model name for accurate LiteLLM token counting
+        use_selective_compression: Use new selective compression (default: True)
         
     Returns:
         Hook function compatible with pre_model_hook parameter
@@ -51,12 +60,24 @@ def create_compression_hook(
     # Create monitor logger for detailed compression tracking
     monitor_logger = logging.getLogger('mcp_context_tracker')
     
+    # If selective compression is available and requested, use the new approach
+    if use_selective_compression and SELECTIVE_COMPRESSION_AVAILABLE:
+        logger.info("✅ Using new selective compression approach")
+        return create_smart_compression_hook()
+    
+    # Fall back to legacy compression if needed
+    if not compact_integration:
+        logger.warning("⚠️ No compression integration available, using passthrough")
+        return create_passthrough_hook()
+    
+    logger.info("ℹ️ Using legacy CompactIntegration compression")
+    
     def compression_hook(state: DeepAgentState) -> DeepAgentState:
         """
-        Pre-model hook that compresses messages if needed.
+        LEGACY: Pre-model hook that compresses messages using CompactIntegration.
         
-        This function is called by LangGraph before each LLM call and has
-        the opportunity to modify the state, including compressing messages.
+        This is the legacy compression approach that uses RemoveMessage to clear
+        all context. The new selective compression approach is preferred.
         
         Args:
             state: Current LangGraph state
@@ -178,16 +199,14 @@ def create_compression_hook(
                 
                 logger.info(f"✅ Context compressed via pre-model hook: {reduction_percentage:.1f}% reduction")
                 
-                # Return state update for LangGraph v2 format with RemoveMessage to clear existing messages
-                # This will permanently replace ALL messages in the graph state with compressed ones
-                monitor_logger.info(f"📦 Permanently replacing {len(messages)} messages with {len(compacted_messages)} compressed messages")
-                monitor_logger.info(f"🗑️ Using RemoveMessage to clear existing context before adding compressed messages")
+                # LEGACY APPROACH WARNING: This replaces all messages which can destroy context
+                # Including todos, virtual file system state, and other critical elements
+                # The new selective compression approach (use_selective_compression=True) is recommended
+                monitor_logger.info(f"📦 LEGACY: Permanently replacing {len(messages)} messages with {len(compacted_messages)} compressed messages")
+                monitor_logger.warning(f"⚠️ LEGACY APPROACH: Replacing all messages can destroy todos and virtual FS state")
                 
                 return {
-                    "messages": [
-                        RemoveMessage(id="__remove_all__"),  # Clear ALL existing messages first
-                        *compacted_messages  # Then add only the compressed messages
-                    ]
+                    "messages": compacted_messages  # Replace with only compressed messages
                 }
                 
             else:

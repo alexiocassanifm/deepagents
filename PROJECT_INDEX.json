@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2025-08-17T20:40:13.978943",
+  "indexed_at": "2025-08-18T22:31:54.691948",
   "root": ".",
   "project_structure": {
     "type": "tree",
@@ -7,12 +7,12 @@
     "tree": [
       ".",
       "\u251c\u2500\u2500 deepagents.egg-info/",
-      "\u251c\u2500\u2500 examples/ (59 files)",
+      "\u251c\u2500\u2500 examples/ (66 files)",
       "\u2502   \u251c\u2500\u2500 atlas/ (4 files)",
       "\u2502   \u2502   \u251c\u2500\u2500 pyproject.toml",
       "\u2502   \u2502   \u251c\u2500\u2500 README.md",
       "\u2502   \u2502   \u2514\u2500\u2500 requirements.txt",
-      "\u2502   \u251c\u2500\u2500 deep_planning/ (52 files)",
+      "\u2502   \u251c\u2500\u2500 deep_planning/ (59 files)",
       "\u2502   \u2502   \u251c\u2500\u2500 archive/ (2 files)",
       "\u2502   \u2502   \u251c\u2500\u2500 config/",
       "\u2502   \u2502   \u251c\u2500\u2500 deep_planning_agent.egg-info/",
@@ -21,11 +21,11 @@
       "\u2502   \u2502   \u251c\u2500\u2500 examples/ (1 files)",
       "\u2502   \u2502   \u251c\u2500\u2500 logs/",
       "\u2502   \u2502   \u251c\u2500\u2500 scripts/ (2 files)",
-      "\u2502   \u2502   \u251c\u2500\u2500 src/ (33 files)",
+      "\u2502   \u2502   \u251c\u2500\u2500 src/ (36 files)",
       "\u2502   \u2502   \u2502   \u251c\u2500\u2500 compatibility/ (5 files)",
       "\u2502   \u2502   \u2502   \u251c\u2500\u2500 config/ (6 files)",
-      "\u2502   \u2502   \u2502   \u251c\u2500\u2500 context/ (7 files)",
-      "\u2502   \u2502   \u2502   \u251c\u2500\u2500 core/ (4 files)",
+      "\u2502   \u2502   \u2502   \u251c\u2500\u2500 context/ (9 files)",
+      "\u2502   \u2502   \u2502   \u251c\u2500\u2500 core/ (5 files)",
       "\u2502   \u2502   \u2502   \u251c\u2500\u2500 integrations/ (5 files)",
       "\u2502   \u2502   \u2502   \u2502   \u2514\u2500\u2500 mcp/ (4 files)",
       "\u2502   \u2502   \u2502   \u2514\u2500\u2500 utils/ (5 files)",
@@ -36,8 +36,10 @@
       "\u2502   \u2514\u2500\u2500 research/ (2 files)",
       "\u2502       \u2514\u2500\u2500 requirements.txt",
       "\u251c\u2500\u2500 specs/",
-      "\u251c\u2500\u2500 src/ (9 files)",
-      "\u2502   \u2514\u2500\u2500 deepagents/ (9 files)",
+      "\u251c\u2500\u2500 src/ (14 files)",
+      "\u2502   \u2514\u2500\u2500 deepagents/ (14 files)",
+      "\u2502       \u251c\u2500\u2500 context/ (2 files)",
+      "\u2502       \u2514\u2500\u2500 extensions/ (3 files)",
       "\u251c\u2500\u2500 pyproject.toml",
       "\u2514\u2500\u2500 README.md"
     ]
@@ -55,6 +57,21 @@
         "- Any other MCP tools defined in langgraph.json",
         "Available MCP Tools",
         "Benefits of This Approach"
+      ],
+      "architecture_hints": []
+    },
+    "CONTEXT_REFACTOR_PR_DESCRIPTION.md": {
+      "sections": [
+        "DeepAgents Context Management Refactor - Selective Compression & Agent-Driven Archiving",
+        "Summary",
+        "Problem Statement",
+        "Current Issues Resolved",
+        "Solution Overview",
+        "\ud83c\udfaf Selective Compression System",
+        "\ud83c\udfd7\ufe0f Agent-Driven MCP Archiving",
+        "\ud83e\uddf9 Architecture Simplification",
+        "Key Changes",
+        "\ud83d\udce6 New Core Module: `src/deepagents/context/selective_compression.py`"
       ],
       "architecture_hints": []
     },
@@ -144,6 +161,36 @@
         "Phase 2: Targeted Discussion",
         "Phase 3: Structured Planning",
         "Phase 4: Task Generation  "
+      ],
+      "architecture_hints": []
+    },
+    "specs/deepagents-context-refactor.md": {
+      "sections": [
+        "DeepAgents Context Management Refactor",
+        "Executive Summary",
+        "Current Problem",
+        "Solution Overview",
+        "Current State Analysis",
+        "Problem 1: Indiscriminate Compression",
+        "Problem 2: Architectural Mismatch",
+        "Problem 3: MCP Content Bloat",
+        "Proposed Architecture",
+        "Core Principle: Selective Preservation"
+      ],
+      "architecture_hints": []
+    },
+    "specs/MCP_TOOLS_DOCUMENTATION.md": {
+      "sections": [
+        "MCP Tools Documentation",
+        "Endpoint MCP Principali",
+        "`/mcp` - Endpoint Principale",
+        "`/mcp/company` - Endpoint Aziendale  ",
+        "\ud83d\udccb General Tools",
+        "Endpoint: `/mcp` e `/mcp/company`",
+        "\ud83c\udfaf Studio Tools",
+        "Endpoint: `/mcp` e `/mcp/company`",
+        "\ud83d\udcbb Code Tools",
+        "Endpoint: Solo `/mcp`"
       ],
       "architecture_hints": []
     },
@@ -294,20 +341,22 @@
       ],
       "architecture_hints": []
     },
-    "specs/deepagents-context-refactor.md": {
+    "examples/deep_planning/README.md": {
       "sections": [
-        "DeepAgents Context Management Refactor",
-        "Executive Summary",
-        "Current Problem",
-        "Solution Overview",
-        "Current State Analysis",
-        "Problem 1: Indiscriminate Compression",
-        "Problem 2: Architectural Mismatch",
-        "Problem 3: MCP Content Bloat",
-        "Proposed Architecture",
-        "Core Principle: Selective Preservation"
+        "Deep Planning Agent with Smart Context Compression",
+        "\ud83d\ude80 Quick Start",
+        "Enhanced Agent (Recommended)",
+        "Create agent with smart compression enabled",
+        "Use the agent normally",
+        "Simple Agent (Core Only)",
+        "Create basic agent without enhancements",
+        "\ud83c\udfaf Key Features",
+        "\ud83e\udde0 Smart Context Compression",
+        "\ud83d\udce6 MCP Content Archiving"
       ],
-      "architecture_hints": []
+      "architecture_hints": [
+        "examples/enhanced_agent_example.py"
+      ]
     }
   },
   "directory_purposes": {
@@ -325,19 +374,96 @@
     "examples/deep_planning/src/utils": "Shared utility functions and helpers"
   },
   "stats": {
-    "total_files": 72,
-    "total_directories": 31,
+    "total_files": 86,
+    "total_directories": 33,
     "fully_parsed": {
-      "python": 63,
+      "python": 76,
       "shell": 1
     },
     "listed_only": {
-      "json": 7,
+      "json": 8,
       "shell": 1
     },
-    "markdown_files": 30
+    "markdown_files": 21
   },
   "files": {
+    "test_selective_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "sys",
+        "os",
+        "asyncio",
+        "json",
+        "datetime",
+        "deepagents.context",
+        "deepagents.extensions",
+        "traceback"
+      ],
+      "functions": {
+        "test_preservation_rules": {
+          "doc": "Test that preservation rules correctly identify critical content.",
+          "signature": "()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "test_message_analyzer": {
+          "doc": "Test MCP content analysis functionality.",
+          "signature": "()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "test_selective_compressor": {
+          "doc": "Test the core selective compression functionality.",
+          "signature": "()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "test_smart_compression_hook": {
+          "doc": "Test the smart compression hook.",
+          "signature": "()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "test_virtual_fs_tools": {
+          "doc": "Test virtual filesystem management tools.",
+          "signature": "async ()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "test_integration": {
+          "doc": "Test integration between components.",
+          "signature": "()",
+          "called_by": [
+            "main"
+          ]
+        },
+        "main": {
+          "doc": "Run all tests.",
+          "calls": [
+            "test_integration",
+            "test_message_analyzer",
+            "test_preservation_rules",
+            "test_selective_compressor",
+            "test_smart_compression_hook",
+            "test_virtual_fs_tools"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "PROJECT_INDEX.json": {
+      "language": "json",
+      "parsed": false
+    },
     ".obsidian/workspace.json": {
       "language": "json",
       "parsed": false
@@ -462,28 +588,12 @@
     "src/deepagents/graph.py": {
       "language": "python",
       "parsed": true,
-      "imports": [
-        "deepagents.sub_agent",
-        "deepagents.model",
-        "deepagents.tools",
-        "deepagents.state",
-        "typing",
-        "langchain_core.tools",
-        "langchain_core.language_models",
-        "langgraph.prebuilt",
-        "langgraph.checkpoint.memory",
-        "os",
-        "sys",
-        "langgraph.checkpoint.postgres"
-      ],
       "functions": {
         "create_deep_agent": "(tools: Sequence[Union[BaseTool, Callable, dict[str, Any]]], instructions: str, model: Optional[Union[str, LanguageModelLike]] = None, subagents: list[SubAgent] = None, state_schema: Optional[StateSchemaType] = None, enable_planning_approval: bool = False, checkpointer: Optional[Union[str, Any]] = None, pre_model_hook: Optional[Callable] = None,)"
       },
       "classes": {},
-      "type_aliases": {
-        "StateSchemaType": "Type[StateSchema]"
-      },
-      "call_graph": {}
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T22:41:56.724663"
     },
     "src/deepagents/__init__.py": {
       "language": "python",
@@ -608,13 +718,13 @@
             "__init__": {
               "signature": "(self, enable_sequential_thinking: bool = False)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -647,8 +757,8 @@
               "doc": "Format a plan for human review.",
               "signature": "(self, plan: Plan) -> str",
               "called_by": [
-                "review_plan",
-                "DocumentationPlanner.request_plan_approval"
+                "DocumentationPlanner.request_plan_approval",
+                "review_plan"
               ]
             }
           },
@@ -799,6 +909,299 @@
       },
       "call_graph": {}
     },
+    "src/deepagents/context/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "src/deepagents/context/selective_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "typing",
+        "json",
+        "re",
+        "datetime",
+        "logging"
+      ],
+      "functions": {
+        "is_mcp_content_tool": {
+          "doc": "Check if a tool name is a known MCP content tool.",
+          "signature": "(tool_name: str) -> bool"
+        },
+        "generate_mcp_filename": {
+          "doc": "Generate appropriate filename for MCP content.",
+          "calls": [
+            "_generate_filename"
+          ],
+          "signature": "(tool_name: str) -> str"
+        },
+        "create_smart_compression_hook": {
+          "doc": "Create a smart compression hook for deepagents.",
+          "calls": [
+            "compress_messages",
+            "smart_compression_hook"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {
+        "PreservationRules": {
+          "methods": {
+            "__init__": {
+              "signature": "(self)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
+            },
+            "should_preserve_message": {
+              "calls": [
+                "_contains_todos",
+                "_is_recent_tool_result",
+                "_references_virtual_fs"
+              ],
+              "signature": "(self, message: Dict, index: int, context: Dict) -> bool",
+              "called_by": [
+                "SelectiveCompressor.compress_messages"
+              ]
+            },
+            "_contains_todos": {
+              "doc": "Check if message contains todo-related content.",
+              "signature": "(self, message: Dict) -> bool",
+              "called_by": [
+                "PreservationRules.should_preserve_message"
+              ]
+            },
+            "_is_recent_tool_result": {
+              "doc": "Check if this is a recent tool result that should be preserved.",
+              "signature": "(self, message: Dict, index: int, context: Dict) -> bool",
+              "called_by": [
+                "PreservationRules.should_preserve_message"
+              ]
+            },
+            "_references_virtual_fs": {
+              "doc": "Check if message references virtual file system operations.",
+              "signature": "(self, message: Dict) -> bool",
+              "called_by": [
+                "PreservationRules.should_preserve_message"
+              ]
+            }
+          },
+          "doc": "Defines what content must never be compressed.",
+          "properties": [
+            "message",
+            "index",
+            "context"
+          ]
+        },
+        "MessageAnalyzer": {
+          "methods": {
+            "extract_topics": {
+              "doc": "Extract key topics from a list of messages.",
+              "signature": "(self, messages: List[Dict]) -> List[str]",
+              "called_by": [
+                "SelectiveCompressor._compress_conversation_buffer"
+              ]
+            },
+            "extract_timeframe": {
+              "doc": "Extract timeframe information from messages.",
+              "signature": "(self, messages: List[Dict]) -> str",
+              "called_by": [
+                "SelectiveCompressor._compress_conversation_buffer"
+              ]
+            },
+            "analyze_mcp_content": {
+              "doc": "Analyze if message contains large MCP content requiring archiving.",
+              "calls": [
+                "_extract_content_summary",
+                "_generate_filename"
+              ],
+              "signature": "(self, message: Dict) -> Optional[Dict]",
+              "called_by": [
+                "SelectiveCompressor.compress_messages"
+              ]
+            },
+            "_extract_content_summary": {
+              "doc": "Extract a brief summary from large content.",
+              "signature": "(self, content: str) -> str",
+              "called_by": [
+                "MessageAnalyzer.analyze_mcp_content"
+              ]
+            },
+            "_generate_filename": {
+              "doc": "Generate appropriate filename for MCP content.",
+              "signature": "(self, tool_name: str) -> str",
+              "called_by": [
+                "MessageAnalyzer.analyze_mcp_content",
+                "generate_mcp_filename"
+              ]
+            }
+          },
+          "doc": "Analyzes message content and extracts key information."
+        },
+        "SelectiveCompressor": {
+          "methods": {
+            "__init__": {
+              "signature": "(self)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
+            },
+            "compress_messages": {
+              "calls": [
+                "_compress_conversation_buffer",
+                "_create_archiving_marker",
+                "analyze_mcp_content",
+                "should_preserve_message"
+              ],
+              "signature": "(self, messages: List[Dict], state_context: Dict) -> List[Dict]",
+              "called_by": [
+                "create_smart_compression_hook"
+              ]
+            },
+            "_compress_conversation_buffer": {
+              "doc": "Compress a buffer of old conversations into a summary.",
+              "calls": [
+                "extract_timeframe",
+                "extract_topics"
+              ],
+              "signature": "(self, buffer: List[Dict]) -> Dict",
+              "called_by": [
+                "SelectiveCompressor.compress_messages"
+              ]
+            }
+          },
+          "doc": "Performs intelligent compression preserving critical elements.",
+          "properties": [
+            "messages",
+            "state_context"
+          ]
+        }
+      },
+      "constants": {
+        "PRESERVE_ALWAYS": "collection",
+        "MCP_CONTENT_TOOLS": "collection",
+        "ARCHIVING_THRESHOLDS": "collection"
+      },
+      "call_graph": {}
+    },
+    "src/deepagents/extensions/smart_archiving_prompts.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "enhance_agent_instructions": {
+          "doc": "Add smart archiving capabilities to agent instructions.",
+          "signature": "(base_instructions: str) -> str"
+        }
+      },
+      "classes": {},
+      "constants": {
+        "SMART_ARCHIVING_PROMPT": "str",
+        "VIRTUAL_FS_MANAGEMENT_PROMPT": "str"
+      },
+      "call_graph": {}
+    },
+    "src/deepagents/extensions/__init__.py": {
+      "language": "python",
+      "parsed": false
+    },
+    "src/deepagents/extensions/virtual_fs_tools.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "re",
+        "json",
+        "datetime",
+        "typing",
+        "langchain_core.tools",
+        "deepagents.state",
+        "langgraph.prebuilt"
+      ],
+      "functions": {
+        "organize_virtual_fs": {
+          "decorators": [
+            "tool"
+          ],
+          "calls": [
+            "cleanup_old_archives"
+          ],
+          "signature": "async (state: Annotated[DeepAgentState, InjectedState]) -> str"
+        },
+        "cleanup_old_archives": {
+          "decorators": [
+            "tool"
+          ],
+          "calls": [
+            "_extract_timestamp_from_filename"
+          ],
+          "signature": "async (prefix: str, state: Annotated[DeepAgentState, InjectedState], keep_last_n: int = 3) -> str",
+          "called_by": [
+            "organize_virtual_fs"
+          ]
+        },
+        "archive_content_helper": {
+          "decorators": [
+            "tool"
+          ],
+          "calls": [
+            "_clean_filename"
+          ],
+          "signature": "async (content: str, filename: str, summary: str, state: Annotated[DeepAgentState, InjectedState]) -> str",
+          "called_by": [
+            "get_archiving_suggestions"
+          ]
+        },
+        "get_archiving_suggestions": {
+          "decorators": [
+            "tool"
+          ],
+          "calls": [
+            "_generate_filename_for_tool",
+            "archive_content_helper"
+          ],
+          "signature": "async (state: Annotated[DeepAgentState, InjectedState]) -> str"
+        },
+        "_extract_timestamp_from_filename": {
+          "doc": "Extract timestamp from filename for sorting.",
+          "signature": "(filename: str) -> str",
+          "called_by": [
+            "cleanup_old_archives"
+          ]
+        },
+        "_clean_filename": {
+          "doc": "Clean and validate filename for virtual FS.",
+          "signature": "(filename: str) -> str",
+          "called_by": [
+            "archive_content_helper"
+          ]
+        },
+        "_generate_filename_for_tool": {
+          "doc": "Generate appropriate filename for a tool output.",
+          "signature": "(tool_name: str) -> str",
+          "called_by": [
+            "get_archiving_suggestions"
+          ]
+        }
+      },
+      "classes": {},
+      "constants": {
+        "FILE_NAMING_CONVENTION": "collection"
+      },
+      "call_graph": {}
+    },
     "examples/research/langgraph.json": {
       "language": "json",
       "parsed": false
@@ -816,6 +1219,84 @@
         "internet_search": {
           "doc": "Run a web search",
           "signature": "(query: str, max_results: int = 5, topic: Literal[\"general\", \"news\", \"finance\"] = \"general\", include_raw_content: bool = False,)"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/test_permanent_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "sys",
+        "logging",
+        "unittest.mock",
+        "langchain_core.messages",
+        "src.context.compression_hooks"
+      ],
+      "functions": {
+        "simulate_langgraph_add_messages": {
+          "signature": "(existing_messages, new_messages)",
+          "called_by": [
+            "test_permanent_compression_simulation"
+          ]
+        },
+        "test_permanent_compression_simulation": {
+          "doc": "Test that demonstrates how compression permanently reduces token usage.",
+          "calls": [
+            "simulate_langgraph_add_messages"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/test_llm_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "os",
+        "sys",
+        "logging",
+        "datetime",
+        "pathlib",
+        "src.context.context_manager",
+        "src.context.compact_integration",
+        "traceback"
+      ],
+      "functions": {
+        "test_llm_compression_integration": {
+          "doc": "Test dell'integrazione LLM compression.",
+          "signature": "()"
+        },
+        "show_configuration_status": {
+          "doc": "Mostra lo stato della configurazione.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
+    "examples/deep_planning/test_token_tracking.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "sys",
+        "os",
+        "logging",
+        "src.context.http_interceptor",
+        "src.context.token_tracking_hooks",
+        "deepagents",
+        "traceback"
+      ],
+      "functions": {
+        "test_minimal_tracking": {
+          "doc": "Test token tracking with a minimal agent configuration.",
+          "signature": "()"
         }
       },
       "classes": {},
@@ -900,6 +1381,32 @@
     "examples/deep_planning/langgraph.json": {
       "language": "json",
       "parsed": false
+    },
+    "examples/deep_planning/test_compression_fix.py": {
+      "language": "python",
+      "parsed": true,
+      "purpose": "Test file",
+      "imports": [
+        "sys",
+        "os",
+        "logging",
+        "unittest.mock",
+        "src.context.compression_hooks",
+        "langchain_core.messages",
+        "src.context.compression_hooks"
+      ],
+      "functions": {
+        "test_compression_hook_fix": {
+          "doc": "Test that the compression hook properly returns state updates for LangGraph v2.",
+          "signature": "()"
+        },
+        "test_return_format_validation": {
+          "doc": "Validate that the hook return format matches LangGraph v2 expectations.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
     },
     "examples/atlas/test_planning_workflow.py": {
       "language": "python",
@@ -1050,13 +1557,13 @@
             "__init__": {
               "signature": "(self, compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, node_name: str = \"compress_context\")",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -1129,13 +1636,13 @@
               ],
               "signature": "(self, model: LanguageModelLike, tools: List[BaseTool], prompt: str, state_schema: Optional[StateSchemaType] = None, checkpointer: Optional[Any] = None, compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -1167,10 +1674,10 @@
               ],
               "signature": "async (self, input_data: Dict[str, Any], config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]",
               "called_by": [
-                "CompressedReactAgent.ainvoke",
-                "test_hook_registration",
+                "CompressedReactAgent._call_model",
                 "test_optimized_compressor",
-                "CompressedReactAgent._call_model"
+                "test_hook_registration",
+                "CompressedReactAgent.ainvoke"
               ]
             },
             "stream": {
@@ -1834,13 +2341,13 @@
             "__init__": {
               "signature": "(self, name: str, description: str = \"\")",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             }
@@ -1885,13 +2392,13 @@
             "__init__": {
               "signature": "(self, content: str, name: str = \"General_list_projects\", tool_call_id: str = None)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             }
@@ -2197,13 +2704,13 @@
             "__init__": {
               "signature": "(self, original_tool, wrapper)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -2239,9 +2746,9 @@
               ],
               "signature": "(self, func: Callable, tool_name: str) -> Callable",
               "called_by": [
-                "UnifiedWrapper._wrap_tool_object",
+                "UnifiedWrapper.run",
                 "UnifiedWrapper.wrap_tool",
-                "UnifiedWrapper.run"
+                "UnifiedWrapper._wrap_tool_object"
               ]
             },
             "wrapped_func": {
@@ -2269,8 +2776,8 @@
               ],
               "signature": "(self, tool: Any, tool_name: str) -> Any",
               "called_by": [
-                "MCPToolWrapper.wrap_tool",
-                "UnifiedWrapper.wrap_tool"
+                "UnifiedWrapper.wrap_tool",
+                "MCPToolWrapper.wrap_tool"
               ]
             },
             "run": {
@@ -2279,10 +2786,10 @@
               ],
               "signature": "(self, *args, **kwargs)",
               "called_by": [
-                "UnifiedWrapper._wrap_tool_object",
-                "MCPToolWrapper._wrap_tool_object",
                 "MCPToolWrapper.__call__",
-                "UnifiedWrapper.__call__"
+                "UnifiedWrapper.__call__",
+                "UnifiedWrapper._wrap_tool_object",
+                "MCPToolWrapper._wrap_tool_object"
               ]
             },
             "__call__": {
@@ -2299,44 +2806,43 @@
               "doc": "Extract tool name from various tool types.",
               "signature": "(self, tool: Any) -> str",
               "called_by": [
-                "MCPToolWrapper.wrap_tool",
-                "ContextManager.process_context_cleaning",
+                "MCPToolWrapper.wrap_tool_list",
                 "UnifiedWrapper.wrap_tool",
-                "MCPToolWrapper.wrap_tool_list"
+                "MCPToolWrapper.wrap_tool"
               ]
             },
             "_is_mcp_tool": {
               "doc": "Check if tool is an MCP tool.",
               "signature": "(self, tool_name: str) -> bool",
               "called_by": [
-                "UnifiedWrapper._wrap_callable",
+                "MCPToolWrapper.wrap_tool_list",
                 "UnifiedWrapper.wrapped_func",
                 "MCPToolWrapper._is_mcp_tool_message",
-                "MCPToolWrapper.wrap_tool_list"
+                "UnifiedWrapper._wrap_callable"
               ]
             },
             "_clean_mcp_result": {
               "doc": "Apply MCP cleaning to tool result.",
               "signature": "(self, result: Any, tool_name: str) -> Any",
               "called_by": [
-                "UnifiedWrapper._wrap_callable",
-                "UnifiedWrapper.wrapped_func"
+                "UnifiedWrapper.wrapped_func",
+                "UnifiedWrapper._wrap_callable"
               ]
             },
             "_should_compress": {
               "doc": "Check if compression should be triggered.",
               "signature": "(self) -> bool",
               "called_by": [
-                "UnifiedWrapper._wrap_callable",
-                "UnifiedWrapper.wrapped_func"
+                "UnifiedWrapper.wrapped_func",
+                "UnifiedWrapper._wrap_callable"
               ]
             },
             "_trigger_compression": {
               "doc": "Trigger LLM compression.",
               "signature": "(self)",
               "called_by": [
-                "UnifiedWrapper._wrap_callable",
-                "UnifiedWrapper.wrapped_func"
+                "UnifiedWrapper.wrapped_func",
+                "UnifiedWrapper._wrap_callable"
               ]
             },
             "get_statistics": {
@@ -2421,13 +2927,13 @@
               ],
               "signature": "(self)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -2444,9 +2950,9 @@
               ],
               "signature": "(self, model_name: str) -> Optional[ModelCompatibilityProfile]",
               "called_by": [
-                "get_required_fixes",
+                "should_apply_compatibility_fixes",
                 "print_model_compatibility_report",
-                "should_apply_compatibility_fixes"
+                "get_required_fixes"
               ]
             },
             "register_model": {
@@ -2480,6 +2986,20 @@
     "examples/deep_planning/src/context/context_manager.py": {
       "language": "python",
       "parsed": true,
+      "imports": [
+        "json",
+        "time",
+        "logging",
+        "yaml",
+        "dataclasses",
+        "datetime",
+        "typing",
+        "enum",
+        "pathlib",
+        "litellm",
+        "tiktoken",
+        "datetime"
+      ],
       "functions": {
         "create_context_manager": "(config: Dict[str, Any] = None) -> ContextManager"
       },
@@ -2498,11 +3018,18 @@
           "methods": {
             "should_trigger_compact": {
               "doc": "Check if context should trigger compression based on main threshold.",
-              "signature": "(self) -> bool"
+              "signature": "(self) -> bool",
+              "called_by": [
+                "ContextManager.should_trigger_compaction",
+                "ContextManager.analyze_context"
+              ]
             },
             "should_trigger_post_tool": {
               "doc": "Check if context should trigger compression after tool calls.",
-              "signature": "(self) -> bool"
+              "signature": "(self) -> bool",
+              "called_by": [
+                "ContextManager.should_trigger_compaction"
+              ]
             },
             "is_near_limit": {
               "doc": "Check if context is approaching the absolute limit.",
@@ -2528,19 +3055,40 @@
               "calls": [
                 "_load_config"
               ],
-              "signature": "(self, config: Dict[str, Any] = None)"
+              "signature": "(self, config: Dict[str, Any] = None)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
             },
             "_load_config": {
               "doc": "Load simplified configuration from YAML file.",
-              "signature": "(self) -> Dict[str, Any]"
+              "signature": "(self) -> Dict[str, Any]",
+              "called_by": [
+                "ContextManager.__init__"
+              ]
             },
-            "count_tokens": "(self, messages: List[Dict[str, Any]], model_name: str = None, tools: List = None) -> int",
+            "count_tokens": {
+              "signature": "(self, messages: List[Dict[str, Any]], model_name: str = None, tools: List = None) -> int",
+              "called_by": [
+                "ContextManager.analyze_context"
+              ]
+            },
             "analyze_context": {
               "calls": [
                 "count_tokens",
                 "should_trigger_compact"
               ],
-              "signature": "(self, messages: List[Dict[str, Any]], model_name: str = None, tools: List = None) -> ContextMetrics"
+              "signature": "(self, messages: List[Dict[str, Any]], model_name: str = None, tools: List = None) -> ContextMetrics",
+              "called_by": [
+                "ContextManager.should_trigger_compaction"
+              ]
             },
             "should_trigger_compaction": {
               "calls": [
@@ -2571,12 +3119,33 @@
           ]
         }
       },
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T15:26:13.402093"
+      "call_graph": {},
+      "enums": {
+        "CompactTrigger": {
+          "values": [
+            "CONTEXT_SIZE",
+            "POST_TOOL",
+            "MANUAL"
+          ],
+          "doc": "Enumeration of compression trigger reasons."
+        }
+      }
     },
     "examples/deep_planning/src/context/context_compression.py": {
       "language": "python",
       "parsed": true,
+      "imports": [
+        "asyncio",
+        "logging",
+        "typing",
+        "datetime",
+        ".compact_integration",
+        ".compact_integration",
+        "..config.config_loader",
+        "langchain_core.tools",
+        "langgraph.prebuilt",
+        "typing"
+      ],
       "functions": {
         "check_and_compact_if_needed": "(messages: List[Dict[str, Any]], context: Dict[str, Any] = None, compact_integration: Optional[Any] = None) -> Tuple[List[Dict[str, Any]], Optional[str]]",
         "get_compaction_metrics": "(compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None) -> Optional[Dict[str, Any]]",
@@ -2598,7 +3167,12 @@
           ],
           "signature": "(agent: Any, hook_manager: Optional[Any] = None, enhanced_compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None) -> Any"
         },
-        "get_compression_status": "(compact_integration: Optional[Any] = None, enhanced_compact_integration: Optional[Any] = None) -> Dict[str, Any]",
+        "get_compression_status": {
+          "signature": "(compact_integration: Optional[Any] = None, enhanced_compact_integration: Optional[Any] = None) -> Dict[str, Any]",
+          "called_by": [
+            "print_compression_status"
+          ]
+        },
         "print_compression_status": {
           "calls": [
             "get_compression_status"
@@ -2607,20 +3181,84 @@
         }
       },
       "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T14:49:13.183142"
+      "call_graph": {}
     },
     "examples/deep_planning/src/context/__init__.py": {
       "language": "python",
       "parsed": false
     },
+    "examples/deep_planning/src/context/token_tracking_hooks.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "json",
+        "time",
+        "typing",
+        "deepagents.state",
+        "litellm",
+        "langchain_core.messages",
+        "tiktoken"
+      ],
+      "functions": {
+        "count_tokens_multiple_methods": {
+          "signature": "(messages: List[Dict[str, Any]], model_name: str = \"z-ai/glm-4.5\") -> Dict[str, int]",
+          "called_by": [
+            "create_enhanced_token_tracking_hook",
+            "create_passthrough_token_tracking_hook"
+          ]
+        },
+        "log_message_details": {
+          "doc": "Log detailed information about messages for debugging.",
+          "signature": "(messages: List[Any], prefix: str = \"\") -> None",
+          "called_by": [
+            "create_enhanced_token_tracking_hook"
+          ]
+        },
+        "create_enhanced_token_tracking_hook": {
+          "calls": [
+            "count_tokens_multiple_methods",
+            "enhanced_compression_hook",
+            "log_message_details"
+          ],
+          "signature": "(compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, model_name: Optional[str] = \"z-ai/glm-4.5\") -> Callable[[DeepAgentState], DeepAgentState]"
+        },
+        "create_passthrough_token_tracking_hook": {
+          "calls": [
+            "count_tokens_multiple_methods",
+            "passthrough_hook"
+          ],
+          "signature": "() -> Callable[[DeepAgentState], DeepAgentState]"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
+    },
     "examples/deep_planning/src/context/llm_compression.py": {
       "language": "python",
       "parsed": true,
+      "imports": [
+        "asyncio",
+        "json",
+        "time",
+        "datetime",
+        "typing",
+        "dataclasses",
+        "enum",
+        "langchain_core.language_models",
+        "langchain_core.messages",
+        ".context_manager",
+        ".compact_integration",
+        "..config.config_loader",
+        "re"
+      ],
       "functions": {
         "_load_compression_config": {
           "doc": "Carica configurazione compressione da YAML.",
-          "signature": "() -> Dict[str, Any]"
+          "signature": "() -> Dict[str, Any]",
+          "called_by": [
+            "CompressionConfig.from_yaml"
+          ]
         }
       },
       "classes": {
@@ -2675,21 +3313,139 @@
               "calls": [
                 "_load_compression_prompts"
               ],
-              "signature": "(self, model: LanguageModelLike, config: CompressionConfig = None, context_manager: ContextManager = None)"
+              "signature": "(self, model: LanguageModelLike, config: CompressionConfig = None, context_manager: ContextManager = None)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
             },
             "_load_compression_prompts": {
               "doc": "Carica i prompts di compressione ottimizzati.",
-              "signature": "(self) -> Dict[CompressionType, str]"
+              "signature": "(self) -> Dict[CompressionType, str]",
+              "called_by": [
+                "LLMCompressor.__init__"
+              ]
             }
           }
         }
       },
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T14:50:01.789007"
+      "call_graph": {},
+      "enums": {
+        "CompressionType": {
+          "values": [
+            "GENERAL",
+            "MCP_HEAVY",
+            "CODE_FOCUSED",
+            "PLANNING_FOCUSED",
+            "TECHNICAL_DEEP"
+          ],
+          "doc": "Tipi di compressione disponibili."
+        },
+        "CompressionStrategy": {
+          "values": [
+            "AGGRESSIVE",
+            "BALANCED",
+            "CONSERVATIVE",
+            "ADAPTIVE"
+          ],
+          "doc": "Strategie di compressione."
+        }
+      }
+    },
+    "examples/deep_planning/src/context/http_interceptor.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "json",
+        "time",
+        "typing",
+        "functools",
+        "httpx",
+        "requests",
+        "httpx",
+        "requests"
+      ],
+      "functions": {
+        "log_request_details": {
+          "doc": "Log detailed information about HTTP requests to OpenRouter.",
+          "signature": "(url: str, payload: Dict[str, Any], headers: Dict[str, str]) -> None",
+          "called_by": [
+            "patch_httpx",
+            "patch_requests"
+          ]
+        },
+        "log_response_details": {
+          "doc": "Log detailed information about HTTP responses from OpenRouter.",
+          "signature": "(response: Any) -> None",
+          "called_by": [
+            "patch_httpx",
+            "patch_requests"
+          ]
+        },
+        "patch_httpx": {
+          "doc": "Patch httpx.post to intercept OpenRouter requests.",
+          "calls": [
+            "log_request_details",
+            "log_response_details",
+            "patched_post"
+          ],
+          "signature": "()",
+          "called_by": [
+            "enable_openrouter_logging"
+          ]
+        },
+        "patch_requests": {
+          "doc": "Patch requests.post to intercept OpenRouter requests.",
+          "calls": [
+            "log_request_details",
+            "log_response_details",
+            "patched_post"
+          ],
+          "signature": "()",
+          "called_by": [
+            "enable_openrouter_logging"
+          ]
+        },
+        "enable_openrouter_logging": {
+          "doc": "Enable comprehensive OpenRouter request/response logging.",
+          "calls": [
+            "patch_httpx",
+            "patch_requests"
+          ],
+          "signature": "()"
+        },
+        "disable_openrouter_logging": {
+          "doc": "Disable OpenRouter logging by restoring original functions.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
     },
     "examples/deep_planning/src/context/compact_integration.py": {
       "language": "python",
       "parsed": true,
+      "imports": [
+        "json",
+        "time",
+        "os",
+        "logging",
+        "datetime",
+        "typing",
+        "dataclasses",
+        ".context_manager",
+        "re",
+        "re",
+        "re",
+        "re"
+      ],
       "functions": {},
       "classes": {
         "CompactSummary": {
@@ -2724,21 +3480,31 @@
           "methods": {
             "__init__": {
               "calls": [
-                "_initialize_llm_compressor",
-                "_load_llm_compression_config",
                 "_load_summary_template"
               ],
-              "signature": "(self, context_manager: ContextManager, model_name: str = None)"
+              "signature": "(self, context_manager: ContextManager, model_name: str = None)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
             },
             "_load_summary_template": {
               "doc": "Carica il template per generazione summary compatibile con Claude Code.",
-              "signature": "(self) -> str"
+              "signature": "(self) -> str",
+              "called_by": [
+                "CompactIntegration.__init__"
+              ]
             }
           }
         }
       },
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T15:58:42.847666"
+      "call_graph": {}
     },
     "examples/deep_planning/src/context/compression_hooks.py": {
       "language": "python",
@@ -2746,9 +3512,10 @@
       "functions": {
         "create_compression_hook": {
           "calls": [
-            "compression_hook"
+            "compression_hook",
+            "create_passthrough_hook"
           ],
-          "signature": "(compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, model_name: Optional[str] = None) -> Callable[[DeepAgentState], DeepAgentState]"
+          "signature": "(compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, model_name: Optional[str] = None, use_selective_compression: bool = True) -> Callable[[DeepAgentState], DeepAgentState]"
         },
         "create_passthrough_hook": {
           "calls": [
@@ -2760,17 +3527,41 @@
       },
       "classes": {},
       "updated_by_hook": true,
-      "updated_at": "2025-08-18T16:14:45.287872"
+      "updated_at": "2025-08-18T22:53:38.487520"
     },
     "examples/deep_planning/src/context/context_hooks.py": {
       "language": "python",
       "parsed": true,
+      "imports": [
+        "asyncio",
+        "json",
+        "time",
+        "yaml",
+        "os",
+        "abc",
+        "typing",
+        "dataclasses",
+        "enum",
+        "functools",
+        "pathlib",
+        "langchain_core.language_models",
+        "langgraph.types",
+        ".context_manager",
+        ".llm_compression",
+        "deepagents.state",
+        "deepagents.graph"
+      ],
       "functions": {
         "load_context_config": {
           "calls": [
             "load_context_config"
           ],
-          "signature": "(config_path: Optional[str] = None) -> Dict[str, Any]"
+          "signature": "(config_path: Optional[str] = None) -> Dict[str, Any]",
+          "called_by": [
+            "load_context_config",
+            "ValidationHook.__init__",
+            "CompressionHook.__init__"
+          ]
         },
         "with_context_hooks": {
           "calls": [
@@ -2780,7 +3571,11 @@
             "with_context_hooks",
             "wrapper"
           ],
-          "signature": "(hook_manager: ContextHookManager)"
+          "signature": "(hook_manager: ContextHookManager)",
+          "called_by": [
+            "with_context_hooks",
+            "create_hooked_deep_agent"
+          ]
         },
         "create_hooked_deep_agent": {
           "calls": [
@@ -2806,17 +3601,35 @@
         },
         "Hook": {
           "methods": {
-            "__init__": "(self, name: str, priority: HookPriority = HookPriority.NORMAL)",
+            "__init__": {
+              "signature": "(self, name: str, priority: HookPriority = HookPriority.NORMAL)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
+            },
             "execute": {
               "decorators": [
                 "abstractmethod"
               ],
               "doc": "Esegue la logica dell'hook.",
-              "signature": "async (self, context: HookContext) -> Optional[Dict[str, Any]]"
+              "signature": "async (self, context: HookContext) -> Optional[Dict[str, Any]]",
+              "called_by": [
+                "ContextHookManager.execute_hooks"
+              ]
             },
             "can_execute": {
               "doc": "Determina se l'hook pu\u00f2 essere eseguito in questo contesto.",
-              "signature": "(self, context: HookContext) -> bool"
+              "signature": "(self, context: HookContext) -> bool",
+              "called_by": [
+                "ContextHookManager.execute_hooks"
+              ]
             }
           },
           "inherits": [
@@ -2832,18 +3645,36 @@
                 "__init__",
                 "load_context_config"
               ],
-              "signature": "(self, compressor: LLMCompressor, priority: HookPriority = HookPriority.HIGH, config_path: Optional[str] = None)"
+              "signature": "(self, compressor: LLMCompressor, priority: HookPriority = HookPriority.HIGH, config_path: Optional[str] = None)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
             },
             "execute": {
               "doc": "Perform lightweight validation without compression.",
               "calls": [
                 "_extract_messages_from_state"
               ],
-              "signature": "async (self, context: HookContext) -> Optional[Dict[str, Any]]"
+              "signature": "async (self, context: HookContext) -> Optional[Dict[str, Any]]",
+              "called_by": [
+                "ContextHookManager.execute_hooks"
+              ]
             },
             "_extract_messages_from_state": {
               "doc": "Extract messages from DeepAgentState.",
-              "signature": "(self, state: DeepAgentState) -> List[Dict[str, Any]]"
+              "signature": "(self, state: DeepAgentState) -> List[Dict[str, Any]]",
+              "called_by": [
+                "CompressionHook.execute",
+                "CompressionHook._should_trigger_compression",
+                "ValidationHook.execute"
+              ]
             }
           },
           "inherits": [
@@ -2858,7 +3689,17 @@
                 "__init__",
                 "load_context_config"
               ],
-              "signature": "(self, compressor: LLMCompressor, trigger_config: Dict[str, Any] = None, priority: HookPriority = HookPriority.HIGH, config_path: Optional[str] = None)"
+              "signature": "(self, compressor: LLMCompressor, trigger_config: Dict[str, Any] = None, priority: HookPriority = HookPriority.HIGH, config_path: Optional[str] = None)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
             },
             "execute": {
               "doc": "Esegue compressione se necessaria.",
@@ -2867,22 +3708,36 @@
                 "_extract_messages_from_state",
                 "_should_trigger_compression"
               ],
-              "signature": "async (self, context: HookContext) -> Optional[Dict[str, Any]]"
+              "signature": "async (self, context: HookContext) -> Optional[Dict[str, Any]]",
+              "called_by": [
+                "ContextHookManager.execute_hooks"
+              ]
             },
             "_should_trigger_compression": {
               "doc": "Determina se deve essere attivata la compressione.",
               "calls": [
                 "_extract_messages_from_state"
               ],
-              "signature": "async (self, state: DeepAgentState) -> tuple[bool, CompressionType, ContextMetrics]"
+              "signature": "async (self, state: DeepAgentState) -> tuple[bool, CompressionType, ContextMetrics]",
+              "called_by": [
+                "CompressionHook.execute"
+              ]
             },
             "_extract_messages_from_state": {
               "doc": "Estrae messaggi dal DeepAgentState.",
-              "signature": "(self, state: DeepAgentState) -> List[Dict[str, Any]]"
+              "signature": "(self, state: DeepAgentState) -> List[Dict[str, Any]]",
+              "called_by": [
+                "CompressionHook.execute",
+                "CompressionHook._should_trigger_compression",
+                "ValidationHook.execute"
+              ]
             },
             "_apply_compression_to_state": {
               "doc": "Applica il risultato della compressione al state.",
-              "signature": "(self, state: DeepAgentState, result: LLMCompressionResult) -> Dict[str, Any]"
+              "signature": "(self, state: DeepAgentState, result: LLMCompressionResult) -> Dict[str, Any]",
+              "called_by": [
+                "CompressionHook.execute"
+              ]
             }
           },
           "inherits": [
@@ -2896,11 +3751,24 @@
               "calls": [
                 "register_hook"
               ],
-              "signature": "(self, compressor: LLMCompressor, config: Dict[str, Any] = None, config_path: Optional[str] = None)"
+              "signature": "(self, compressor: LLMCompressor, config: Dict[str, Any] = None, config_path: Optional[str] = None)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
             },
             "register_hook": {
               "doc": "Registra un hook per un tipo specifico.",
-              "signature": "(self, hook_type: HookType, hook: Hook) -> None"
+              "signature": "(self, hook_type: HookType, hook: Hook) -> None",
+              "called_by": [
+                "ContextHookManager.__init__"
+              ]
             },
             "unregister_hook": {
               "doc": "Rimuove un hook.",
@@ -2912,17 +3780,35 @@
                 "can_execute",
                 "execute"
               ],
-              "signature": "async (self, hook_type: HookType, state: DeepAgentState, metadata: Dict[str, Any] = None) -> Optional[Dict[str, Any]]"
+              "signature": "async (self, hook_type: HookType, state: DeepAgentState, metadata: Dict[str, Any] = None) -> Optional[Dict[str, Any]]",
+              "called_by": [
+                "with_context_hooks"
+              ]
             },
             "get_hook_stats": {
               "doc": "Restituisce statistiche degli hook.",
-              "signature": "(self) -> Dict[str, Any]"
+              "signature": "(self) -> Dict[str, Any]",
+              "called_by": [
+                "HookMonitor.get_performance_report"
+              ]
             }
           }
         },
         "HookMonitor": {
           "methods": {
-            "__init__": "(self, hook_manager: ContextHookManager)",
+            "__init__": {
+              "signature": "(self, hook_manager: ContextHookManager)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
+            },
             "log_execution": {
               "doc": "Registra esecuzione hook per analisi.",
               "signature": "(self, hook_type: HookType, result: Dict[str, Any]) -> None"
@@ -2938,8 +3824,64 @@
           "doc": "Monitor per analisi performance e debugging hook."
         }
       },
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T14:49:50.727328"
+      "call_graph": {},
+      "enums": {
+        "HookType": {
+          "values": [
+            "PRE_STEP",
+            "POST_STEP",
+            "PRE_TOOL",
+            "POST_TOOL",
+            "PRE_MESSAGE",
+            "POST_MESSAGE",
+            "PRE_SUBAGENT",
+            "POST_SUBAGENT"
+          ],
+          "doc": "Tipi di hook disponibili."
+        },
+        "HookPriority": {
+          "values": [
+            "HIGHEST",
+            "HIGH",
+            "NORMAL",
+            "LOW",
+            "LOWEST"
+          ],
+          "doc": "Priorit\u00e0 di esecuzione hook."
+        }
+      }
+    },
+    "examples/deep_planning/src/core/debug_agent_core.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "os",
+        "logging",
+        "sys",
+        "..context.http_interceptor",
+        "..context.token_tracking_hooks",
+        ".agent_core",
+        "deepagents",
+        "..context.compact_integration",
+        "traceback"
+      ],
+      "functions": {
+        "create_debug_agent_with_enhanced_tracking": {
+          "signature": "(enable_compression=True)",
+          "called_by": [
+            "test_token_tracking"
+          ]
+        },
+        "test_token_tracking": {
+          "doc": "Test the token tracking capabilities with a simple conversation.",
+          "calls": [
+            "create_debug_agent_with_enhanced_tracking"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "call_graph": {}
     },
     "examples/deep_planning/src/core/phase_orchestration.py": {
       "language": "python",
@@ -3006,13 +3948,13 @@
               "doc": "Initialize factory with available tools.",
               "signature": "(self, available_tools: List[Any])",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -3077,7 +4019,7 @@
       },
       "classes": {},
       "updated_by_hook": true,
-      "updated_at": "2025-08-18T14:50:13.211583"
+      "updated_at": "2025-08-18T23:29:25.394154"
     },
     "examples/deep_planning/src/config/config_loader.py": {
       "language": "python",
@@ -3204,13 +4146,13 @@
             "__init__": {
               "signature": "(self, config_path: str = None)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -3221,10 +4163,10 @@
               ],
               "signature": "(self) -> FullConfig",
               "called_by": [
-                "get_full_config",
+                "ConfigLoader.get_context_management_config",
                 "ConfigLoader.get_trigger_config",
                 "reload_config",
-                "ConfigLoader.get_context_management_config"
+                "get_full_config"
               ]
             },
             "_parse_yaml_config": {
@@ -3840,27 +4782,27 @@
               "doc": "Validate configuration and return validation report.",
               "signature": "(self) -> Dict[str, Any]",
               "called_by": [
+                "validate_config",
                 "ConfigurationManager.validate",
-                "ConfigurationManager.reload",
                 "Validator.handle",
-                "validate_config"
+                "ConfigurationManager.reload"
               ]
             },
             "to_dict": {
               "doc": "Convert configuration to dictionary.",
               "signature": "(self) -> Dict[str, Any]",
               "called_by": [
+                "ValidationChain.validate",
                 "ConfigurationManager.export",
-                "ConfigurationManager.get",
-                "ValidationChain.validate"
+                "ConfigurationManager.get"
               ]
             },
             "print_summary": {
               "doc": "Print configuration summary.",
               "signature": "(self)",
               "called_by": [
-                "ConfigurationManager.print_summary",
-                "print_config_summary"
+                "print_config_summary",
+                "ConfigurationManager.print_summary"
               ]
             }
           },
@@ -3897,13 +4839,13 @@
               ],
               "signature": "(self)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -3915,9 +4857,9 @@
               ],
               "signature": "(self, yaml_path: Optional[str] = None)",
               "called_by": [
+                "ConfigurationManager.__init__",
                 "ConfigurationManager.config",
-                "reload_config",
-                "ConfigurationManager.__init__"
+                "reload_config"
               ]
             },
             "config": {
@@ -3937,10 +4879,10 @@
               ],
               "signature": "(self, path: str, default: Any = None) -> Any",
               "called_by": [
-                "get_config_value",
-                "PerformanceMonitor.get_current_performance",
                 "UnifiedConfig.merge_yaml_config",
-                "PerformanceOptimizer.optimized_compress"
+                "PerformanceOptimizer.optimized_compress",
+                "get_config_value",
+                "PerformanceMonitor.get_current_performance"
               ]
             },
             "set": {
@@ -3957,8 +4899,8 @@
               ],
               "signature": "(self)",
               "called_by": [
-                "ConfigurationManager.print_summary",
-                "print_config_summary"
+                "print_config_summary",
+                "ConfigurationManager.print_summary"
               ]
             },
             "validate": {
@@ -3968,10 +4910,10 @@
               ],
               "signature": "(self) -> Dict[str, Any]",
               "called_by": [
+                "validate_config",
                 "ConfigurationManager.validate",
-                "ConfigurationManager.reload",
                 "Validator.handle",
-                "validate_config"
+                "ConfigurationManager.reload"
               ]
             },
             "export": {
@@ -4030,13 +4972,13 @@
             "__init__": {
               "signature": "(self, valid: bool, level: ValidationLevel = ValidationLevel.INFO, message: str = \"\", errors: List[str] = None, warnings: List[str] = None, data: Dict[str, Any] = None)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4044,9 +4986,9 @@
               "doc": "Convert to dictionary representation.",
               "signature": "(self) -> Dict[str, Any]",
               "called_by": [
+                "ValidationChain.validate",
                 "ConfigurationManager.export",
-                "ConfigurationManager.get",
-                "ValidationChain.validate"
+                "ConfigurationManager.get"
               ]
             }
           },
@@ -4057,13 +4999,13 @@
             "__init__": {
               "signature": "(self, name: str, level: ValidationLevel = ValidationLevel.WARNING)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4081,10 +5023,10 @@
               "doc": "Perform validation.",
               "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
               "called_by": [
+                "validate_config",
                 "ConfigurationManager.validate",
-                "ConfigurationManager.reload",
                 "Validator.handle",
-                "validate_config"
+                "ConfigurationManager.reload"
               ]
             },
             "handle": {
@@ -4095,8 +5037,8 @@
               ],
               "signature": "(self, data: Any, context: Dict[str, Any] = None) -> List[ValidationResult]",
               "called_by": [
-                "ValidationChain.validate",
-                "Validator.handle"
+                "Validator.handle",
+                "ValidationChain.validate"
               ]
             }
           },
@@ -4114,13 +5056,13 @@
               ],
               "signature": "(self, max_tokens: int = 50000, warning_threshold: float = 0.8)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4128,10 +5070,10 @@
               "doc": "Validate context size and utilization.",
               "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
               "called_by": [
+                "validate_config",
                 "ConfigurationManager.validate",
-                "ConfigurationManager.reload",
                 "Validator.handle",
-                "validate_config"
+                "ConfigurationManager.reload"
               ]
             }
           },
@@ -4148,13 +5090,13 @@
               ],
               "signature": "(self)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4162,10 +5104,10 @@
               "doc": "Validate message structure.",
               "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
               "called_by": [
+                "validate_config",
                 "ConfigurationManager.validate",
-                "ConfigurationManager.reload",
                 "Validator.handle",
-                "validate_config"
+                "ConfigurationManager.reload"
               ]
             }
           },
@@ -4182,13 +5124,13 @@
               ],
               "signature": "(self)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4196,10 +5138,10 @@
               "doc": "Validate phase transition requirements.",
               "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
               "called_by": [
+                "validate_config",
                 "ConfigurationManager.validate",
-                "ConfigurationManager.reload",
                 "Validator.handle",
-                "validate_config"
+                "ConfigurationManager.reload"
               ]
             }
           },
@@ -4216,13 +5158,13 @@
               ],
               "signature": "(self)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4230,10 +5172,10 @@
               "doc": "Validate compression result.",
               "signature": "(self, data: Any, context: Dict[str, Any] = None) -> ValidationResult",
               "called_by": [
+                "validate_config",
                 "ConfigurationManager.validate",
-                "ConfigurationManager.reload",
                 "Validator.handle",
-                "validate_config"
+                "ConfigurationManager.reload"
               ]
             }
           },
@@ -4247,13 +5189,13 @@
             "__init__": {
               "signature": "(self, name: str = \"default\")",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4276,10 +5218,10 @@
               ],
               "signature": "(self, data: Any, context: Dict[str, Any] = None) -> Dict[str, Any]",
               "called_by": [
+                "validate_config",
                 "ConfigurationManager.validate",
-                "ConfigurationManager.reload",
                 "Validator.handle",
-                "validate_config"
+                "ConfigurationManager.reload"
               ]
             }
           },
@@ -4363,13 +5305,13 @@
             "__init__": {
               "signature": "(self, config: RateLimitConfig)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4381,8 +5323,8 @@
               ],
               "signature": "async (self) -> bool",
               "called_by": [
-                "PerformanceOptimizer.optimized_compress",
-                "RateLimiter.acquire"
+                "RateLimiter.acquire",
+                "PerformanceOptimizer.optimized_compress"
               ]
             },
             "_cleanup_old_requests": {
@@ -4407,13 +5349,13 @@
             "__init__": {
               "signature": "(self, strategy: CacheStrategy = CacheStrategy.MEMORY, max_memory_items: int = 1000, cache_dir: str = \"cache/compression\", ttl_seconds: int = 3600)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4433,10 +5375,10 @@
               ],
               "signature": "async (self, messages: List[Dict[str, Any]], config: Dict[str, Any]) -> Optional[Dict[str, Any]]",
               "called_by": [
-                "get_config_value",
-                "PerformanceMonitor.get_current_performance",
                 "UnifiedConfig.merge_yaml_config",
-                "PerformanceOptimizer.optimized_compress"
+                "PerformanceOptimizer.optimized_compress",
+                "get_config_value",
+                "PerformanceMonitor.get_current_performance"
               ]
             },
             "put": {
@@ -4488,13 +5430,13 @@
             "__init__": {
               "signature": "(self, window_size: int = 100)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4520,8 +5462,8 @@
               "signature": "(self) -> PerformanceMetrics",
               "called_by": [
                 "PerformanceMonitor.get_performance_level",
-                "PerformanceOptimizer.health_check",
-                "PerformanceOptimizer.get_comprehensive_stats"
+                "PerformanceOptimizer.get_comprehensive_stats",
+                "PerformanceOptimizer.health_check"
               ]
             },
             "get_performance_level": {
@@ -4544,13 +5486,13 @@
             "__init__": {
               "signature": "(self, rate_limit_config: RateLimitConfig = None, cache_strategy: CacheStrategy = CacheStrategy.HYBRID, enable_auto_tuning: bool = True)",
               "called_by": [
-                "ValidationHook.__init__",
-                "PhaseTransitionValidator.__init__",
                 "MCPToolWrapper._wrap_tool_object",
-                "CompressionHook.__init__",
-                "MessageStructureValidator.__init__",
                 "CompressionValidator.__init__",
                 "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
                 "ContextValidator.__init__"
               ]
             },
@@ -4654,8 +5596,24 @@
     "examples/deep_planning/src/integrations/mcp/mcp_wrapper.py": {
       "language": "python",
       "parsed": true,
+      "imports": [
+        "asyncio",
+        "json",
+        "time",
+        "inspect",
+        "logging",
+        "functools",
+        "typing",
+        "dataclasses",
+        "...context.context_manager"
+      ],
       "functions": {
-        "create_mcp_wrapper": "(config: Dict[str, Any] = None) -> MCPToolWrapper",
+        "create_mcp_wrapper": {
+          "signature": "(config: Dict[str, Any] = None) -> MCPToolWrapper",
+          "called_by": [
+            "wrap_existing_mcp_tools"
+          ]
+        },
         "wrap_existing_mcp_tools": {
           "calls": [
             "create_mcp_wrapper",
@@ -4667,14 +5625,30 @@
       "classes": {
         "MCPToolWrapper": {
           "methods": {
-            "__init__": "(self, original_tool, wrapper_instance, name)",
+            "__init__": {
+              "signature": "(self, original_tool, wrapper_instance, name)",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "CompressionValidator.__init__",
+                "UnifiedWrapper._wrap_tool_object",
+                "CompressionHook.__init__",
+                "MessageStructureValidator.__init__",
+                "PhaseTransitionValidator.__init__",
+                "ValidationHook.__init__",
+                "ContextValidator.__init__"
+              ]
+            },
             "wrap_tool": {
               "calls": [
                 "_extract_tool_name",
                 "_wrap_callable_tool",
                 "_wrap_tool_object"
               ],
-              "signature": "(self, tool: Any, tool_name: Optional[str] = None) -> Any"
+              "signature": "(self, tool: Any, tool_name: Optional[str] = None) -> Any",
+              "called_by": [
+                "UnifiedWrapper.wrap_tools",
+                "MCPToolWrapper.wrap_tool_list"
+              ]
             },
             "wrap_tool_list": {
               "calls": [
@@ -4682,15 +5656,29 @@
                 "_is_mcp_tool",
                 "wrap_tool"
               ],
-              "signature": "(self, tools: List[Any]) -> List[Any]"
+              "signature": "(self, tools: List[Any]) -> List[Any]",
+              "called_by": [
+                "wrap_existing_mcp_tools"
+              ]
             },
             "_extract_tool_name": {
               "doc": "Estrae il nome del tool da vari tipi di oggetti tool.",
-              "signature": "(self, tool: Any) -> str"
+              "signature": "(self, tool: Any) -> str",
+              "called_by": [
+                "MCPToolWrapper.wrap_tool_list",
+                "UnifiedWrapper.wrap_tool",
+                "MCPToolWrapper.wrap_tool"
+              ]
             },
             "_is_mcp_tool": {
               "doc": "Determina se un tool \u00e8 un tool MCP basandosi sul nome.",
-              "signature": "(self, tool_name: str) -> bool"
+              "signature": "(self, tool_name: str) -> bool",
+              "called_by": [
+                "MCPToolWrapper.wrap_tool_list",
+                "UnifiedWrapper.wrapped_func",
+                "MCPToolWrapper._is_mcp_tool_message",
+                "UnifiedWrapper._wrap_callable"
+              ]
             },
             "_wrap_callable_tool": {
               "doc": "Wrappa un tool callable (function) preservando completamente la signature.",
@@ -4699,7 +5687,10 @@
                 "_execute_with_cleaning",
                 "wrapped_function"
               ],
-              "signature": "(self, tool: Callable, tool_name: str) -> Callable"
+              "signature": "(self, tool: Callable, tool_name: str) -> Callable",
+              "called_by": [
+                "MCPToolWrapper.wrap_tool"
+              ]
             },
             "wrapped_function": {
               "decorators": [
@@ -4708,7 +5699,11 @@
               "calls": [
                 "_execute_with_cleaning"
               ],
-              "signature": "(*args, **kwargs)"
+              "signature": "(*args, **kwargs)",
+              "called_by": [
+                "MCPToolWrapper._create_function_wrapper",
+                "MCPToolWrapper._wrap_callable_tool"
+              ]
             },
             "_create_function_wrapper": {
               "doc": "Create a wrapper for a raw function that will be used in StructuredTool.func",
@@ -4716,7 +5711,10 @@
                 "_execute_with_cleaning",
                 "wrapped_function"
               ],
-              "signature": "(self, func: Callable, tool_name: str) -> Callable"
+              "signature": "(self, func: Callable, tool_name: str) -> Callable",
+              "called_by": [
+                "MCPToolWrapper._wrap_callable_tool"
+              ]
             },
             "_wrap_tool_object": {
               "doc": "Wrappa un tool object.",
@@ -4726,20 +5724,34 @@
                 "_execute_with_cleaning",
                 "run"
               ],
-              "signature": "(self, tool: Any, tool_name: str) -> Any"
+              "signature": "(self, tool: Any, tool_name: str) -> Any",
+              "called_by": [
+                "UnifiedWrapper.wrap_tool",
+                "MCPToolWrapper.wrap_tool"
+              ]
             },
             "run": {
               "calls": [
                 "_execute_with_cleaning"
               ],
-              "signature": "(self, *args, **kwargs)"
+              "signature": "(self, *args, **kwargs)",
+              "called_by": [
+                "MCPToolWrapper.__call__",
+                "UnifiedWrapper.__call__",
+                "UnifiedWrapper._wrap_tool_object",
+                "MCPToolWrapper._wrap_tool_object"
+              ]
             },
             "__call__": {
               "calls": [
                 "_execute_with_cleaning",
                 "run"
               ],
-              "signature": "(self, *args, **kwargs)"
+              "signature": "(self, *args, **kwargs)",
+              "called_by": [
+                "UnifiedWrapper._wrap_tool_object",
+                "MCPToolWrapper._wrap_tool_object"
+              ]
             },
             "_execute_with_cleaning": {
               "calls": [
@@ -4752,23 +5764,44 @@
                 "_log_pre_execution_context",
                 "_log_tool_call"
               ],
-              "signature": "(self, tool_func: Callable, tool_name: str, *args, **kwargs) -> Any"
+              "signature": "(self, tool_func: Callable, tool_name: str, *args, **kwargs) -> Any",
+              "called_by": [
+                "MCPToolWrapper._wrap_tool_object",
+                "MCPToolWrapper.wrapped_function",
+                "MCPToolWrapper.run",
+                "MCPToolWrapper.__call__",
+                "MCPToolWrapper._create_function_wrapper",
+                "MCPToolWrapper._wrap_callable_tool"
+              ]
             },
             "_clean_tool_result": {
               "doc": "Applica pulizia al risultato del tool.",
-              "signature": "(self, tool_name: str, result: Any, args: tuple, kwargs: dict) -> tuple[Any, CleaningResult]"
+              "signature": "(self, tool_name: str, result: Any, args: tuple, kwargs: dict) -> tuple[Any, CleaningResult]",
+              "called_by": [
+                "MCPToolWrapper._execute_with_cleaning",
+                "MCPToolWrapper._clean_tool_message_content"
+              ]
             },
             "_create_no_cleaning_result": {
               "doc": "Crea un CleaningResult per quando la pulizia \u00e8 disabilitata.",
-              "signature": "(self, result: Any) -> CleaningResult"
+              "signature": "(self, result: Any) -> CleaningResult",
+              "called_by": [
+                "MCPToolWrapper._execute_with_cleaning"
+              ]
             },
             "_log_tool_call": {
               "doc": "Registra una chiamata al tool per analisi successive.",
-              "signature": "(self, tool_name: str, args: tuple, kwargs: dict, original_result: Any, cleaned_result: Any, cleaning_info: CleaningResult, execution_time: float) -> None"
+              "signature": "(self, tool_name: str, args: tuple, kwargs: dict, original_result: Any, cleaned_result: Any, cleaning_info: CleaningResult, execution_time: float) -> None",
+              "called_by": [
+                "MCPToolWrapper._execute_with_cleaning"
+              ]
             },
             "_log_error": {
               "doc": "Registra un errore di esecuzione del tool.",
-              "signature": "(self, tool_name: str, args: tuple, kwargs: dict, error: Exception, execution_time: float) -> None"
+              "signature": "(self, tool_name: str, args: tuple, kwargs: dict, error: Exception, execution_time: float) -> None",
+              "called_by": [
+                "MCPToolWrapper._execute_with_cleaning"
+              ]
             },
             "get_statistics": {
               "doc": "Restituisce statistiche delle operazioni di wrapping.",
@@ -4796,45 +5829,72 @@
               "calls": [
                 "_is_mcp_tool"
               ],
-              "signature": "(self, message: Any) -> bool"
+              "signature": "(self, message: Any) -> bool",
+              "called_by": [
+                "MCPToolWrapper.clean_message_list"
+              ]
             },
             "_clean_tool_message_content": {
               "doc": "Pulisce il contenuto di un ToolMessage.",
               "calls": [
                 "_clean_tool_result"
               ],
-              "signature": "(self, message: Any) -> Any"
+              "signature": "(self, message: Any) -> Any",
+              "called_by": [
+                "MCPToolWrapper.clean_message_list"
+              ]
             },
             "_create_cleaned_tool_message": {
               "doc": "Crea una copia del ToolMessage con contenuto pulito.",
-              "signature": "(self, original_message: Any, cleaned_content: Any) -> Any"
+              "signature": "(self, original_message: Any, cleaned_content: Any) -> Any",
+              "called_by": [
+                "MCPToolWrapper.clean_message_list"
+              ]
             },
             "_log_pre_execution_context": {
               "doc": "Log del contesto prima dell'esecuzione del tool.",
-              "signature": "(self) -> None"
+              "signature": "(self) -> None",
+              "called_by": [
+                "MCPToolWrapper._execute_with_cleaning"
+              ]
             },
             "_log_post_execution_context": {
               "doc": "Log del contesto dopo l'esecuzione del tool.",
-              "signature": "(self, execution_time: float) -> None"
+              "signature": "(self, execution_time: float) -> None",
+              "called_by": [
+                "MCPToolWrapper._execute_with_cleaning"
+              ]
             },
             "_log_cleaning_operation": {
               "doc": "Log delle operazioni di pulizia.",
-              "signature": "(self, tool_name: str, cleaning_info: CleaningResult, original_size: int) -> None"
+              "signature": "(self, tool_name: str, cleaning_info: CleaningResult, original_size: int) -> None",
+              "called_by": [
+                "MCPToolWrapper._execute_with_cleaning"
+              ]
             },
             "_check_and_log_compaction_trigger": {
               "doc": "Verifica e log dei trigger di compattazione.",
               "calls": [
                 "_trigger_context_compaction"
               ],
-              "signature": "(self) -> None"
+              "signature": "(self) -> None",
+              "called_by": [
+                "MCPToolWrapper._execute_with_cleaning"
+              ]
             },
             "_trigger_context_compaction": {
               "doc": "Esegue la compattazione del contesto.",
-              "signature": "(self, messages: List[Any], trigger_type: Any, metrics: ContextMetrics) -> None"
+              "signature": "(self, messages: List[Any], trigger_type: Any, metrics: ContextMetrics) -> None",
+              "called_by": [
+                "MCPToolWrapper._check_and_log_compaction_trigger"
+              ]
             },
             "_log_message_cleaning": {
               "doc": "Log dell'operazione di pulizia messaggio.",
-              "signature": "(self, original_message: Any, cleaned_message: Any) -> None"
+              "signature": "(self, original_message: Any, cleaned_message: Any) -> None",
+              "called_by": [
+                "MCPToolWrapper.clean_message_list"
+              ]
             }
           },
           "properties": [
@@ -4847,8 +5907,7 @@
           ]
         }
       },
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T10:19:00.517071"
+      "call_graph": {}
     },
     "examples/deep_planning/src/integrations/mcp/__init__.py": {
       "language": "python",
@@ -4869,28 +5928,63 @@
           "doc": "Disabled stub for backward compatibility."
         }
       },
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T10:21:29.071153"
+      "call_graph": {}
     },
     "examples/deep_planning/src/integrations/mcp/mcp_integration.py": {
       "language": "python",
       "parsed": true,
+      "imports": [
+        "asyncio",
+        "os",
+        "logging",
+        "typing",
+        "langchain_mcp_adapters.client",
+        "langchain_mcp_adapters.tools",
+        "...compatibility.unified_wrapper",
+        "...context.compact_integration",
+        "...context.context_manager",
+        "...context.context_manager",
+        "...context.compact_integration",
+        "...context.context_manager",
+        "...context.compact_integration",
+        "...context.context_manager",
+        "...context.compact_integration",
+        "langchain_core.tools",
+        "..context.context_manager",
+        "..context.compact_integration"
+      ],
       "functions": {
         "load_fairmind_mcp_tools": {
           "calls": [
             "filter_relevant_fairmind_tools",
             "get_fallback_tools"
           ],
-          "signature": "async () -> Tuple[List[Any], Optional[Any], Optional[Any]]"
+          "signature": "async () -> Tuple[List[Any], Optional[Any], Optional[Any]]",
+          "called_by": [
+            "initialize_atlas_mcp_tools",
+            "initialize_deep_planning_mcp_tools"
+          ]
         },
-        "filter_relevant_fairmind_tools": "(tools: List[Any]) -> List[Any]",
+        "filter_relevant_fairmind_tools": {
+          "signature": "(tools: List[Any]) -> List[Any]",
+          "called_by": [
+            "load_fairmind_mcp_tools"
+          ]
+        },
         "get_fallback_tools": {
           "calls": [
             "get_project_overview_demo",
             "list_projects_demo",
             "search_code_demo"
           ],
-          "signature": "() -> List[Any]"
+          "signature": "() -> List[Any]",
+          "called_by": [
+            "load_fairmind_mcp_tools",
+            "initialize_atlas_mcp_tools",
+            "load_fairmind_mcp_tools",
+            "initialize_deep_planning_mcp_tools",
+            "get_mcp_status"
+          ]
         },
         "initialize_deep_planning_mcp_tools": {
           "calls": [
@@ -4903,7 +5997,10 @@
           "calls": [
             "get_fallback_tools"
           ],
-          "signature": "() -> Dict[str, Any]"
+          "signature": "() -> Dict[str, Any]",
+          "called_by": [
+            "print_mcp_status"
+          ]
         },
         "print_mcp_status": {
           "calls": [
@@ -4913,244 +6010,324 @@
         }
       },
       "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T10:20:52.467877"
+      "call_graph": {}
     },
-    "examples/deep_planning/test_threshold_fix.py": {
+    "examples/deep_planning/src/context/selective_compression.py": {
       "language": "python",
       "parsed": true,
       "functions": {
-        "test_threshold_logic": {
-          "doc": "Test that compression triggers at the correct threshold",
-          "signature": "()"
-        }
-      },
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T09:03:29.819478",
-      "purpose": "Test file"
-    },
-    "examples/deep_planning/test_token_counting.py": {
-      "language": "python",
-      "parsed": true,
-      "functions": {
-        "test_token_counting": {
-          "doc": "Test different token counting methods",
-          "signature": "()"
-        }
-      },
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T09:16:40.964103",
-      "purpose": "Test file"
-    },
-    "examples/deep_planning/test_tiktoken_counting.py": {
-      "language": "python",
-      "parsed": true,
-      "functions": {
-        "count_tokens": {
-          "doc": "Count tokens using tiktoken or fallback",
-          "signature": "(text)"
+        "is_mcp_content_tool": {
+          "doc": "Check if a tool name is a known MCP content tool.",
+          "signature": "(tool_name: str) -> bool"
         },
-        "test_real_token_counting": {
-          "doc": "Test with actual message structure",
+        "generate_mcp_filename": {
+          "doc": "Generate appropriate filename for MCP content.",
           "calls": [
-            "count_tokens"
+            "_generate_filename"
+          ],
+          "signature": "(tool_name: str) -> str"
+        },
+        "create_smart_compression_hook": {
+          "doc": "Create a smart compression hook for deep planning agents.",
+          "calls": [
+            "compress_messages",
+            "smart_compression_hook"
+          ],
+          "signature": "()"
+        }
+      },
+      "classes": {
+        "PreservationRules": {
+          "methods": {
+            "__init__": "(self)",
+            "should_preserve_message": {
+              "calls": [
+                "_contains_todos",
+                "_get_message_role",
+                "_is_recent_tool_result",
+                "_references_virtual_fs"
+              ],
+              "signature": "(self, message: Any, index: int, context: Dict) -> bool"
+            },
+            "_contains_todos": {
+              "doc": "Check if message contains todo-related content.",
+              "signature": "(self, message: Any) -> bool"
+            },
+            "_get_message_role": {
+              "doc": "Get role from message, handling both dict and LangChain Message objects.",
+              "signature": "(self, message: Any) -> str"
+            },
+            "_get_message_content": {
+              "doc": "Get content from message, handling both dict and LangChain Message objects.",
+              "signature": "(self, message: Any) -> str"
+            },
+            "_is_recent_tool_result": {
+              "doc": "Check if this is a recent tool result that should be preserved.",
+              "calls": [
+                "_get_message_role"
+              ],
+              "signature": "(self, message: Any, index: int, context: Dict) -> bool"
+            },
+            "_references_virtual_fs": {
+              "doc": "Check if message references virtual file system operations.",
+              "calls": [
+                "_get_message_content"
+              ],
+              "signature": "(self, message: Any) -> bool"
+            }
+          },
+          "doc": "Defines what content must never be compressed.",
+          "properties": [
+            "message",
+            "index",
+            "context"
+          ]
+        },
+        "MessageAnalyzer": {
+          "methods": {
+            "_get_message_role": {
+              "doc": "Get role from message, handling both dict and LangChain Message objects.",
+              "signature": "(self, message: Any) -> str"
+            },
+            "_get_message_content": {
+              "doc": "Get content from message, handling both dict and LangChain Message objects.",
+              "signature": "(self, message: Any) -> str"
+            },
+            "_get_message_name": {
+              "doc": "Get name/tool name from message, handling both dict and LangChain Message objects.",
+              "signature": "(self, message: Any) -> str"
+            },
+            "extract_topics": {
+              "doc": "Extract key topics from a list of messages.",
+              "calls": [
+                "_get_message_content"
+              ],
+              "signature": "(self, messages: List[Any]) -> List[str]"
+            },
+            "extract_timeframe": {
+              "doc": "Extract timeframe information from messages.",
+              "signature": "(self, messages: List[Any]) -> str"
+            },
+            "analyze_mcp_content": {
+              "doc": "Analyze if message contains large MCP content requiring archiving.",
+              "calls": [
+                "_extract_content_summary",
+                "_generate_filename",
+                "_get_message_content",
+                "_get_message_name",
+                "_get_message_role"
+              ],
+              "signature": "(self, message: Any) -> Optional[Dict]"
+            },
+            "_extract_content_summary": {
+              "doc": "Extract a brief summary from large content.",
+              "signature": "(self, content: str) -> str"
+            },
+            "_generate_filename": {
+              "doc": "Generate appropriate filename for MCP content.",
+              "signature": "(self, tool_name: str) -> str"
+            }
+          },
+          "doc": "Analyzes message content and extracts key information."
+        },
+        "SelectiveCompressor": {
+          "methods": {
+            "__init__": "(self)",
+            "compress_messages": {
+              "calls": [
+                "_compress_conversation_buffer",
+                "_create_archiving_marker",
+                "analyze_mcp_content",
+                "should_preserve_message"
+              ],
+              "signature": "(self, messages: List[Any], state_context: Dict) -> List[Any]"
+            },
+            "_compress_conversation_buffer": {
+              "doc": "Compress a buffer of old conversations into a summary.",
+              "calls": [
+                "_get_message_role",
+                "extract_timeframe",
+                "extract_topics"
+              ],
+              "signature": "(self, buffer: List[Any]) -> Dict"
+            }
+          },
+          "doc": "Performs intelligent compression preserving critical elements.",
+          "properties": [
+            "messages",
+            "state_context"
+          ]
+        }
+      },
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T23:00:59.982378"
+    },
+    "examples/deep_planning/src/context/archiving_tools.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "organize_virtual_fs": {
+          "decorators": [
+            "tool"
+          ],
+          "calls": [
+            "cleanup_old_archives"
+          ],
+          "signature": "async (state: Annotated[DeepAgentState, InjectedState]) -> str"
+        },
+        "cleanup_old_archives": {
+          "decorators": [
+            "tool"
+          ],
+          "calls": [
+            "_extract_timestamp_from_filename"
+          ],
+          "signature": "async (prefix: str, state: Annotated[DeepAgentState, InjectedState], keep_last_n: int = 3) -> str"
+        },
+        "archive_content_helper": {
+          "decorators": [
+            "tool"
+          ],
+          "calls": [
+            "_clean_filename"
+          ],
+          "signature": "async (content: str, filename: str, summary: str, state: Annotated[DeepAgentState, InjectedState]) -> str"
+        },
+        "get_archiving_suggestions": {
+          "decorators": [
+            "tool"
+          ],
+          "calls": [
+            "_generate_filename_for_tool",
+            "archive_content_helper"
+          ],
+          "signature": "async (state: Annotated[DeepAgentState, InjectedState]) -> str"
+        },
+        "_extract_timestamp_from_filename": {
+          "doc": "Extract timestamp from filename for sorting.",
+          "signature": "(filename: str) -> str"
+        },
+        "_clean_filename": {
+          "doc": "Clean and validate filename for virtual FS.",
+          "signature": "(filename: str) -> str"
+        },
+        "_generate_filename_for_tool": {
+          "doc": "Generate appropriate filename for a tool output.",
+          "signature": "(tool_name: str) -> str"
+        },
+        "get_archiving_tools": {
+          "doc": "Get list of archiving tools for agent integration.",
+          "signature": "()"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T22:38:52.830490"
+    },
+    "examples/deep_planning/src/prompts/smart_archiving_prompts.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "enhance_agent_instructions": {
+          "doc": "Add smart archiving capabilities to agent instructions.",
+          "signature": "(base_instructions: str) -> str"
+        }
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T22:39:45.530593"
+    },
+    "examples/deep_planning/src/core/enhanced_agent_factory.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "create_enhanced_deep_agent": {
+          "calls": [
+            "chained_hook"
+          ],
+          "signature": "(tools: Sequence[Union[BaseTool, Callable, dict[str, Any]]], instructions: str, model: Optional[Union[str, LanguageModelLike]] = None, subagents: list[SubAgent] = None, state_schema: Optional[type] = None, enable_planning_approval: bool = False, checkpointer: Optional[Union[str, Any]] = None, pre_model_hook: Optional[Callable] = None, enable_smart_compression: bool = True,)"
+        },
+        "create_simple_deep_agent": "(tools: Sequence[Union[BaseTool, Callable, dict[str, Any]]], instructions: str, model: Optional[Union[str, LanguageModelLike]] = None, **kwargs)",
+        "get_compression_features_info": "()"
+      },
+      "classes": {},
+      "updated_by_hook": true,
+      "updated_at": "2025-08-18T22:42:54.818438"
+    },
+    "examples/deep_planning/tests/test_selective_compression.py": {
+      "language": "python",
+      "parsed": true,
+      "functions": {
+        "test_preservation_rules": {
+          "doc": "Test that preservation rules correctly identify critical content.",
+          "signature": "()"
+        },
+        "test_message_analyzer": {
+          "doc": "Test MCP content analysis functionality.",
+          "signature": "()"
+        },
+        "test_selective_compressor": {
+          "doc": "Test the core selective compression functionality.",
+          "signature": "()"
+        },
+        "test_smart_compression_hook": {
+          "doc": "Test the smart compression hook.",
+          "signature": "()"
+        },
+        "test_virtual_fs_tools": {
+          "doc": "Test virtual filesystem management tools.",
+          "signature": "async ()"
+        },
+        "test_integration": {
+          "doc": "Test integration between components.",
+          "signature": "()"
+        },
+        "main": {
+          "doc": "Run all tests.",
+          "calls": [
+            "test_integration",
+            "test_message_analyzer",
+            "test_preservation_rules",
+            "test_selective_compressor",
+            "test_smart_compression_hook",
+            "test_virtual_fs_tools"
           ],
           "signature": "()"
         }
       },
       "classes": {},
       "updated_by_hook": true,
-      "updated_at": "2025-08-18T09:17:47.574717",
+      "updated_at": "2025-08-18T22:46:44.058033",
       "purpose": "Test file"
     },
-    "examples/deep_planning/test_langchain_messages.py": {
-      "language": "python",
-      "parsed": false,
-      "functions": {},
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T09:22:02.989995",
-      "purpose": "Test file"
-    },
-    "examples/deep_planning/test_token_fix.py": {
+    "examples/deep_planning/examples/enhanced_agent_example.py": {
       "language": "python",
       "parsed": true,
       "functions": {
-        "test_token_counting_fixes": {
-          "doc": "Test the fixed token counting system",
-          "signature": "()"
-        }
-      },
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T09:26:43.608545",
-      "purpose": "Test file"
-    },
-    "examples/deep_planning/src/context/token_tracking_hooks.py": {
-      "language": "python",
-      "parsed": true,
-      "functions": {
-        "count_tokens_multiple_methods": "(messages: List[Dict[str, Any]], model_name: str = \"z-ai/glm-4.5\") -> Dict[str, int]",
-        "log_message_details": {
-          "doc": "Log detailed information about messages for debugging.",
-          "signature": "(messages: List[Any], prefix: str = \"\") -> None"
-        },
-        "create_enhanced_token_tracking_hook": {
+        "main": {
+          "doc": "Demonstrate enhanced deep agent creation and features.",
           "calls": [
-            "count_tokens_multiple_methods",
-            "enhanced_compression_hook",
-            "log_message_details"
-          ],
-          "signature": "(compact_integration: Optional[Any] = None, mcp_wrapper: Optional[Any] = None, model_name: Optional[str] = \"z-ai/glm-4.5\") -> Callable[[DeepAgentState], DeepAgentState]"
-        },
-        "create_passthrough_token_tracking_hook": {
-          "calls": [
-            "count_tokens_multiple_methods",
-            "passthrough_hook"
-          ],
-          "signature": "() -> Callable[[DeepAgentState], DeepAgentState]"
-        }
-      },
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T15:37:49.141107"
-    },
-    "examples/deep_planning/src/context/http_interceptor.py": {
-      "language": "python",
-      "parsed": true,
-      "functions": {
-        "log_request_details": {
-          "doc": "Log detailed information about HTTP requests to OpenRouter.",
-          "signature": "(url: str, payload: Dict[str, Any], headers: Dict[str, str]) -> None"
-        },
-        "log_response_details": {
-          "doc": "Log detailed information about HTTP responses from OpenRouter.",
-          "signature": "(response: Any) -> None"
-        },
-        "patch_httpx": {
-          "doc": "Patch httpx.post to intercept OpenRouter requests.",
-          "calls": [
-            "log_request_details",
-            "log_response_details",
-            "patched_post"
-          ],
-          "signature": "()"
-        },
-        "patch_requests": {
-          "doc": "Patch requests.post to intercept OpenRouter requests.",
-          "calls": [
-            "log_request_details",
-            "log_response_details",
-            "patched_post"
-          ],
-          "signature": "()"
-        },
-        "enable_openrouter_logging": {
-          "doc": "Enable comprehensive OpenRouter request/response logging.",
-          "calls": [
-            "patch_httpx",
-            "patch_requests"
-          ],
-          "signature": "()"
-        },
-        "disable_openrouter_logging": {
-          "doc": "Disable OpenRouter logging by restoring original functions.",
-          "signature": "()"
-        }
-      },
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T15:38:30.881188"
-    },
-    "examples/deep_planning/src/core/debug_agent_core.py": {
-      "language": "python",
-      "parsed": true,
-      "functions": {
-        "create_debug_agent_with_enhanced_tracking": "(enable_compression=True)",
-        "test_token_tracking": {
-          "doc": "Test the token tracking capabilities with a simple conversation.",
-          "calls": [
-            "create_debug_agent_with_enhanced_tracking"
+            "custom_pre_model_hook"
           ],
           "signature": "()"
         }
       },
       "classes": {},
       "updated_by_hook": true,
-      "updated_at": "2025-08-18T15:43:03.512579"
-    },
-    "examples/deep_planning/test_token_tracking.py": {
-      "language": "python",
-      "parsed": true,
-      "functions": {
-        "test_minimal_tracking": {
-          "doc": "Test token tracking with a minimal agent configuration.",
-          "signature": "()"
-        }
-      },
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T15:43:33.122562",
-      "purpose": "Test file"
-    },
-    "examples/deep_planning/test_llm_compression.py": {
-      "language": "python",
-      "parsed": true,
-      "functions": {
-        "test_llm_compression_integration": {
-          "doc": "Test dell'integrazione LLM compression.",
-          "signature": "()"
-        },
-        "show_configuration_status": {
-          "doc": "Mostra lo stato della configurazione.",
-          "signature": "()"
-        }
-      },
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T15:58:00.336197",
-      "purpose": "Test file"
-    },
-    "examples/deep_planning/test_compression_fix.py": {
-      "language": "python",
-      "parsed": true,
-      "functions": {
-        "test_compression_hook_fix": {
-          "doc": "Test that the compression hook properly returns state updates for LangGraph v2.",
-          "signature": "()"
-        },
-        "test_return_format_validation": {
-          "doc": "Validate that the hook return format matches LangGraph v2 expectations.",
-          "signature": "()"
-        }
-      },
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T16:14:57.544602",
-      "purpose": "Test file"
-    },
-    "examples/deep_planning/test_permanent_compression.py": {
-      "language": "python",
-      "parsed": true,
-      "functions": {
-        "simulate_langgraph_add_messages": "(existing_messages, new_messages)",
-        "test_permanent_compression_simulation": {
-          "doc": "Test that demonstrates how compression permanently reduces token usage.",
-          "calls": [
-            "simulate_langgraph_add_messages"
-          ],
-          "signature": "()"
-        }
-      },
-      "classes": {},
-      "updated_by_hook": true,
-      "updated_at": "2025-08-18T16:15:55.927550",
-      "purpose": "Test file"
+      "updated_at": "2025-08-18T22:47:24.190449"
     }
   },
   "dependency_graph": {
+    "test_selective_compression.py": [
+      "sys",
+      "os",
+      "asyncio",
+      "json",
+      "datetime",
+      "deepagents.context",
+      "deepagents.extensions",
+      "traceback"
+    ],
     "examples/openrouter_glm45_example.py": [
       "os",
       "deepagents"
@@ -5181,6 +6358,8 @@
       "langchain_core.language_models",
       "langgraph.prebuilt",
       "langgraph.checkpoint.memory",
+      "deepagents.extensions",
+      "deepagents.context",
       "os",
       "sys",
       "langgraph.checkpoint.postgres"
@@ -5218,11 +6397,53 @@
       "typing",
       "typing_extensions"
     ],
+    "src/deepagents/context/selective_compression.py": [
+      "typing",
+      "json",
+      "re",
+      "datetime",
+      "logging"
+    ],
+    "src/deepagents/extensions/virtual_fs_tools.py": [
+      "re",
+      "json",
+      "datetime",
+      "typing",
+      "langchain_core.tools",
+      "deepagents.state",
+      "langgraph.prebuilt"
+    ],
     "examples/research/research_agent.py": [
       "os",
       "typing",
       "tavily",
       "deepagents"
+    ],
+    "examples/deep_planning/test_permanent_compression.py": [
+      "sys",
+      "logging",
+      "unittest.mock",
+      "langchain_core.messages",
+      "src.context.compression_hooks"
+    ],
+    "examples/deep_planning/test_llm_compression.py": [
+      "os",
+      "sys",
+      "logging",
+      "datetime",
+      "pathlib",
+      "src.context.context_manager",
+      "src.context.compact_integration",
+      "traceback"
+    ],
+    "examples/deep_planning/test_token_tracking.py": [
+      "sys",
+      "os",
+      "logging",
+      "src.context.http_interceptor",
+      "src.context.token_tracking_hooks",
+      "deepagents",
+      "traceback"
     ],
     "examples/deep_planning/test_compression_logging.py": [
       "logging",
@@ -5234,6 +6455,15 @@
       "src.context.context_compression",
       "src.integrations.mcp.mcp_cleaners",
       "traceback"
+    ],
+    "examples/deep_planning/test_compression_fix.py": [
+      "sys",
+      "os",
+      "logging",
+      "unittest.mock",
+      "src.context.compression_hooks",
+      "langchain_core.messages",
+      "src.context.compression_hooks"
     ],
     "examples/atlas/test_planning_workflow.py": [
       "sys",
@@ -5437,15 +6667,17 @@
     ],
     "examples/deep_planning/src/context/context_manager.py": [
       "json",
-      "re",
       "time",
       "logging",
-      "abc",
+      "yaml",
       "dataclasses",
       "datetime",
       "typing",
       "enum",
-      "tiktoken  # Per conteggio token preciso"
+      "pathlib",
+      "litellm",
+      "tiktoken",
+      "datetime"
     ],
     "examples/deep_planning/src/context/context_compression.py": [
       "asyncio",
@@ -5455,6 +6687,16 @@
       "langchain_core.tools",
       "langgraph.prebuilt",
       "typing"
+    ],
+    "examples/deep_planning/src/context/token_tracking_hooks.py": [
+      "logging",
+      "json",
+      "time",
+      "typing",
+      "deepagents.state",
+      "litellm",
+      "langchain_core.messages",
+      "tiktoken"
     ],
     "examples/deep_planning/src/context/llm_compression.py": [
       "asyncio",
@@ -5468,9 +6710,22 @@
       "langchain_core.messages",
       "re"
     ],
+    "examples/deep_planning/src/context/http_interceptor.py": [
+      "logging",
+      "json",
+      "time",
+      "typing",
+      "functools",
+      "httpx",
+      "requests",
+      "httpx",
+      "requests"
+    ],
     "examples/deep_planning/src/context/compact_integration.py": [
       "json",
       "time",
+      "os",
+      "logging",
       "datetime",
       "typing",
       "dataclasses",
@@ -5482,7 +6737,10 @@
     "examples/deep_planning/src/context/compression_hooks.py": [
       "logging",
       "typing",
-      "deepagents.state"
+      "deepagents.state",
+      "deepagents.context",
+      "time",
+      "traceback"
     ],
     "examples/deep_planning/src/context/context_hooks.py": [
       "asyncio",
@@ -5500,6 +6758,13 @@
       "langgraph.types",
       "deepagents.state",
       "deepagents.graph"
+    ],
+    "examples/deep_planning/src/core/debug_agent_core.py": [
+      "os",
+      "logging",
+      "sys",
+      "deepagents",
+      "traceback"
     ],
     "examples/deep_planning/src/core/phase_orchestration.py": [
       "logging",
@@ -5584,13 +6849,6 @@
       "typing",
       "dataclasses"
     ],
-    "examples/deep_planning/src/integrations/mcp/mcp_cleaners.py": [
-      "json",
-      "re",
-      "logging",
-      "typing",
-      "dataclasses"
-    ],
     "examples/deep_planning/src/integrations/mcp/mcp_integration.py": [
       "asyncio",
       "os",
@@ -5601,5 +6859,5 @@
       "langchain_core.tools"
     ]
   },
-  "staleness_check": 1754851214.271985
+  "staleness_check": 1754944314.931587
 }
