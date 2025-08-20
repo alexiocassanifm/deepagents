@@ -5,6 +5,7 @@ from deepagents.state import DeepAgentState
 from typing import Sequence, Union, Callable, Any, TypeVar, Type, Optional
 from langchain_core.tools import BaseTool
 from langchain_core.language_models import LanguageModelLike
+from langgraph.types import Checkpointer
 
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import InMemorySaver
@@ -31,8 +32,9 @@ def create_deep_agent(
     model: Optional[Union[str, LanguageModelLike]] = None,
     subagents: list[SubAgent] = None,
     state_schema: Optional[StateSchemaType] = None,
+    config_schema: Optional[Type[Any]] = None,
+    checkpointer: Optional[Checkpointer] = None,
     enable_planning_approval: bool = False,
-    checkpointer: Optional[Union[str, Any]] = None,
     pre_model_hook: Optional[Callable] = None,
 ):
     """Create a deep agent.
@@ -54,12 +56,9 @@ def create_deep_agent(
                 - (optional) `requires_approval` (bool): Whether this subagent requires plan approval
                 - (optional) `approval_points` (list): Specific points where approval is needed
         state_schema: The schema of the deep agent. Should subclass from DeepAgentState
+        config_schema: The schema of the deep agent.
+        checkpointer: Optional checkpointer for persisting agent state between runs.
         enable_planning_approval: Whether to enable human-in-the-loop planning approval
-        checkpointer: Checkpointer to use for state persistence. Can be:
-            - "memory": Use InMemorySaver 
-            - "postgres": Use PostgresSaver (requires configuration)
-            - Custom checkpointer instance
-            - None: No checkpointing (disables human-in-the-loop features)
         pre_model_hook: Optional function to process state before each LLM call.
             Useful for context compression, message filtering, or preprocessing.
             Function should take DeepAgentState and return modified DeepAgentState.
